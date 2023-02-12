@@ -14,7 +14,8 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="collapse navbar-collapse" id="navbarTogglerDemo012">
-        <a class="navbar-brand" href="{% url 'index' %}"><h1>Roguelike Library</h1></a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0 ml-4">
+        <a class="navbar-brand" href="{% url 'index' %}"><h1 class="ms-5">RogueLists Library</h1></a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item">
             <!-- <a href="{% url 'admin:index' %}" class="nav-link"><h2>Admin Panel</h2></a> -->
@@ -29,20 +30,25 @@
       {% block content %}
     </div>
 
-    <div class="card-columns">
-      {% for game in shelf %}
-      <div class="card" style="width: 18rem;">
-        <img src="" class="card-img-top">
-        <div class="card-body">
-          <h3 class="card-title">{{game.game_title}}</h3>
-          <p class="card-text">{{game.current_price}}</p>
-          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg">
-          <div class="card-footer bg-transparent border-dark">
-            <p class="card-title">{{game.release_date}}</p>
+    <div class="container">
+      <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-around">
+        {% for game in shelf %}
+          <div class="card m-2">
+            <a href="https://store.steampowered.com/app/{{game.steam_id}}"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top">
+            <div class="card-body"></a>
+              <h4 class="card-title text-md-center"><a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a></h4>
+              {% if game.current_price == 0 %}
+              <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
+              {% else %}
+              <p class="card-text text-center fw-bold p-lg-2">{{game.current_price}}</p>
+              {% endif %}
+              <div class="card-footer bg-transparent border-dark">
+                <p class="card-title text-center p-lg-2">Released {{game.release_date}}</p>
+              </div>
+            </div>
           </div>
-        </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
 
     {% endblock %}
