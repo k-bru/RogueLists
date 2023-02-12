@@ -22,8 +22,16 @@ class UserList(models.Model):
 
 #This creates two tables
 class ListDetail(models.Model):
-  user_list = models.ForeignKey(UserList, on_delete=models.CASCADE, db_constraint=True)
-  steam_id = models.ManyToManyField(Game)
+  list_detail_id = models.AutoField(primary_key=True)
+  user_list = models.ForeignKey(UserList, to_field="list_id", db_column="UserList", on_delete=models.CASCADE, db_constraint=True)
   
   def __str__(self):
-    return self.list_id
+    return self.list_detail_id
+
+class ListDetailContent(models.Model):
+  list_detail_content_id = models.AutoField(primary_key=True)
+  list_detail_id = models.ForeignKey(ListDetail, to_field="list_detail_id", on_delete=models.CASCADE)
+  steam_id = models.ForeignKey(Game, to_field="steam_id", on_delete=models.CASCADE)
+  
+  def __str__(self):
+    return self.list_detail_content_id

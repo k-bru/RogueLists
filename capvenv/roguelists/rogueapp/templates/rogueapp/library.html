@@ -40,7 +40,7 @@
               {% if game.current_price == 0 %}
               <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
               {% else %}
-              <p class="card-text text-center fw-bold p-lg-2">{{game.current_price}}</p>
+              <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
               {% endif %}
               <div class="card-footer bg-transparent border-dark">
                 <p class="card-title text-center p-lg-2">Released {{game.release_date}}</p>
