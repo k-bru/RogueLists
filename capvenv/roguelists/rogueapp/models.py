@@ -21,8 +21,8 @@ class UserList(models.Model):
     return self.list_name
 
 class ListDetail(models.Model):
-  list_id = models.ForeignKey(UserList, on_delete=models.CASCADE, db_constraint=True)
-  steam_id = models.ForeignKey(Game, on_delete=models.CASCADE, db_constraint=True)
+  user_list = models.ForeignKey(UserList, on_delete=models.CASCADE, db_constraint=True)
+  steam_id = models.ManyToManyField(Game)
   
   def __str__(self):
     return self.list_id
