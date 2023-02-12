@@ -12,9 +12,9 @@
     <title>Rogue Lists</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
       <div class="collapse navbar-collapse" id="navbarTogglerDemo012">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0 ml-4">
+        <!-- <ul class="navbar-nav mr-auto mt-2 mt-lg-0 ml-4"> -->
         <a class="navbar-brand" href="{% url 'index' %}"><h1 class="ms-5">RogueLists Library</h1></a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item">
@@ -43,7 +43,7 @@
               <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
               {% endif %}
               <div class="card-footer bg-transparent border-dark">
-                <p class="card-title text-center p-lg-2">Released {{game.release_date}}</p>
+                <p class="card-title text-center p-lg-2">Release Date: {{game.release_date}}</p>
               </div>
             </div>
           </div>

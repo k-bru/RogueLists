@@ -20,10 +20,9 @@ class UserList(models.Model):
   def __str__(self):
     return self.list_name
 
-#This creates two tables
 class ListDetail(models.Model):
   list_detail_id = models.AutoField(primary_key=True)
-  user_list = models.ForeignKey(UserList, to_field="list_id", db_column="UserList", on_delete=models.CASCADE, db_constraint=True)
+  user_list = models.ForeignKey(UserList, to_field="list_id", db_column="user_list_id", on_delete=models.CASCADE, db_constraint=True)
   
   def __str__(self):
     return self.list_detail_id
