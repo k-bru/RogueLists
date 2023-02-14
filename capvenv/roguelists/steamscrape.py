@@ -161,11 +161,12 @@ def scrap():
           if release[3] == " ":
             release = datetime.strptime(release, '%b %Y')
             release = release.strftime('%Y-%m-%d')
-      #"Coming Soon/To Be Announced"
+      #"Invalid Date strings"
       if release[4] != "-" and release[7] != "-":
         count += 1
         continue
       
+      #For CSV
       if "," in title:
         title = title.replace(",", " —")
       
