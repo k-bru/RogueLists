@@ -1,0 +1,43 @@
+{% extends 'rogueapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if form.errors %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  There was an error with your form. <hr>
+  <ul class="errorlist">
+  {% for field in form %}
+    {% if field.errors %}
+      {% for error in field.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+  </ul>
+
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+<h1>Register</h1>
+<br>
+
+<form action="{% url 'register_user' %}" method=POST>
+  {% csrf_token %}
+  {% for field in form %}
+    {% if field.name != 'csrfmiddlewaretoken' %}
+      <div class="mb-3">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.help_text %}
+          <small id="{{ field.id }}_help" class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
+  <br><br>
+  <input type="submit" value="Sign Up" class="btn-btn-secondary">
+</form>
+
+{% endblock %}
