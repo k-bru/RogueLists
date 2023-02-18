@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .forms import RegisterUserForm
+import datetime
 
 # Create your views here.
 def home(request):
@@ -43,3 +44,14 @@ def register_user(request):
   else:
     form = RegisterUserForm()
   return render(request, 'authenticate/register_user.html', {'form':form})
+
+def search(request):
+  if request.method == "POST":
+    today = datetime.date.today()
+    searched = request.POST['searched']
+    games = Game.objects.filter(game_title__contains=searched)
+    return render(request, 'rogueapp/search.html', {'searched':searched,
+     'games':games,
+     'today':today})
+  else:
+    return render(request, 'rogueapp/search.html', {})

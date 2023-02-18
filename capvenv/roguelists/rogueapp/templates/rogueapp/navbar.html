@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="">RogueLists</a>
+    <a class="navbar-brand" href="{% url 'home' %}">RogueLists</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -35,6 +35,12 @@
       {% endif %}
       
     </ul>
+
+    <form class="d-flex" method="POST" action="{% url 'search' %}">
+      {% csrf_token %}
+      <input type="search" class="form-control me-2" placeholder="Search Games" aria-label="Search" name="searched">
+      <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </form>
     </div>
   </div>
 </nav>

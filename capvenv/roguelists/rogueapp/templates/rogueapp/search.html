@@ -1,0 +1,43 @@
+{% extends 'rogueapp/base.html' %}
+
+{% block content %}
+<center>
+  <hr><br>
+  {% if searched %}
+  <h1>Search Results: <em>{{searched}}</em></h1><br>
+  {% else %}
+  <h1>Search Games</h1>
+  {% endif %}
+  <form class="d-flex" method="POST" action="{% url 'search' %}">
+    {% csrf_token %}
+    <input type="search" class="form-control me-2" placeholder="Search Games" aria-label="Search" name="searched">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </form>
+  {% if searched %}
+  <br>
+  <div class="container">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-around">
+      {% for game in games %}
+      <div class="card m-2">
+        <a href="https://store.steampowered.com/app/{{game.steam_id}}"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2">
+          <div class="card-body"></a>
+            <h4 class="card-title text-md-center"><a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a></h4>
+            {% if game.current_price == 0 and game.release_date > today %}
+            <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
+            {% elif game.current_price == 0 %}
+            <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
+            {% else %}
+            <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
+            {% endif %}
+            <div class="card-footer bg-transparent border-dark">
+              <p class="card-title text-center p-lg-2">Release Date: {{game.release_date}}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  
+</center>
+{% endblock %}
