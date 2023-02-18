@@ -2,10 +2,12 @@ from django.urls import path
 from . import views
 from roguelists.settings import DEBUG, STATIC_ROOT, STATIC_URL, MEDIA_ROOT, MEDIA_URL
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-  path('', views.index, name='index'),
-  # path('test', views.all_test, name="testdump"),
+  path('', views.home, name='home'),
+  path('login_user', views.login_user, name="login"),
+  path('logout_user', views.logout_user, name="logout"),
 ]
 
 if DEBUG:
