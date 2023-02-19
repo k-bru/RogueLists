@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from .models import UserList, ListDetailContent, Game
 
 
 class RegisterUserForm(UserCreationForm):
@@ -17,4 +18,3 @@ class RegisterUserForm(UserCreationForm):
     self.fields['password1'].widget.attrs['class'] = 'form-control'
     self.fields['password2'].widget.attrs['class'] = 'form-control'
     self.fields['username'].help_text = 'Required. Letters, digits and @/./+/-/_ only.'
-

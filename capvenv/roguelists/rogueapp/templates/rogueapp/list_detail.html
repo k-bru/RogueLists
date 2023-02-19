@@ -1,0 +1,72 @@
+{% extends 'rogueapp/base.html' %}
+
+{% block content %}
+  <h2>List Name: <em>{{ list_detail.user_list.list_name }}</em></h2>
+  <p class='fw-bold'>List Creator: {{ list_detail.user_list.list_owner }}</p>
+  <ul>
+    <div class="container">
+      <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-around">
+        {% for game in games %}
+        <div class="card m-2">
+          <a href="https://store.steampowered.com/app/{{game.steam_id}}">
+            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2">
+          </a>
+          <div class="card-body">
+            <h4 class="card-title text-md-center">
+              <a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a>
+            </h4>
+            {% if game.current_price == 0 and game.release_date > today %}
+              <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
+            {% elif game.current_price == 0 %}
+              <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
+            {% else %}
+              <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
+            {% endif %}
+            {% for detail in list_detail_content %}
+            {% if detail.steam_id.steam_id == game.steam_id %}
+            {% if request.user == list_detail.user_list.list_owner %}
+            <form method="post" action="{% url 'update_tier_rank' pk=detail.list_detail_content_id %}">
+              {% csrf_token %}
+              <label for="tier_rank" class="form-label">Tier Rank:</label>
+              <select name="tier_rank" id="tier_rank" class="form-select mb-2">
+                <option value="A" {% if detail.tier_rank == 'A' %}selected{% endif %}>A</option>
+                <option value="B" {% if detail.tier_rank == 'B' %}selected{% endif %}>B</option>
+                <option value="C" {% if detail.tier_rank == 'C' %}selected{% endif %}>C</option>
+                <option value="D" {% if detail.tier_rank == 'D' %}selected{% endif %}>D</option>
+              </select>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+            {% else %}
+              <p class="card-text text-center fw-bold p-lg-2">Tier Rank: {{ detail.tier_rank }}</p>
+            {% endif %}
+            {% endif %}
+          {% endfor %}
+          </div> 
+        </div>
+      {% empty %}
+        <p>This list is currently empty.</p>
+      {% endfor %}      
+      </div>
+    </div>
+  </ul>
+  
+  {% if request.user == list_detail.user_list.list_owner %}
+    <div class="my-3">
+      <form method="post" action="{% url 'update_list_name' list_id=list_detail.user_list.list_id %}">
+        {% csrf_token %}
+        <label for="list_name" class="form-label">Edit List Name:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="list_name" name="list_name" value="{{ list_detail.user_list.list_name }}">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+      <br><hr>
+      <center>
+        <form method="post" action="{% url 'delete_list' list_id=list_detail.user_list.list_id %}" onsubmit="return confirm('Are you sure you want to delete this list?')">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Delete List</button>
+        </form>
+      </center>
+    </div>
+  {% endif %}
+{% endblock %}

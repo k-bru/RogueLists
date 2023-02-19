@@ -1,4 +1,12 @@
 {% extends 'rogueapp/base.html' %}
 
 {% block content %}
+  {% if user_lists %}
+    <h2>My Lists:</h2>
+    {% for list in user_lists %}
+    <a href="{% url 'list_detail' list_id=list.list_id %}">{{ list.list_name }}</a>
+    {% endfor %}
+  {% else %}
+    <p>You have no lists yet.</p>
+  {% endif %}
 {% endblock %}

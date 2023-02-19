@@ -19,6 +19,7 @@
     <div class="container">
       {% if user.is_authenticated %}
       <h2 class="text-dark">Welcome, {{ user }}</h2>
+      <hr>
       {% endif %}
       {% if messages %}
         {% for message in messages %}

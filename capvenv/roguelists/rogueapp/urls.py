@@ -9,7 +9,13 @@ urlpatterns = [
   path('login_user', views.login_user, name="login"),
   path('logout_user', views.logout_user, name="logout"),
   path('register_user', views.register_user, name="register_user"),
-  path('search', views.search, name="search")
+  path('search', views.search, name="search"),
+  path('create_list/<int:game_id>', views.create_list, name='create_list'),
+  path('list_detail/<int:list_id>', views.list_detail, name='list_detail'),
+  path('add_to_list/<int:list_id>/<int:game_id>', views.add_to_list, name='add_to_list'),
+  path('update_list_name/<int:list_id>', views.update_list_name, name='update_list_name'),
+  path('delete_list/<int:list_id>', views.delete_list, name='delete_list'),
+  path('list_detail/<int:pk>/update_tier_rank/', views.update_tier_rank, name='update_tier_rank'),
 ]
 
 if DEBUG:
