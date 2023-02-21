@@ -16,6 +16,7 @@ urlpatterns = [
   path('update_list_name/<int:list_id>', views.update_list_name, name='update_list_name'),
   path('delete_list/<int:list_id>', views.delete_list, name='delete_list'),
   path('list_detail/<int:pk>/update_tier_rank/', views.update_tier_rank, name='update_tier_rank'),
+  path('list_detail_content/<int:pk>/remove_game/', views.remove_game, name='remove_game'),
 ]
 
 if DEBUG:

@@ -139,3 +139,11 @@ def update_tier_rank(request, pk):
         messages.success(request, ("Tier Rank Updated."))
         return redirect('list_detail', list_id=list_detail.pk)
     return render(request, 'rogueapp/update_tier_rank.html', {'list_detail_content': list_detail_content})
+
+def remove_game(request, pk):
+    list_detail_content = get_object_or_404(ListDetailContent, pk=pk)
+    list_detail = list_detail_content.list_detail_id
+    user_list = list_detail.user_list
+    list_detail_content.delete()
+    return redirect('list_detail', list_id=user_list.list_id)
+

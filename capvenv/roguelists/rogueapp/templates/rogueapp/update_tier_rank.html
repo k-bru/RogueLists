@@ -6,11 +6,11 @@
     {% csrf_token %}
     <label for="tier_rank">New Tier Rank:</label>
     <select name="tier_rank" id="tier_rank">
-      <option value="A" {% if list_detail_content.tier_rank == 1 %}selected{% endif %}>A</option>
-      <option value="B" {% if list_detail_content.tier_rank == 2 %}selected{% endif %}>B</option>
-      <option value="C" {% if list_detail_content.tier_rank == 3 %}selected{% endif %}>C</option>
-      <option value="D" {% if list_detail_content.tier_rank == 4 %}selected{% endif %}>D</option>
-      <option value="F" {% if list_detail_content.tier_rank == 5 %}selected{% endif %}>F</option>
+      <option value="A" {% if list_detail_content.tier_rank == A %}selected{% endif %}>A</option>
+      <option value="B" {% if list_detail_content.tier_rank == B %}selected{% endif %}>B</option>
+      <option value="C" {% if list_detail_content.tier_rank == C %}selected{% endif %}>C</option>
+      <option value="D" {% if list_detail_content.tier_rank == D %}selected{% endif %}>D</option>
+      <option value="F" {% if list_detail_content.tier_rank == F %}selected{% endif %}>F</option>
     </select>
     <br><br>
     <button type="submit">Update</button>

@@ -8,6 +8,37 @@
       <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-around">
         {% for game in games %}
         <div class="card m-2">
+          {% for detail in list_detail_content %}
+          {% if detail.steam_id.steam_id == game.steam_id %}
+          {% if request.user == list_detail.user_list.list_owner %}
+          <div class="remove-container position-relative">
+            <a href="#" id="remove-from-list" class="btn btn-sm btn-link text-danger position-absolute top-0 mt-2 my-1 end-0 rounded-circle" data-bs-toggle="modal" data-bs-target="#confirmRemoveModal" data-toggle="tooltip" title="Remove Game From List">
+              <i class="fas fa-times"></i>
+            </a>
+          </div>
+          
+          <!-- Modal -->
+          <div class="modal fade" id="confirmRemoveModal" tabindex="-1" aria-labelledby="confirmRemoveModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="confirmRemoveModalLabel">Confirm Game Removal</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Are you sure you want to remove this game from the list?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <a href="{% url 'remove_game' pk=detail.list_detail_content_id %}" class="btn btn-danger">Remove Game</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {% endif %}
+          {% endif %}
+          {% endfor %}
           <a href="https://store.steampowered.com/app/{{game.steam_id}}">
             <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2">
           </a>
@@ -16,11 +47,11 @@
               <a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a>
             </h4>
             {% if game.current_price == 0 and game.release_date > today %}
-              <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
+            <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
             {% elif game.current_price == 0 %}
-              <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
+            <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
             {% else %}
-              <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
+            <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
             {% endif %}
             {% for detail in list_detail_content %}
             {% if detail.steam_id.steam_id == game.steam_id %}
@@ -33,9 +64,16 @@
                 <option value="B" {% if detail.tier_rank == 'B' %}selected{% endif %}>B</option>
                 <option value="C" {% if detail.tier_rank == 'C' %}selected{% endif %}>C</option>
                 <option value="D" {% if detail.tier_rank == 'D' %}selected{% endif %}>D</option>
+                <option value="F" {% if detail.tier_rank == 'F' %}selected{% endif %}>F</option>
               </select>
-              <button type="submit" class="btn btn-primary">Save</button>
             </form>
+            <script>
+            document.querySelectorAll('select[name="tier_rank"]').forEach(function(select) {
+              select.addEventListener('change', function() {
+                this.closest('form').submit();
+              });
+            });
+            </script>
             {% else %}
               <p class="card-text text-center fw-bold p-lg-2">Tier Rank: {{ detail.tier_rank }}</p>
             {% endif %}
