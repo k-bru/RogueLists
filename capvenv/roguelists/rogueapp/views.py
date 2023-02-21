@@ -9,11 +9,21 @@ import datetime
 from django.contrib.auth.decorators import login_required
 
 def home(request):
-  if request.user.is_authenticated:
-    user_lists = UserList.objects.filter(list_owner=request.user)
-    return render(request, 'rogueapp/home.html', {'user_lists': user_lists})
-  else:
-    return render(request, 'rogueapp/home.html')
+    user_lists = UserList.objects.select_related('list_owner').all()
+    list_previews = []
+    for user_list in user_lists:
+        game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
+        game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
+
+        # Add game images
+        game_images = []
+        for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
+            game_images.append(f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg")
+
+        list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
+    return render(request, 'rogueapp/home.html', {'list_previews': list_previews})
+
+
 
 def login_user(request):
   if request.method == "POST":

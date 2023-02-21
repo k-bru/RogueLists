@@ -1,12 +1,60 @@
 {% extends 'rogueapp/base.html' %}
 
 {% block content %}
-  {% if user_lists %}
-    <h2>My Lists:</h2>
-    {% for list in user_lists %}
-    <a href="{% url 'list_detail' list_id=list.list_id %}">{{ list.list_name }}</a>
-    {% endfor %}
-  {% else %}
-    <p>You have no lists yet.</p>
-  {% endif %}
-{% endblock %}
+<div class="container">
+  <div class="row">
+    <div class="row col-md-8">
+      {% if list_previews %}
+      {% if request.user.is_authenticated %}
+      <h2>My Lists:</h2>
+      <div class="row">
+        {% for list_preview in list_previews %}
+        {% if list_preview.list.list_owner == request.user %}
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">{{ list_preview.list.list_name }} by {{ list_preview.list.list_owner.username }}</a>
+            </div>
+            <div class="card-body">
+              <p class="card-text">{{ list_preview.game_count }} games</p>
+              {% if list_preview.game_titles %}
+              <p class="card-text">{{ list_preview.game_titles|join:", " }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <hr>
+      {% endif %}
+      {% endif %}
+      {% if list_previews %}
+      <h2>Other Users' Lists:</h2>
+      {% for list_preview in list_previews %}
+      {% if list_preview.list.list_owner != request.user %}
+      <div class="col-md-4">
+        <div class="card home-previews">
+          <div class="card-header">
+            <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">{{ list_preview.list.list_name }} by {{ list_preview.list.list_owner.username }}</a>
+          </div>
+          {% for game_image in list_preview.game_images|slice:":3" %}
+          <img src="{{ game_image }}" width=231 height=87 class="p-2">
+          {% endfor %}
+
+          <div class="card-body">
+            <p class="card-text">{{ list_preview.game_count }} games</p>
+            {% if list_preview.game_titles %}
+            <p class="card-text">{{ list_preview.game_titles|join:", " }}</p>
+            {% endif %}
+          </div>
+        </div>
+        <br>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  {% endblock %}
+</div>
