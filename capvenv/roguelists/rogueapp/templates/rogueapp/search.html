@@ -30,6 +30,7 @@
             {% endif %}
             <div class="card-footer bg-transparent border-dark">
               <p class="card-title text-center p-lg-2">Release Date: {{game.release_date}}</p>
+              {% if request.user.is_authenticated %}
               <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                   Add to list
@@ -42,6 +43,7 @@
               </div>
               <br>
               <a href="{% url 'create_list' game_id=game.steam_id %}" class="btn btn-primary">Add to new list</a>
+              {% endif %}
             </div>
           </div>
         </div>

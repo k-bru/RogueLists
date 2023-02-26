@@ -197,7 +197,6 @@ def scrap():
 
   df = pd.DataFrame(datas)
   df.to_csv(f'resultfile/csvdata_{game}.csv', index=False, header=False)
-  # df.to_excel(f'resultfile/exceldata_{game}.xlsx', index=False)
   print('all data was created')
 
 
