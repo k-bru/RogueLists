@@ -16,6 +16,7 @@ class UserList(models.Model):
   list_id = models.AutoField(primary_key=True)
   list_owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_constraint=True)
   list_name = models.CharField(max_length=50)
+  list_description = models.CharField(max_length=500, default="No description found.")
   
   def __str__(self):
     return self.list_name

@@ -1,0 +1,24 @@
+{% for detail in list_detail_content %}
+{% if detail.steam_id.steam_id == game.steam_id %}
+{% if request.user == list_detail.user_list.list_owner %}
+<form method="post" action="{% url 'update_tier_rank' pk=detail.list_detail_content_id %}">
+  {% csrf_token %}
+  <label for="tier_rank" class="form-label">Tier Rank:</label>
+  <select name="tier_rank" id="tier_rank" class="form-select mb-2">
+    <option value="A" {% if detail.tier_rank in "A" %}selected{% endif %}>A</option>
+    <option value="B" {% if detail.tier_rank in "B" %}selected{% endif %}>B</option>
+    <option value="C" {% if detail.tier_rank in "C" %}selected{% endif %}>C</option>
+    <option value="D" {% if detail.tier_rank in "D" %}selected{% endif %}>D</option>
+    <option value="F" {% if detail.tier_rank in "F" %}selected{% endif %}>F</option>
+  </select>
+</form>
+<script>
+  document.querySelectorAll('select[name="tier_rank"]').forEach(function (select) {
+    select.addEventListener('change', function () {
+      this.closest('form').submit();
+    });
+  });
+</script>
+{% endif %}
+{% endif %}
+{% endfor %}

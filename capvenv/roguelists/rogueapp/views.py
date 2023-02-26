@@ -18,7 +18,10 @@ def home(request):
         # Add game images
         game_images = []
         for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
-            game_images.append(f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg")
+          game_images.append({
+            'game_id': list_detail_content.steam_id.steam_id,
+            'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
+          })
 
         list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
     return render(request, 'rogueapp/home.html', {'list_previews': list_previews})
@@ -97,20 +100,31 @@ from .models import Game, ListDetailContent, UserList, ListDetail
 
 def list_detail(request, list_id):
   list_detail = get_object_or_404(ListDetail, pk=list_id)
-  games = Game.objects.filter(steam_id__in=ListDetailContent.objects.filter(list_detail_id=list_id).values_list('steam_id', flat=True))
   list_detail_content = ListDetailContent.objects.filter(list_detail_id=list_id)
-  games_with_tier_rank = []
+
+  # Get all games in the list
+  games = Game.objects.filter(steam_id__in=list_detail_content.values_list('steam_id', flat=True))
+
+  # Create separate lists for each tier of games
+  tier_A_games, tier_B_games, tier_C_games, tier_D_games, tier_F_games = [], [], [], [], []
   for game in games:
     detail = list_detail_content.filter(steam_id=game.steam_id).first()
     if detail:
-      games_with_tier_rank.append((game, detail.tier_rank))
-    else:
-      games_with_tier_rank.append((game, None))
-  games_with_tier_rank.sort(key=lambda x: x[1], reverse=False)
-  sorted_games = [x[0] for x in games_with_tier_rank]
-  context = {'games': sorted_games, 'list_detail': list_detail, 'list_detail_content': list_detail_content}
+      if detail.tier_rank == "A":
+        tier_A_games.append(game)
+      elif detail.tier_rank == "B":
+        tier_B_games.append(game)
+      elif detail.tier_rank == "C":
+        tier_C_games.append(game)
+      elif detail.tier_rank == "D":
+        tier_D_games.append(game)
+      elif detail.tier_rank == "F":
+        tier_F_games.append(game)
+  tiers = (('A', tier_A_games), ('B', tier_B_games), ('C', tier_C_games), ('D', tier_D_games), ('F', tier_F_games))
+  context = {'tier_A_games': tier_A_games, 'tier_B_games': tier_B_games, 'tier_C_games': tier_C_games,
+             'tier_D_games': tier_D_games, 'tier_F_games': tier_F_games, 'list_detail': list_detail,
+             'list_detail_content': list_detail_content, 'tiers': tiers}
   return render(request, 'rogueapp/list_detail.html', context)
-
 
 def add_to_list(request, list_id, game_id):
     # Get the UserList and ListDetail objects for the given list_id
@@ -130,6 +144,7 @@ def update_list_name(request, list_id):
     new_name = request.POST.get('list_name')
     user_list.list_name = new_name
     user_list.save()
+    messages.success(request, ("List Name Updated."))
     return redirect('list_detail', list_id=list_id)
   return render(request, 'rogueapp/update_list_name.html', {'user_list': user_list})
 
@@ -157,3 +172,12 @@ def remove_game(request, pk):
     list_detail_content.delete()
     return redirect('list_detail', list_id=user_list.list_id)
 
+def update_list_description(request, list_id):
+  user_list = UserList.objects.get(list_id=list_id)
+  if request.method == 'POST':
+    new_description = request.POST.get('list_description')
+    user_list.list_description = new_description
+    user_list.save()
+    messages.success(request, ("List Description Updated."))
+    return redirect('list_detail', list_id=list_id)
+  return render(request, 'rogueapp/update_list_description.html', {'user_list': user_list})

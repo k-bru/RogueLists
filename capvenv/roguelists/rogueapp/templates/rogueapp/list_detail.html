@@ -1,110 +1,75 @@
 {% extends 'rogueapp/base.html' %}
 
 {% block content %}
-  <h2>List Name: <em>{{ list_detail.user_list.list_name }}</em></h2>
-  <p class='fw-bold'>List Creator: {{ list_detail.user_list.list_owner }}</p>
-  <ul>
-    <div class="container">
-      <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-around">
-        {% for game in games %}
-        <div class="card m-2">
-          {% for detail in list_detail_content %}
-          {% if detail.steam_id.steam_id == game.steam_id %}
-          {% if request.user == list_detail.user_list.list_owner %}
-          <div class="remove-container position-relative">
-            <a href="#" id="remove-from-list" class="btn btn-sm btn-link text-danger position-absolute top-0 mt-2 my-1 end-0 rounded-circle" data-bs-toggle="modal" data-bs-target="#confirmRemoveModal" data-toggle="tooltip" title="Remove Game From List">
-              <i class="fas fa-times"></i>
-            </a>
-          </div>
-          
-          <!-- Modal -->
-          <div class="modal fade" id="confirmRemoveModal" tabindex="-1" aria-labelledby="confirmRemoveModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="confirmRemoveModalLabel">Confirm Game Removal</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  Are you sure you want to remove this game from the list?
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <a href="{% url 'remove_game' pk=detail.list_detail_content_id %}" class="btn btn-danger">Remove Game</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {% endif %}
-          {% endif %}
-          {% endfor %}
-          <a href="https://store.steampowered.com/app/{{game.steam_id}}">
-            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2">
-          </a>
-          <div class="card-body">
-            <h4 class="card-title text-md-center">
-              <a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a>
-            </h4>
-            {% if game.current_price == 0 and game.release_date > today %}
-            <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
-            {% elif game.current_price == 0 %}
-            <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
-            {% else %}
-            <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
-            {% endif %}
-            {% for detail in list_detail_content %}
-            {% if detail.steam_id.steam_id == game.steam_id %}
-            {% if request.user == list_detail.user_list.list_owner %}
-            <form method="post" action="{% url 'update_tier_rank' pk=detail.list_detail_content_id %}">
-              {% csrf_token %}
-              <label for="tier_rank" class="form-label">Tier Rank:</label>
-              <select name="tier_rank" id="tier_rank" class="form-select mb-2">
-                <option value="A" {% if detail.tier_rank == 'A' %}selected{% endif %}>A</option>
-                <option value="B" {% if detail.tier_rank == 'B' %}selected{% endif %}>B</option>
-                <option value="C" {% if detail.tier_rank == 'C' %}selected{% endif %}>C</option>
-                <option value="D" {% if detail.tier_rank == 'D' %}selected{% endif %}>D</option>
-                <option value="F" {% if detail.tier_rank == 'F' %}selected{% endif %}>F</option>
-              </select>
-            </form>
-            <script>
-            document.querySelectorAll('select[name="tier_rank"]').forEach(function(select) {
-              select.addEventListener('change', function() {
-                this.closest('form').submit();
-              });
-            });
-            </script>
-            {% else %}
-              <p class="card-text text-center fw-bold p-lg-2">Tier Rank: {{ detail.tier_rank }}</p>
-            {% endif %}
-            {% endif %}
-          {% endfor %}
-          </div> 
-        </div>
-      {% empty %}
-        <p>This list is currently empty.</p>
-      {% endfor %}      
-      </div>
+<h2>List Name: <em>{{ list_detail.user_list.list_name }}</em></h2>
+<p class='fw-bold'>List Creator: {{ list_detail.user_list.list_owner }}</p>
+<p><em>{{ list_detail.user_list.list_description }}</em></p>
+
+{% if request.user == list_detail.user_list.list_owner %}
+<div class="my-3">
+  <form method="post" action="{% url 'update_list_name' list_id=list_detail.user_list.list_id %}">
+    {% csrf_token %}
+    <label for="list_name" class="form-label">List Name:</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="list_name" name="list_name" value="{{ list_detail.user_list.list_name }}">
+      <button type="submit" class="btn btn-primary">Edit Name</button>
     </div>
-  </ul>
-  
-  {% if request.user == list_detail.user_list.list_owner %}
-    <div class="my-3">
-      <form method="post" action="{% url 'update_list_name' list_id=list_detail.user_list.list_id %}">
-        {% csrf_token %}
-        <label for="list_name" class="form-label">Edit List Name:</label>
-        <div class="input-group">
-          <input type="text" class="form-control" id="list_name" name="list_name" value="{{ list_detail.user_list.list_name }}">
-          <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-      </form>
-      <br><hr>
-      <center>
-        <form method="post" action="{% url 'delete_list' list_id=list_detail.user_list.list_id %}" onsubmit="return confirm('Are you sure you want to delete this list?')">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger">Delete List</button>
-        </form>
-      </center>
+  </form>
+  <form method="post" action="{% url 'update_list_description' list_id=list_detail.user_list.list_id %}">
+    {% csrf_token %}
+    <label for="list_description" class="form-label">List Description:</label>
+    <div class="input-group">
+      <input type="textarea" class="form-control" id="list_description" name="list_description" value="{{ list_detail.user_list.list_description }}">
+      <button type="submit" class="btn btn-primary">Edit Description</button>
     </div>
-  {% endif %}
+  </form>
+  <br>
+  <hr>
+  <center>
+    <form method="post" action="{% url 'delete_list' list_id=list_detail.user_list.list_id %}" onsubmit="return confirm('Are you sure you want to delete this list?')">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Delete List</button>
+    </form>
+  </center>
+</div>
+{% endif %}
+
+{% for tier, games in tiers %}
+{% if games %}
+<h2>{{ tier }} Tier</h2>
+<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-start">
+  {% for game in games %}
+  <div class="card m-2 col-lg-3">
+    {% for detail in list_detail_content %}
+    {% if detail.steam_id.steam_id == game.steam_id %}
+    {% if request.user == list_detail.user_list.list_owner %}
+    <!-- Modal -->
+    {% include 'rogueapp/modal_remove.html' %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    <a href="https://store.steampowered.com/app/{{game.steam_id}}">
+      <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2">
+    </a>
+    <div class="card-body">
+      <h4 class="card-title text-md-center">
+        <a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a>
+      </h4>
+      {% if game.current_price == 0 and game.release_date > today %}
+      <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
+      {% elif game.current_price == 0 %}
+      <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
+      {% else %}
+      <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
+      {% endif %}
+      {% include 'rogueapp/list_detail_form.html' %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endfor %}
+{% if not tier_A_games and not tier_B_games and not tier_C_games and not tier_D_games and not tier_F_games %}
+<p>This list is currently empty.</p>
+{% endif %}
 {% endblock %}
