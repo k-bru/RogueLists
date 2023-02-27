@@ -73,35 +73,46 @@ def search(request):
   else:
     return render(request, 'rogueapp/search.html', {})
 
+# def create_list(request, game_id):
+#     if request.method == 'POST':
+#         list_name = request.POST.get('list_name')
+#         game = Game.objects.get(steam_id=game_id)
+#         user_list = UserList.objects.create(list_name=list_name, list_description=list_description, user=request.user)
+#         user_list.games.add(game)
+#         return redirect('game_details', steam_id=game_id)
+#     else:
+#         return render(request, 'rogueapp/create_list.html')
+      
 def create_list(request, game_id):
-  if request.method == 'POST':
-    # Get the name of the new list from the form
-    list_name = request.POST.get('list_name')
+    if request.method == 'POST':
+        # Get the name and description of the new list from the form
+        list_name = request.POST.get('list_name')
+        list_description = request.POST.get('list_description')
 
-    # Create a new UserList object with the logged in user as the list owner
-    new_list = UserList(list_owner=request.user, list_name=list_name)
-    new_list.save()
+        # Create a new UserList object with the logged in user as the list owner
+        new_list = UserList(list_owner=request.user, list_name=list_name, list_description=list_description)
+        new_list.save()
 
-    # Create a new ListDetail object for the new list
-    new_list_detail = ListDetail(user_list=new_list)
-    new_list_detail.save()
+        # Create a new ListDetail object for the new list
+        new_list_detail = ListDetail(user_list=new_list)
+        new_list_detail.save()
 
-    # Create a new ListDetailContent object for the game and new list detail
-    game = Game.objects.get(steam_id=game_id)
-    new_list_detail_content = ListDetailContent(list_detail_id=new_list_detail, steam_id=game)
-    new_list_detail_content.save()
+        # Create a new ListDetailContent object for the game and new list detail
+        game = Game.objects.get(steam_id=game_id)
+        new_list_detail_content = ListDetailContent(list_detail_id=new_list_detail, steam_id=game)
+        new_list_detail_content.save()
 
-    return redirect('list_detail', list_id=new_list.list_id)
+        # Redirect the user to the new list detail page
+        return redirect('list_detail', list_id=new_list.list_id)
 
-  game = Game.objects.get(steam_id=game_id)
-  return render(request, 'rogueapp/create_list.html', {'game': game})
+    # If the request method is GET, render the template with the form
+    return render(request, 'rogueapp/create_list.html')
 
-from .models import Game, ListDetailContent, UserList, ListDetail
-
+  
 def list_detail(request, list_id):
   list_detail = get_object_or_404(ListDetail, pk=list_id)
   list_detail_content = ListDetailContent.objects.filter(list_detail_id=list_id)
-
+  today = datetime.date.today()
   # Get all games in the list
   games = Game.objects.filter(steam_id__in=list_detail_content.values_list('steam_id', flat=True))
 
@@ -123,7 +134,7 @@ def list_detail(request, list_id):
   tiers = (('A', tier_A_games), ('B', tier_B_games), ('C', tier_C_games), ('D', tier_D_games), ('F', tier_F_games))
   context = {'tier_A_games': tier_A_games, 'tier_B_games': tier_B_games, 'tier_C_games': tier_C_games,
              'tier_D_games': tier_D_games, 'tier_F_games': tier_F_games, 'list_detail': list_detail,
-             'list_detail_content': list_detail_content, 'tiers': tiers}
+             'list_detail_content': list_detail_content, 'tiers': tiers, 'today': today,}
   return render(request, 'rogueapp/list_detail.html', context)
 
 def add_to_list(request, list_id, game_id):

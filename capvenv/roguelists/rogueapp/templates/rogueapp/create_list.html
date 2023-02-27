@@ -1,8 +1,20 @@
-<form method="POST">
-  {% csrf_token %}
-  <label for="list_name">List name:</label>
-  <input type="text" name="list_name">
-  <label for="list_description">List Description:</label>
-  <input type="textarea" name="list_description">
-  <input type="submit" value="Create list">
-</form>
+{% extends 'rogueapp/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h1>Create new list</h1>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="list_name">List name:</label>
+        <input type="text" class="form-control" id="list_name" name="list_name" required>
+      </div>
+      <div class="form-group">
+        <label for="list_description">List description:</label>
+        <input type="text" class="form-control" id="list_description" name="list_description">
+      </div>
+      <input type="hidden" name="game_id" value="{{ game_id }}">
+      <button type="submit">Create List</button>
+    </form>
+  </div>
+{% endblock %}
