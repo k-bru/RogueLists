@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Game, ListDetailContent, UserList, ListDetail
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .forms import RegisterUserForm
 from django.urls import reverse
 import datetime
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 def home(request):
@@ -27,7 +28,29 @@ def home(request):
         list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
     return render(request, 'rogueapp/home.html', {'list_previews': list_previews})
 
+def user_profile(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    user_lists = UserList.objects.filter(list_owner=user)
+    list_previews = []
+    for user_list in user_lists:
+        game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
+        game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
 
+        # Add game images
+        game_images = []
+        for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
+          game_images.append({
+            'game_id': list_detail_content.steam_id.steam_id,
+            'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
+          })
+
+        list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
+    context = {
+        'user': user,
+        'user_lists': user_lists,
+        'list_previews': list_previews
+    }
+    return render(request, 'rogueapp/user_profile.html', context)
 
 def login_user(request):
   if request.method == "POST":
@@ -140,14 +163,20 @@ def list_detail(request, list_id):
 
 def add_to_list(request, list_id, game_id):
     # Get the UserList and ListDetail objects for the given list_id
-    user_list = UserList.objects.get(list_id=list_id)
-    list_detail = ListDetail.objects.get(user_list=user_list)
+    user_list = get_object_or_404(UserList, list_id=list_id)
+    list_detail = get_object_or_404(ListDetail, user_list=user_list)
 
-    # Create a new ListDetailContent object for the game and list detail
-    game = Game.objects.get(steam_id=game_id)
-    new_list_detail_content = ListDetailContent(list_detail_id=list_detail, steam_id=game)
-    new_list_detail_content.save()
+    # Check if the game is already in the list
+    if ListDetailContent.objects.filter(list_detail_id=list_detail, steam_id=game_id).exists():
+        messages.warning(request, "This game is already in the list.")
+    else:
+        # Create a new ListDetailContent object for the game and list detail
+        game = get_object_or_404(Game, steam_id=game_id)
+        new_list_detail_content = ListDetailContent(list_detail_id=list_detail, steam_id=game)
+        new_list_detail_content.save()
+        messages.success(request, "Game added to list.")
 
+    # Redirect to the list_detail view with the list_id parameter
     return redirect('list_detail', list_id=user_list.list_id)
 
 def update_list_name(request, list_id):

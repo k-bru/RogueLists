@@ -82,12 +82,12 @@
               Add to list
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              {% for user_list in request.user.userlist_set.all %}
+          {% for user_list in request.user.userlist_set.all %}
               <li><a class="dropdown-item" href="{% url 'add_to_list' list_id=user_list.list_id game_id=game.steam_id %}">{{ user_list.list_name }}</a></li>
-              {% endfor %}
+          {% endfor %}
               <li><a class="dropdown-item fw-bold" href="{% url 'create_list' game_id=game.steam_id %}">Add to new list</a></li>
             </ul>
-          </div>
+      </div>
       {% endif %}
     </div>
   </div>

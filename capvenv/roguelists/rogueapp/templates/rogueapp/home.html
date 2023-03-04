@@ -10,25 +10,7 @@
       <div class="row">
         {% for list_preview in list_previews %}
         {% if list_preview.list.list_owner == request.user %}
-        <div class="col-md-6 text-center">
-          <div class="card">
-            <div class="card-header">
-              <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">{{ list_preview.list.list_name }} by {{ list_preview.list.list_owner.username }}</a>
-            </div>
-            <div class="card-body">
-              <p class="card-text">{{ list_preview.game_count }} games</p>
-              <p class="card-text"><em>{{ list_preview.list.list_description }}</em></p>
-              <hr>
-              {% for game_image in list_preview.game_images|slice:":3" %}
-              <a href="https://store.steampowered.com/app/{{ game_image.game_id }}"><img src="{{ game_image.image_url }}" width=231 height=87 class="p-2"></a>
-              {% endfor %}
-              <hr>
-              {% if list_preview.game_titles %}
-              <p class="card-text">{{ list_preview.game_titles|join:", " }}</p>
-              {% endif %}
-            </div>
-          </div>
-        </div>
+        {% include 'rogueapp/show_lists.html' %}
         {% endif %}
         {% endfor %}
       </div>
@@ -40,25 +22,7 @@
       <div class="row">
         {% for list_preview in list_previews %}
         {% if list_preview.list.list_owner != request.user %}
-        <div class="col-md-6 text-center">
-          <div class="card">
-            <div class="card-header">
-              <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">{{ list_preview.list.list_name }} by {{ list_preview.list.list_owner.username }}</a>
-            </div>
-            <div class="card-body">
-              <p class="card-text">{{ list_preview.game_count }} games</p>
-              <p class="card-text"><em>{{ list_preview.list.list_description }}</em></p>
-              <hr>
-              {% for game_image in list_preview.game_images|slice:":3" %}
-              <a href="https://store.steampowered.com/app/{{ game_image.game_id }}"><img src="{{ game_image.image_url }}" width=231 height=87 class="p-2"></a>
-              {% endfor %}
-              <hr>
-              {% if list_preview.game_titles %}
-              <p class="card-text">{{ list_preview.game_titles|join:", " }}</p>
-              {% endif %}
-            </div>
-          </div>
-        </div>
+        {% include 'rogueapp/show_lists.html' %}
         {% endif %}
         {% endfor %}
       </div>
