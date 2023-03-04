@@ -2,13 +2,13 @@ body {
   background-color: #f4f4f4;
 }
 
-.remove-container #remove-from-list {
+#remove-game-button a {
   background-color: #f4f4f4 !important;
   color: #b00b0b !important;
   border: 1px solid #b00b0b;
 }
 
-.remove-container #remove-from-list:hover {
+#remove-game-button a:hover {
   background-color: #b00b0b !important;
   color: #f4f4f4 !important;
 }

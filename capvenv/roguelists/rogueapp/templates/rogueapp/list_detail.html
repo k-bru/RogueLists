@@ -1,6 +1,6 @@
 {% extends 'rogueapp/base.html' %}
-
 {% block content %}
+
 <h2><em>{{ list_detail.user_list.list_name }}</em></h2>
 <p class='fw-bold'>List Creator: {{ list_detail.user_list.list_owner }}</p>
 <p><em>{{ list_detail.user_list.list_description }}</em></p>
@@ -43,8 +43,12 @@
     {% for detail in list_detail_content %}
     {% if detail.steam_id.steam_id == game.steam_id %}
     {% if request.user == list_detail.user_list.list_owner %}
-    <!-- Modal -->
-    {% include 'rogueapp/modal_remove.html' %}
+    <div id="remove-game-button" class="remove-container position-relative">
+      <a id="remove-game-{{ game.steam_id }}" href="{% url 'remove_game' list_id=list_detail.user_list.list_id game_id=game.steam_id %}" class="btn btn-sm btn-link text-danger position-absolute top-0 mt-2 my-1 end-0 rounded-circle" title="Remove Game From List">
+        <i class="fas fa-times"></i>
+      </a>
+    </div>
+    
     {% endif %}
     {% endif %}
     {% endfor %}
@@ -72,6 +76,19 @@
       {% endif %}
       <p class="card-text text-center fw-bold p-lg-2">{{game.release_date}}</p>
       {% include 'rogueapp/list_detail_form.html' %}
+      {% if request.user.is_authenticated %}
+          <div class="dropdown text-center">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              Add to list
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              {% for user_list in request.user.userlist_set.all %}
+              <li><a class="dropdown-item" href="{% url 'add_to_list' list_id=user_list.list_id game_id=game.steam_id %}">{{ user_list.list_name }}</a></li>
+              {% endfor %}
+              <li><a class="dropdown-item fw-bold" href="{% url 'create_list' game_id=game.steam_id %}">Add to new list</a></li>
+            </ul>
+          </div>
+      {% endif %}
     </div>
   </div>
   {% endfor %}

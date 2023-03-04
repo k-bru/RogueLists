@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .forms import RegisterUserForm
+from django.urls import reverse
 import datetime
 from django.contrib.auth.decorators import login_required
 
@@ -176,12 +177,34 @@ def update_tier_rank(request, pk):
         return redirect('list_detail', list_id=list_detail.pk)
     return render(request, 'rogueapp/update_tier_rank.html', {'list_detail_content': list_detail_content})
 
-def remove_game(request, pk):
-    list_detail_content = get_object_or_404(ListDetailContent, pk=pk)
-    list_detail = list_detail_content.list_detail_id
-    user_list = list_detail.user_list
+def remove_game(request, list_id, game_id):
+    # get the list_detail_content object that needs to be removed
+    user_list = UserList.objects.get(list_id=list_id)
+    list_detail = ListDetail.objects.get(user_list=user_list)
+    list_detail_content = get_object_or_404(ListDetailContent, list_detail_id=list_detail, steam_id=game_id)
+    # remove the list_detail_content object
     list_detail_content.delete()
+
+    # create an undo button with the reverse URL of the add_game view
+    undo_button = f'<a href="{reverse("add_to_list", args=[list_id, game_id])}" class="btn btn-sm btn-link">Undo</a>'
+
+    # add a success message with the undo button
+    messages.success(request, f"{list_detail_content.steam_id.game_title} successfully removed from list. {undo_button}")
+
+    # redirect to the list_detail view with the list_id parameter
     return redirect('list_detail', list_id=user_list.list_id)
+
+
+# def undo_remove_game(request):
+#     if request.method == 'POST':
+#         deleted_content_id = request.POST.get('deleted_content_id')
+#         try:
+#             deleted_content = ListDetailContent.objects.get(pk=deleted_content_id)
+#             deleted_content.pk = None  # create a new object with the same data
+#             deleted_content.save()
+#         except ListDetailContent.DoesNotExist:
+#             pass
+#     return redirect('home')
 
 def update_list_description(request, list_id):
   user_list = UserList.objects.get(list_id=list_id)
