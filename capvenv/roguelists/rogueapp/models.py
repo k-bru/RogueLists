@@ -1,5 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # Create your models here.
 class Game(models.Model):
@@ -36,3 +39,11 @@ class ListDetailContent(models.Model):
   
   def __str__(self):
     return self.list_detail_content_id
+  
+class Follow(models.Model):
+  follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+  following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+  created = models.DateTimeField(auto_now_add=True)
+
+  class Meta:
+      unique_together = ('follower', 'following')

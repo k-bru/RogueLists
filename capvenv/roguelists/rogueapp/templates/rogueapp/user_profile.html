@@ -1,6 +1,20 @@
 {% extends 'rogueapp/base.html' %}
+
 {% block content %}
 <h1>{{ user.username }}'s Profile</h1>
+{% if request.user != user %}
+    {% if is_following %}
+        <form action="{% url 'unfollow' user.pk %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Unfollow</button>
+        </form>
+    {% else %}
+        <form action="{% url 'follow' user.pk %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Follow</button>
+        </form>
+    {% endif %}
+{% endif %}
 
 <h2>Lists</h2>
 <div class="container">

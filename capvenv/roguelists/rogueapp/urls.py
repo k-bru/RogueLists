@@ -19,6 +19,8 @@ urlpatterns = [
   path('list_detail_content/<int:list_id>/<int:game_id>', views.remove_game, name='remove_game'),
   path('update_list_description/<int:list_id>', views.update_list_description, name='update_list_description'),
   path('profile/<int:user_id>/', views.user_profile, name='user_profile'),
+  path('follow/<int:user_id>/', views.follow, name='follow'),
+  path('unfollow/<int:user_id>/', views.unfollow, name='unfollow'),
 ]
 
 if DEBUG:

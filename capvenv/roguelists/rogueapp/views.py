@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Game, ListDetailContent, UserList, ListDetail
+from .models import Game, ListDetailContent, UserList, ListDetail, Follow
 from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
@@ -39,17 +39,22 @@ def user_profile(request, user_id):
         # Add game images
         game_images = []
         for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
-          game_images.append({
-            'game_id': list_detail_content.steam_id.steam_id,
-            'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
-          })
+            game_images.append({
+                'game_id': list_detail_content.steam_id.steam_id,
+                'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
+            })
 
         list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
+
+    is_following = Follow.objects.filter(follower=request.user, following=user).exists()
+
     context = {
         'user': user,
         'user_lists': user_lists,
-        'list_previews': list_previews
+        'list_previews': list_previews,
+        'is_following': is_following
     }
+
     return render(request, 'rogueapp/user_profile.html', context)
 
 def login_user(request):
@@ -96,17 +101,7 @@ def search(request):
      'today':today})
   else:
     return render(request, 'rogueapp/search.html', {})
-
-# def create_list(request, game_id):
-#     if request.method == 'POST':
-#         list_name = request.POST.get('list_name')
-#         game = Game.objects.get(steam_id=game_id)
-#         user_list = UserList.objects.create(list_name=list_name, list_description=list_description, user=request.user)
-#         user_list.games.add(game)
-#         return redirect('game_details', steam_id=game_id)
-#     else:
-#         return render(request, 'rogueapp/create_list.html')
-      
+  
 def create_list(request, game_id):
     if request.method == 'POST':
         # Get the name and description of the new list from the form
@@ -223,18 +218,6 @@ def remove_game(request, list_id, game_id):
     # redirect to the list_detail view with the list_id parameter
     return redirect('list_detail', list_id=user_list.list_id)
 
-
-# def undo_remove_game(request):
-#     if request.method == 'POST':
-#         deleted_content_id = request.POST.get('deleted_content_id')
-#         try:
-#             deleted_content = ListDetailContent.objects.get(pk=deleted_content_id)
-#             deleted_content.pk = None  # create a new object with the same data
-#             deleted_content.save()
-#         except ListDetailContent.DoesNotExist:
-#             pass
-#     return redirect('home')
-
 def update_list_description(request, list_id):
   user_list = UserList.objects.get(list_id=list_id)
   if request.method == 'POST':
@@ -244,3 +227,13 @@ def update_list_description(request, list_id):
     messages.success(request, ("List Description Updated."))
     return redirect('list_detail', list_id=list_id)
   return render(request, 'rogueapp/update_list_description.html', {'user_list': user_list})
+
+def follow(request, user_id):
+    user_to_follow = get_object_or_404(User, pk=user_id)
+    follow_obj, created = Follow.objects.get_or_create(follower=request.user, following=user_to_follow)
+    return redirect('user_profile', user_id=user_id)
+
+def unfollow(request, user_id):
+    user_to_unfollow = get_object_or_404(User, pk=user_id)
+    Follow.objects.filter(follower=request.user, following=user_to_unfollow).delete()
+    return redirect('user_profile', user_id=user_id)
