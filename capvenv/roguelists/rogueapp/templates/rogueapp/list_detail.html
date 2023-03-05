@@ -1,43 +1,41 @@
 {% extends 'rogueapp/base.html' %}
 {% block content %}
-
-<h2><em>{{ list_detail.user_list.list_name }}</em></h2>
-<p class='fw-bold'>List Creator: {{ list_detail.user_list.list_owner }}</p>
-<p><em>{{ list_detail.user_list.list_description }}</em></p>
-
-{% if request.user == list_detail.user_list.list_owner %}
-<div class="my-3">
-  <form method="post" action="{% url 'update_list_name' list_id=list_detail.user_list.list_id %}">
-    {% csrf_token %}
-    <label for="list_name" class="form-label"></label>
-    <div class="input-group">
-      <input type="text" class="form-control" id="list_name" name="list_name" value="{{ list_detail.user_list.list_name }}">
-      <button type="submit" class="btn btn-primary">Edit Name</button>
-    </div>
-  </form>
-  <form method="post" action="{% url 'update_list_description' list_id=list_detail.user_list.list_id %}">
-    {% csrf_token %}
-    <label for="list_description" class="form-label"></label>
-    <div class="input-group">
-      <input type="textarea" class="form-control" id="list_description" name="list_description" value="{{ list_detail.user_list.list_description }}">
-      <button type="submit" class="btn btn-primary">Edit Description</button>
-    </div>
-  </form>
-  <br>
-  <center>
+<div id="user-list-heading">
+  <h2><em>{{ list_detail.user_list.list_name }}</em></h2>
+  <p class='fw-bold'>By <a href="{% url 'user_profile' user_id=user.id %}">{{ list_detail.user_list.list_owner }}</a></p>
+  <p><em>{{ list_detail.user_list.list_description }}</em></p>
+  {% if request.user == list_detail.user_list.list_owner %}
+  <div class="my-3">
+    <form method="post" action="{% url 'update_list_name' list_id=list_detail.user_list.list_id %}">
+      {% csrf_token %}
+      <label for="list_name" class="form-label"></label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="list_name" name="list_name" value="{{ list_detail.user_list.list_name }}">
+        <button type="submit" class="btn">Edit Name</button>
+      </div>
+    </form>
+    <form method="post" action="{% url 'update_list_description' list_id=list_detail.user_list.list_id %}">
+      {% csrf_token %}
+      <label for="list_description" class="form-label"></label>
+      <div class="input-group">
+        <input type="textarea" class="form-control" id="list_description" name="list_description" value="{{ list_detail.user_list.list_description }}">
+        <button type="submit" class="btn">Edit Description</button>
+      </div>
+    </form>
+    <br>
     <form method="post" action="{% url 'delete_list' list_id=list_detail.user_list.list_id %}" onsubmit="return confirm('Are you sure you want to delete this list?')">
       {% csrf_token %}
-      <button type="submit" class="btn btn-danger">Delete List</button>
+      <button type="submit" class="btn" id="delete-list-btn">Delete List</button>
     </form>
-  </center>
-  <hr>
+  </div>
+  {% endif %}
 </div>
-{% endif %}
+<hr>
 
 {% for tier, games in tiers %}
 {% if games %}
 <h2>{{ tier }} Tier</h2>
-<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-start">
+<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-center">
   {% for game in games %}
   <div class="card m-2 col-lg-3">
     {% for detail in list_detail_content %}
@@ -45,48 +43,54 @@
     {% if request.user == list_detail.user_list.list_owner %}
     <div id="remove-game-button" class="remove-container position-relative">
       <a id="remove-game-{{ game.steam_id }}" href="{% url 'remove_game' list_id=list_detail.user_list.list_id game_id=game.steam_id %}" class="btn btn-sm btn-link text-danger position-absolute top-0 mt-2 my-1 end-0 rounded-circle" title="Remove Game From List">
-        <i class="fas fa-times"></i>
+        <i class="fas fa-times" id="remove-game-x"></i>
       </a>
     </div>
-    
+
     {% endif %}
     {% endif %}
     {% endfor %}
     <a href="https://store.steampowered.com/app/{{game.steam_id}}">
-      <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2">
+      <div id="list-detail-card">
+        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2" title="Steam Store">
+        <div>
+          {% if game.base_price > 0 %}
+          {% if game.base_price == game.current_price %}
+          <p class="card-text text-center fw-bold p-lg-2">${{game.base_price}}</p>
+          {% endif %}
+          {% if game.base_price > game.current_price %}
+          <div id="sale-container">
+            <p class="card-text text-center fw-bold p-lg-2 text-decoration-line-through">${{game.base_price}}</p>
+          </div>
+          <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
+          {% endif %}
+          {% endif %}
+          {% if game.current_price == 0 and game.release_date > today %}
+          <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
+          {% elif game.current_price == 0 %}
+          <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
+          {% else %}
+          {% endif %}
+        </div>
+      </div>
     </a>
     <div class="card-body">
       <h4 class="card-title text-md-center">
-        <a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a>
+        <a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none" title="{{game.game_title}}">{{game.game_title}}</a>
       </h4>
-      {% if game.base_price > 0 %}
-      {% if game.base_price == game.current_price %}
-      <p class="card-text text-center fw-bold p-lg-2">${{game.base_price}}</p>
-      {% endif %}
-      {% if game.base_price > game.current_price %}
-      <p class="card-text text-center fw-bold p-lg-2 text-decoration-line-through">${{game.base_price}}</p>
-      <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
-      {% endif %}
-      {% endif %}
-      {% if game.current_price == 0 and game.release_date > today %}
-      <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
-      {% elif game.current_price == 0 %}
-      <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
-      {% else %}
-      {% endif %}
       <p class="card-text text-center fw-bold p-lg-2">{{game.release_date}}</p>
       {% include 'rogueapp/list_detail_form.html' %}
       {% if request.user.is_authenticated %}
-          <div class="dropdown text-center">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-              Add to list
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown text-center">
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+          Add to list
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {% for user_list in request.user.userlist_set.all %}
-              <li><a class="dropdown-item" href="{% url 'add_to_list' list_id=user_list.list_id game_id=game.steam_id %}">{{ user_list.list_name }}</a></li>
+          <li><a class="dropdown-item" href="{% url 'add_to_list' list_id=user_list.list_id game_id=game.steam_id %}">{{ user_list.list_name }}</a></li>
           {% endfor %}
-              <li><a class="dropdown-item fw-bold" href="{% url 'create_list' game_id=game.steam_id %}">Add to new list</a></li>
-            </ul>
+          <li><a class="dropdown-item fw-bold" href="{% url 'create_list' game_id=game.steam_id %}">Add to new list</a></li>
+        </ul>
       </div>
       {% endif %}
     </div>

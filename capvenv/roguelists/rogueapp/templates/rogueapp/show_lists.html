@@ -1,19 +1,21 @@
-<div class="col-md-6 text-center">
-  <div class="card">
-    <div class="card-header">
-      <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">{{ list_preview.list.list_name }}</a> by <a href="{% url 'user_profile' user_id=list_preview.list.list_owner.id %}">{{ list_preview.list.list_owner.username }}</a>
-    </div>
+<div class="card">
+  <div class="card-header">
+    <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">{{ list_preview.list.list_name }}</a> by <a href="{% url 'user_profile' user_id=list_preview.list.list_owner.id %}">{{ list_preview.list.list_owner.username }}</a>
+  </div>
+  <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
     <div class="card-body">
       <p class="card-text">{{ list_preview.game_count }} games</p>
       <p class="card-text"><em>{{ list_preview.list.list_description }}</em></p>
       <hr>
-      {% for game_image in list_preview.game_images|slice:":3" %}
-      <a href="https://store.steampowered.com/app/{{ game_image.game_id }}"><img src="{{ game_image.image_url }}" width=231 height=87 class="p-2"></a>
-      {% endfor %}
-      <hr>
-      {% if list_preview.game_titles %}
-      <p class="card-text">{{ list_preview.game_titles|join:", " }}</p>
-      {% endif %}
+      <div class="row">
+        {% for game_image in list_preview.game_images|slice:":3" %}
+          <div class="col-4">
+            <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
+              <img class="w-100" src="{{ game_image.image_url }}">
+            </a>
+          </div>
+        {% endfor %}
+      </div>
     </div>
-  </div>
+  </a>
 </div>

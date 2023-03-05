@@ -40,6 +40,15 @@
       
     </ul>
 
+    {% if user.is_authenticated %}
+    <ul class="navbar-nav me-2">
+      <li class="nav-item text-white">
+        Logged in as <a id="log-message" href="{% url 'user_profile' user_id=user.id %}">{{ user }}</a>
+      </li>
+      
+    </ul>
+    {% endif %}
+
     <form class="d-flex" method="POST" action="{% url 'search' %}">
       {% csrf_token %}
       <input type="search" class="form-control me-2" placeholder="Search Games" aria-label="Search" name="searched">
