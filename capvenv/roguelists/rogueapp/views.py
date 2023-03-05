@@ -11,22 +11,43 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 def home(request):
-    user_lists = UserList.objects.select_related('list_owner').all()
+    user_lists = UserList.objects.select_related('list_owner').all().order_by('-list_id')
     list_previews = []
-    for user_list in user_lists:
-        game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
-        game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
+    followed_users = []
+    if request.user.is_authenticated:
+        follows = Follow.objects.filter(follower=request.user)
+        followed_users = [follow.following for follow in follows]
+        for user_list in user_lists:
+            game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
+            game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
 
-        # Add game images
-        game_images = []
-        for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
-          game_images.append({
-            'game_id': list_detail_content.steam_id.steam_id,
-            'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
-          })
+            # Add game images
+            game_images = []
+            for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
+                game_images.append({
+                    'game_id': list_detail_content.steam_id.steam_id,
+                    'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
+                })
 
-        list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
-    return render(request, 'rogueapp/home.html', {'list_previews': list_previews})
+            list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
+    else:
+        # Get all public lists
+        user_lists = UserList.objects.all().order_by('-list_id')
+        for user_list in user_lists:
+            game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
+            game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
+
+            # Add game images
+            game_images = []
+            for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
+                game_images.append({
+                    'game_id': list_detail_content.steam_id.steam_id,
+                    'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
+                })
+
+            list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
+    return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users})
+
 
 def user_profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
@@ -46,7 +67,10 @@ def user_profile(request, user_id):
 
         list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
 
-    is_following = Follow.objects.filter(follower=request.user, following=user).exists()
+    is_following = False
+    if request.user.is_authenticated:
+        is_following = Follow.objects.filter(follower=request.user, following=user).exists()
+
 
     context = {
         'user': user,

@@ -3,31 +3,61 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="row col-md-8">
+    <div class="row col-md-8" id="home-page">
       {% if list_previews %}
+        {% if request.user.is_authenticated %}
+          <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#my-lists" title="Show/Hide">My Lists:</h2>
+          <div id="my-lists" class="row content show">
+            <div class="row content show">
+              {% for list_preview in list_previews %}
+                {% if list_preview.list.list_owner == request.user %}
+                  {% include 'rogueapp/show_lists.html' %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          <hr>
+          <br>
+      
+          {% if followed_users %}
+            <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide">Followed Users' Lists:</h2>
+            <div id="f-lists" class="row content show">
+              <div class="row content show">
+                {% for list_preview in list_previews %}
+                  {% if list_preview.list.list_owner in followed_users %}
+                    {% include 'rogueapp/show_lists.html' %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          {% else %}
+            <p>You are not following any users.</p>
+          {% endif %}
+          <hr>
+          <br>
+        {% endif %}
+      {% endif %}
+
       {% if request.user.is_authenticated %}
-      <h2>My Lists:</h2>
-      <div class="row">
-        {% for list_preview in list_previews %}
-        {% if list_preview.list.list_owner == request.user %}
-        {% include 'rogueapp/show_lists.html' %}
-        {% endif %}
-        {% endfor %}
-      </div>
-      <hr>
-      {% endif %}
-      {% endif %}
-      {% if list_previews %}
-      <h2>Other Users' Lists:</h2>
-      <div class="row">
-        {% for list_preview in list_previews %}
-        {% if list_preview.list.list_owner != request.user %}
-        {% include 'rogueapp/show_lists.html' %}
-        {% endif %}
-        {% endfor %}
-      </div>
+        <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Recent Lists:</h2>
+        <div id="unauth-lists" class="row content show">
+          <div class="row content show">
+            {% for list_preview in list_previews %}
+              {% include 'rogueapp/show_lists.html' %}
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Recent Lists:</h2>
+        <div id="unauth-lists" class="row content show">
+          <div class="row content show">
+            {% for list_preview in list_previews %}
+              {% include 'rogueapp/show_lists.html' %}
+            {% endfor %}
+          </div>
+        </div>
       {% endif %}
     </div>
   </div>
-  {% endblock %}
 </div>
+{% endblock %}

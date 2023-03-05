@@ -16,3 +16,13 @@ body {
 .home-previews {
   align-items: center !important;
 }
+
+#home-page h2 {
+  cursor: pointer;
+  transition: .5s;
+}
+
+#home-page h2:hover {
+  color: #c4c2c2;
+  transition: .5s;
+}

@@ -1,0 +1,11 @@
+
+{% if list_previews %}
+<h2>Followed Users' Lists:</h2>
+<div class="row">
+  {% for list_preview in list_previews %}
+  {% include 'rogueapp/show_lists.html' %}
+  {% endfor %}
+</div>
+{% else %}
+<p>You are not following any users.</p>
+{% endif %}
