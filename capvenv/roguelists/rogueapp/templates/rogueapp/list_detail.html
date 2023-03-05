@@ -2,7 +2,7 @@
 {% block content %}
 <div id="user-list-heading">
   <h2><em>{{ list_detail.user_list.list_name }}</em></h2>
-  <p class='fw-bold'>By <a href="{% url 'user_profile' user_id=user.id %}">{{ list_detail.user_list.list_owner }}</a></p>
+  <p class='fw-bold'>By <a href="{% url 'user_profile' user_id=list_detail.user_list.list_owner.id%}">{{ list_detail.user_list.list_owner }}</a></p>
   <p><em>{{ list_detail.user_list.list_description }}</em></p>
   {% if request.user == list_detail.user_list.list_owner %}
   <div class="my-3">
