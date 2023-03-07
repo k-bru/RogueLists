@@ -3,6 +3,7 @@ from . import views
 from roguelists.settings import DEBUG, STATIC_ROOT, STATIC_URL, MEDIA_ROOT, MEDIA_URL
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from django.contrib import admin
 
 urlpatterns = [
   path('', views.home, name='home'),
@@ -21,6 +22,7 @@ urlpatterns = [
   path('profile/<int:user_id>/', views.user_profile, name='user_profile'),
   path('follow/<int:user_id>/', views.follow, name='follow'),
   path('unfollow/<int:user_id>/', views.unfollow, name='unfollow'),
+  path('admin/', admin.site.urls),
 ]
 
 if DEBUG:

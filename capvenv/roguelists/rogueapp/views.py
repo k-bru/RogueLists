@@ -116,15 +116,42 @@ def register_user(request):
   return render(request, 'authenticate/register_user.html', {'form':form})
 
 def search(request):
-  if request.method == "POST":
     today = datetime.date.today()
-    searched = request.POST['searched']
-    games = Game.objects.filter(game_title__contains=searched)
-    return render(request, 'rogueapp/search.html', {'searched':searched,
-     'games':games,
-     'today':today})
-  else:
-    return render(request, 'rogueapp/search.html', {})
+    searched = request.GET.get('searched')
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    release_date_start = request.GET.get('min_release_date')
+    release_date_end = request.GET.get('max_release_date')
+
+    games = Game.objects.all()
+
+    if searched:
+        games = games.filter(game_title__icontains=searched)
+    if min_price:
+        min_price = float(min_price)
+        games = games.filter(current_price__gte=min_price)
+    if max_price:
+        max_price = float(max_price)
+        games = games.filter(current_price__lte=max_price)
+    if release_date_start:
+        release_date_start = datetime.datetime.strptime(release_date_start, "%Y-%m-%d").date()
+        games = games.filter(release_date__gte=release_date_start)
+    if release_date_end:
+        release_date_end = datetime.datetime.strptime(release_date_end, "%Y-%m-%d").date()
+        games = games.filter(release_date__lte=release_date_end)
+    
+    if not searched and not min_price and not max_price and not release_date_start and not release_date_end:
+        games = Game.objects.all()
+
+    return render(request, 'rogueapp/search.html', {'searched': searched,
+                                                     'games': games,
+                                                     'min_price': min_price,
+                                                     'max_price': max_price,
+                                                     'release_date_start': release_date_start,
+                                                     'release_date_end': release_date_end,
+                                                     'today': today,
+                                                     **request.GET.dict()})
+
   
 def create_list(request, game_id):
     if request.method == 'POST':

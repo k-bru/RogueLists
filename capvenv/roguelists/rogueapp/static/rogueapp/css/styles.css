@@ -192,3 +192,13 @@ a,
   color: var(--dark) !important;
   border-radius: .5rem;
 }
+
+#filters-container {
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+#filter-form {
+  margin: 0 auto;
+  width: 75%;
+}

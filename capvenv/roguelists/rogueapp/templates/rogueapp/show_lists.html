@@ -4,16 +4,16 @@
   </div>
   <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
     <div class="card-body">
-      <p class="card-text">{{ list_preview.game_count }} games</p>
+      <p class="card-text">{{ list_preview.game_count }} {% if list_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
       <p class="card-text"><em>{{ list_preview.list.list_description }}</em></p>
       <hr>
       <div class="row">
         {% for game_image in list_preview.game_images|slice:":3" %}
-          <div class="col-4">
-            <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-              <img class="w-100" src="{{ game_image.image_url }}">
-            </a>
-          </div>
+        <div class="col-4">
+          <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
+            <img class="w-100" src="{{ game_image.image_url }}">
+          </a>
+        </div>
         {% endfor %}
       </div>
     </div>

@@ -29,7 +29,7 @@ class ListDetail(models.Model):
   user_list = models.ForeignKey(UserList, to_field="list_id", db_column="user_list_id", on_delete=models.CASCADE, db_constraint=True)
   
   def __str__(self):
-    return self.list_detail_id
+    return str(self.list_detail_id)
 
 class ListDetailContent(models.Model):
   list_detail_content_id = models.AutoField(primary_key=True)
@@ -38,7 +38,7 @@ class ListDetailContent(models.Model):
   tier_rank = models.CharField(max_length=1, null=True, default="A")
   
   def __str__(self):
-    return self.list_detail_content_id
+    return str(self.list_detail_content_id)
   
 class Follow(models.Model):
   follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')

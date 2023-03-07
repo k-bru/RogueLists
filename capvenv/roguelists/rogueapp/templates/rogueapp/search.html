@@ -1,4 +1,5 @@
 {% extends 'rogueapp/base.html' %}
+
 {% block content %}
 <center>
   <br>
@@ -7,13 +8,51 @@
   {% else %}
   <h1>Search Games</h1>
   {% endif %}
-  <form class="d-flex" method="POST" action="{% url 'search' %}">
+  <form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" class="input-group mb-3">
     {% csrf_token %}
-    <input type="search" class="form-control me-2" placeholder="Search Games" aria-label="Search" name="searched">
-    <button class="btn btn-outline-secondary" type="submit">Search</button>
+    {% if searched == None %}
+    <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched">
+    {% else %}
+    <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched" value="{{ searched }}">
+    {% endif %}
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </div>
   </form>
-  {% if searched %}
   <br>
+  <form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" id="filter-form">
+    <div class="row justify-content-center" id="filters-container">
+      <div class="col-sm-6 col-md-4">
+        <label for="price_range">Price range:</label>
+        <div class="input-group">
+          <input type="number" name="min_price" id="min_price" placeholder="Min" class="form-control" value="{{ min_price }}">
+          <span class="input-group-text">-</span>
+          <input type="number" name="max_price" id="max_price" placeholder="Max" class="form-control" value="{{ max_price }}">
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4">
+        <label for="release_date_range">Release date range:</label>
+        <div class="input-group">
+          <input type="date" name="min_release_date" id="min_release_date" placeholder="Earliest" class="form-control" value="{{ release_date_start|date:'Y-m-d' }}">
+          <span class="input-group-text">-</span>
+          <input type="date" name="max_release_date" id="max_release_date" placeholder="Latest" class="form-control" value="{{ release_date_end|date:'Y-m-d' }}">
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-4">
+        {% if searched != 'None' %}
+        <input type="hidden" name="searched" value="">
+        {% else %}
+        <input type="hidden" name="searched" value="{{ searched }}">
+        {% endif %}
+        <button type="submit" class="btn btn-secondary btn-block mt-auto">Filter</button>
+      </div>
+    </div>
+  </form>
+
+
+
+
+
   <div class="container">
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-around">
       {% for game in games %}
@@ -59,7 +98,6 @@
     {% endfor %}
   </div>
   </div>
-  {% endif %}
 
 </center>
 {% endblock %}
