@@ -202,3 +202,9 @@ a,
   margin: 0 auto;
   width: 75%;
 }
+
+#main-logo {
+  width: 2.5rem;
+  height: auto;
+  filter: invert();
+}
