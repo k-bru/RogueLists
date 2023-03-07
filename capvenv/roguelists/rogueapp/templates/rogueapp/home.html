@@ -5,6 +5,15 @@
   <div class="row" id="home-flex">
     <div class="row col-md-8" id="home-page">
       {% if list_previews %}
+      <div class="card">
+        <div class="card-heading">
+          <h1 class="text-center p-lg-2">Create a List for Steam Games</h1>
+        </div>
+        <div class="card-body">
+          <p class="text-center">RogueLists is a proof of concept project designed to create and rank games found on steam under the 'RogueLike' genre. Users are able to create and share lists with others and even follow others so that they can see any future lists they create. </p>
+          <p class="text-center">Site is currently in development and is being worked on to improve your experience. Pricing is updated about once a week, so some prices may be outdated if sales have ended recently.</p>
+        </div>
+      </div>
       {% if request.user.is_authenticated %}
       <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#my-lists" title="Show/Hide">My Lists</h2>
       <div id="my-lists" class="row content show">
@@ -15,7 +24,7 @@
             <div class="col-md-6 mb-4">
               {% include 'rogueapp/show_lists.html' %}
             </div>
-              {% endif %}
+            {% endif %}
             {% endfor %}
           </div>
 
@@ -33,7 +42,7 @@
           <div class="col-md-4 mb-4">
             {% include 'rogueapp/show_lists.html' %}
           </div>
-            {% endif %}
+          {% endif %}
           {% endfor %}
         </div>
       </div>

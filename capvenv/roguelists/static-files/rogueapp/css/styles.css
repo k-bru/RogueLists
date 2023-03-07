@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+:root {
+  --black: #171a21;
+  --sky: #66c0f4;
+  --dark: #1b2838;
+  --denim: #2a475e;
+  --light: #c7d5e0;
+}
+
+body {
+  background-color: var(--black);
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  color: var(--light)
+}
+
+
+/* links and buttons */
+a {
+  color: var(--light);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--sky);
+}
+
+a,
+#log-message {
+  transition: .5s;
+}
+
+#remove-game-button a {
+  background-color: var(--denim);
+  color: var(--light);
+  z-index: 100;
+  transition: .5s;
+}
+
+#remove-game-button a:hover {
+  background-color: var(--light);
+  color: var(--denim);
+  transition: .5s;
+}
+
+#remove-game-button a:hover #remove-game-x {
+  color: var(--denim);
+  transition: .5s;
+}
+
+#remove-game-x {
+  color: var(--light);
+  transition: .5s;
+}
+
+.btn {
+  color: var(--sky);
+  background-color: var(--denim);
+  border: 1px solid var(--sky);
+}
+
+.btn:hover {
+  color: var(--light);
+  border: 1px solid var(--light);
+}
+
+#delete-list-btn {
+  color: var(--light);
+  background-color: #3f0101;
+  border: 1px solid var(--light);
+  transition: .5s;
+}
+
+#delete-list-btn:hover {
+  color: var(--denim);
+  background-color: var(--light);
+  border: 1px solid var(--denim);
+  transition: .5s;
+}
+
+#home-flex {
+  justify-content: center;
+}
+
+#home-page {
+  justify-content: space-around;
+  justify-items: center;
+}
+
+#home-page div,
+#home-page h2 {
+  justify-content: center;
+  text-align: center;
+}
+
+#list-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* user messages */
+#user-list-heading {
+  text-align: center;
+  width: 50%;
+  margin: auto;
+}
+
+/* home page */
+.home-previews {
+  align-items: center;
+}
+
+#home-page h2 {
+  cursor: pointer;
+  transition: .5s;
+  background-color: var(--dark);
+  color: var(--light);
+  border-radius: 1rem;
+  width: 50%;
+  padding: .5rem;
+  margin-bottom: 1rem;
+}
+
+#home-page h2:hover {
+  background-color: var(--denim);
+}
+
+#home-page h2.collapsed::after {
+  content: "\002B";
+  color: var(--sky);
+  font-weight: bold;
+  float: right;
+}
+
+#home-page h2:not(.collapsed)::after {
+  content: "\2212";
+  color: var(--sky);
+  font-weight: bold;
+  float: right;
+}
+
+#home-page h2:hover {
+  color: var(--sky);
+  transition: .5s;
+}
+
+/* cards and lists */
+#list-detail-card {
+  position: relative;
+}
+
+#list-detail-card div {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: var(--black);
+}
+
+#preview-image {
+  padding: 2px;
+  width: 80%;
+  height: auto;
+}
+
+#list-detail-card div p {
+  color: var(--light);
+  transition: .5s;
+}
+
+#list-detail-card div p:hover {
+  color: var(--sky);
+  transition: .5s;
+}
+
+.card {
+  background-color: var(--denim);
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+}
+
+.card .btn {
+  background-color: var(--dark);
+}
+
+#sale-container p{
+  font-size: 90%;
+  position: absolute;
+  bottom: 2.5rem;
+  right: .25rem;
+  background-color: var(--light);
+  color: var(--dark) !important;
+  border-radius: .5rem;
+}
+
+#filters-container {
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+#filter-form {
+  margin: 0 auto;
+  width: 75%;
+}
