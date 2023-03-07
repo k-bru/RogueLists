@@ -7,12 +7,12 @@
     {% if is_following %}
         <form action="{% url 'unfollow' user.pk %}" method="post">
             {% csrf_token %}
-            <button type="submit">Unfollow</button>
+            <button type="submit" class="btn btn-secondary">Unfollow</button>
         </form>
     {% else %}
         <form action="{% url 'follow' user.pk %}" method="post">
             {% csrf_token %}
-            <button type="submit">Follow</button>
+            <button type="submit" class="btn btn-secondary">Follow</button>
         </form>
     {% endif %}
 {% endif %}
