@@ -122,6 +122,8 @@ def search(request):
     max_price = request.GET.get('max_price')
     release_date_start = request.GET.get('min_release_date')
     release_date_end = request.GET.get('max_release_date')
+    sort_by = request.GET.get('sort_by', 'game_title')
+    sort_order = request.GET.get('sort_order', 'asc')
 
     games = Game.objects.all()
 
@@ -139,7 +141,12 @@ def search(request):
     if release_date_end:
         release_date_end = datetime.datetime.strptime(release_date_end, "%Y-%m-%d").date()
         games = games.filter(release_date__lte=release_date_end)
-    
+
+    if sort_order == 'asc':
+        games = games.order_by(sort_by)
+    else:
+        games = games.order_by(f'-{sort_by}')
+
     if not searched and not min_price and not max_price and not release_date_start and not release_date_end:
         games = Game.objects.all()
 
@@ -150,9 +157,10 @@ def search(request):
                                                      'release_date_start': release_date_start,
                                                      'release_date_end': release_date_end,
                                                      'today': today,
+                                                     'sort_by': sort_by,
+                                                     'sort_order': sort_order,
                                                      **request.GET.dict()})
 
-  
 def create_list(request, game_id):
     if request.method == 'POST':
         # Get the name and description of the new list from the form

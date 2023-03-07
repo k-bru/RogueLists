@@ -11,7 +11,7 @@
   <form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" class="input-group mb-3">
     {% csrf_token %}
     {% if searched == None %}
-    <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched">
+    <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched" value="">
     {% else %}
     <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched" value="{{ searched }}">
     {% endif %}
@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-4">
-        {% if searched != 'None' %}
+        {% if searched == None %}
         <input type="hidden" name="searched" value="">
         {% else %}
         <input type="hidden" name="searched" value="{{ searched }}">
@@ -47,11 +47,20 @@
         <button type="submit" class="btn btn-secondary btn-block mt-auto">Filter</button>
       </div>
     </div>
+    {% if searched != None %}
+    <div class="col-sm-12 col-md-4">
+      <label for="sort_by">Sort by:</label>
+      <select name="sort_by" id="sort_by" class="form-select" onchange="this.form.submit()">
+        <option value="game_title" {% if sort_order == 'game_title' %}selected{% endif %}>Title (A-Z)</option>
+        <option value="-game_title" {% if sort_order == '-game_title' %}selected{% endif %}>Title (Z-A)</option>
+        <option value="-current_price" {% if sort_order == '-current_price' %}selected{% endif %}>Price (high-low)</option>
+        <option value="current_price" {% if sort_order == 'current_price' %}selected{% endif %}>Price (low-high)</option>
+        <option value="-release_date" {% if sort_order == '-release_date' %}selected{% endif %}>Release date (newest-oldest)</option>
+        <option value="release_date" {% if sort_order == 'release_date' %}selected{% endif %}>Release date (oldest-newest)</option>
+      </select>
+    </div>    
+    {% endif %}
   </form>
-
-
-
-
 
   <div class="container">
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-around">
