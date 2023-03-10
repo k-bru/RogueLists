@@ -1,94 +1,117 @@
 {% extends 'rogueapp/base.html' %}
 
 {% block content %}
-<center>
-  <br>
-  {% if searched %}
-  <h1>Search Results: <em>{{searched}}</em></h1><br>
+<br>
+{% if searched %}
+<h1>Search Results: <em>{{searched}}</em></h1><br>
+{% else %}
+<h1>Search Games</h1>
+{% endif %}
+<form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" class="input-group mb-3">
+  {% csrf_token %}
+  {% if searched == None %}
+  <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched" value="">
   {% else %}
-  <h1>Search Games</h1>
+  <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched" value="{{ searched }}">
   {% endif %}
-  <form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" class="input-group mb-3">
-    {% csrf_token %}
-    {% if searched == None %}
-    <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched" value="">
-    {% else %}
-    <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched" value="{{ searched }}">
-    {% endif %}
-    <div class="input-group-append">
-      <button class="btn btn-outline-secondary" type="submit">Search</button>
-    </div>
-  </form>
-  <br>
-  <form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" id="filter-form">
-    <div class="row justify-content-center" id="filters-container">
-      <div class="col-sm-6 col-md-4">
-        <label for="price_range">Price range:</label>
-        <div class="input-group">
-          <input type="number" name="min_price" id="min_price" placeholder="Min" class="form-control" value="{{ min_price }}">
-          <span class="input-group-text">-</span>
-          <input type="number" name="max_price" id="max_price" placeholder="Max" class="form-control" value="{{ max_price }}">
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-4">
-        <label for="release_date_range">Release date range:</label>
-        <div class="input-group">
-          <input type="date" name="min_release_date" id="min_release_date" placeholder="Earliest" class="form-control" value="{{ release_date_start|date:'Y-m-d' }}">
-          <span class="input-group-text">-</span>
-          <input type="date" name="max_release_date" id="max_release_date" placeholder="Latest" class="form-control" value="{{ release_date_end|date:'Y-m-d' }}">
-        </div>
-      </div>
-      <div class="col-sm-12 col-md-4">
-        {% if searched == None %}
-        <input type="hidden" name="searched" value="">
-        {% else %}
-        <input type="hidden" name="searched" value="{{ searched }}">
-        {% endif %}
-        <button type="submit" class="btn btn-secondary btn-block mt-auto">Filter</button>
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </div>
+</form>
+<br>
+{% if searched %}
+<form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" id="filter-form">
+  <div class="row justify-content-center text-center mx-auto" id="filters-container">
+    <div class="col-sm-6 col-md-4">
+      <label for="price_range">Price range:</label>
+      <div class="input-group">
+        <input type="number" name="min_price" id="min_price" placeholder="Min" class="form-control" value="{{ min_price }}">
+        <span class="input-group-text">-</span>
+        <input type="number" name="max_price" id="max_price" placeholder="Max" class="form-control" value="{{ max_price }}">
       </div>
     </div>
-    {% if searched != None %}
+    <div class="col-sm-6 col-md-4">
+      <label for="release_date_range">Release date range:</label>
+      <div class="input-group">
+        <input type="date" name="min_release_date" id="min_release_date" placeholder="Earliest" class="form-control" value="{{ release_date_start|date:'Y-m-d' }}">
+        <span class="input-group-text">-</span>
+        <input type="date" name="max_release_date" id="max_release_date" placeholder="Latest" class="form-control" value="{{ release_date_end|date:'Y-m-d' }}">
+      </div>
+    </div>
     <div class="col-sm-12 col-md-4">
-      <label for="sort_by">Sort by:</label>
-      <select name="sort_by" id="sort_by" class="form-select" onchange="this.form.submit()">
-        <option value="game_title" {% if sort_order == 'game_title' %}selected{% endif %}>Title (A-Z)</option>
-        <option value="-game_title" {% if sort_order == '-game_title' %}selected{% endif %}>Title (Z-A)</option>
-        <option value="-current_price" {% if sort_order == '-current_price' %}selected{% endif %}>Price (high-low)</option>
-        <option value="current_price" {% if sort_order == 'current_price' %}selected{% endif %}>Price (low-high)</option>
-        <option value="-release_date" {% if sort_order == '-release_date' %}selected{% endif %}>Release date (newest-oldest)</option>
-        <option value="release_date" {% if sort_order == 'release_date' %}selected{% endif %}>Release date (oldest-newest)</option>
-      </select>
-    </div>    
-    {% endif %}
-  </form>
+      {% if not searched %}
+      <input type="hidden" name="searched" value="">
+      {% else %}
+      <input type="hidden" name="searched" value="{{ searched }}">
+      {% endif %}
+      <button type="submit" class="btn btn-secondary btn-block mt-auto">Filter</button>
+    </div>
+  </div>
 
-  <div class="container">
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-around">
-      {% for game in games %}
-      <div class="card m-2">
-        <a href="https://store.steampowered.com/app/{{game.steam_id}}"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2">
-          <div class="card-body">
-        </a>
-        <h4 class="card-title text-md-center"><a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a></h4>
-        {% if game.base_price > 0 %}
-        {% if game.base_price == game.current_price %}
-        <p class="card-text text-center fw-bold p-lg-2">${{game.base_price}}</p>
-        {% endif %}
-        {% if game.base_price > game.current_price %}
-        <p class="card-text text-center fw-bold p-lg-2 text-decoration-line-through">${{game.base_price}}</p>
-        <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
-        {% endif %}
-        {% endif %}
-        {% if game.current_price == 0 and game.release_date > today %}
-        <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
-        {% elif game.current_price == 0 %}
-        <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
-        {% else %}
-        {% endif %}
+  <div class="col-sm-12 col-md-4 text-center mx-auto">
+    <label for="sort_by">Sort</label>
+    <div id="sort-flex" class="row row-cols-2 row-cols-md-3">
+      <div class="col">
+        <button type="submit" name="sort_by" value="game_title" class="btn {% if sort_order == 'game_title' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Title (A-Z)</button>
+      </div>
+      <div class="col">
+        <button type="submit" name="sort_by" value="-game_title" class="btn {% if sort_order == '-game_title' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Title (Z-A)</button>
+      </div>
+      <div class="w-100"></div> <!-- New row for prices -->
+      <div class="col">
+        <button type="submit" name="sort_by" value="-current_price" class="btn {% if sort_order == '-current_price' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Price (high-low)</button>
+      </div>
+      <div class="col">
+        <button type="submit" name="sort_by" value="current_price" class="btn {% if sort_order == 'current_price' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Price (low-high)</button>
+      </div>
+      <div class="w-100"></div> <!-- New row for release date buttons -->
+      <div class="col">
+        <button type="submit" name="sort_by" value="-release_date" class="btn {% if sort_order == '-release_date' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Release date (newest-oldest)</button>
+      </div>
+      <div class="col">
+        <button type="submit" name="sort_by" value="release_date" class="btn {% if sort_order == 'release_date' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Release date (oldest-newest)</button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</form>
+
+<div class="container">
+  <div class="row justify-content-between">
+    {% for game in games %}
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+      <div class="card">
+        <div id="search-detail-card">
+          <a href="https://store.steampowered.com/app/{{game.steam_id}}"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2 d-block">
+            <div id="search-price">
+              {% if game.base_price > 0 %}
+              {% if game.base_price == game.current_price %}
+              <p class="card-text text-center fw-bold p-lg-2">${{game.base_price}}</p>
+              {% endif %}
+              {% if game.base_price > game.current_price %}
+              <div id="sale-container">
+                <p class="card-text text-center fw-bold p-lg-2 text-decoration-line-through">${{game.base_price}}</p>
+              </div>
+              <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
+              {% endif %}
+              {% endif %}
+              {% if game.current_price == 0 and game.release_date > today %}
+              <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
+              {% elif game.current_price == 0 %}
+              <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
+              {% else %}
+              {% endif %}
+            </div>
+          </a>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title text-md-center"><a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a></h4>
+        </div>
         <div class="card-footer bg-transparent border-dark">
           <p class="card-title text-center p-lg-2">Release Date: {{game.release_date}}</p>
           {% if request.user.is_authenticated %}
-          <div class="dropdown">
+          <div class="dropdown text-center">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               Add to list
             </button>
@@ -100,13 +123,11 @@
             </ul>
           </div>
           {% endif %}
-
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
-  </div>
+</div>
 
-</center>
 {% endblock %}

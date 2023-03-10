@@ -23,7 +23,7 @@ def home(request):
 
             # Add game images
             game_images = []
-            for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
+            for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:9]:
                 game_images.append({
                     'game_id': list_detail_content.steam_id.steam_id,
                     'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
@@ -39,7 +39,7 @@ def home(request):
 
             # Add game images
             game_images = []
-            for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
+            for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:9]:
                 game_images.append({
                     'game_id': list_detail_content.steam_id.steam_id,
                     'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"

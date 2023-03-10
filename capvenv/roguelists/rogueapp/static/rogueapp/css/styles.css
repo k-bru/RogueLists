@@ -31,7 +31,7 @@ a,
 }
 
 #remove-game-button a {
-  background-color: var(--denim);
+  background-color: var(--dark);
   color: var(--light);
   z-index: 100;
   transition: .5s;
@@ -55,7 +55,7 @@ a,
 
 .btn {
   color: var(--sky);
-  background-color: var(--denim);
+  background-color: var(--dark);
   border: 1px solid var(--sky);
 }
 
@@ -149,6 +149,20 @@ a,
 #list-detail-card {
   position: relative;
 }
+.card {
+  position: relative;
+}
+
+#search-detail-card {
+  position: relative;
+}
+
+#search-price {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: var(--black);
+}
 
 #list-detail-card div {
   position: absolute;
@@ -174,16 +188,19 @@ a,
 }
 
 .card {
-  background-color: var(--denim);
+  background-color: var(--dark);
   margin-bottom: 1rem;
   border-radius: 1rem;
+  border: 1px solid var(--denim);
+  height: fit-content;
+  min-height: 330px;
 }
 
 .card .btn {
   background-color: var(--dark);
 }
 
-#sale-container p{
+#sale-container p {
   font-size: 90%;
   position: absolute;
   bottom: 2.5rem;
@@ -199,12 +216,40 @@ a,
 }
 
 #filter-form {
-  margin: 0 auto;
+  margin: 0 auto 2rem;
   width: 75%;
 }
 
 #main-logo {
-  width: 2.5rem;
+  width: 1.6rem;
   height: auto;
   filter: invert();
+  margin-right: .5rem;
+}
+
+.card-body {
+  height: fit-content;
+}
+
+.card-text {
+  height: 3rem;
+  /* or any other fixed height */
+  overflow: hidden;
+  /* hide overflowing content */
+}
+
+#sort-flex .col {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#sort-flex .btn {
+  width: 100%;
+  max-width: 150px;
+}
+
+.card-footer {
+  align-items: flex-end;
 }
