@@ -34,9 +34,21 @@
       <br>
 
       {% if followed_users %}
-      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide">Followed Users' Lists</h2>
-      <div id="f-lists" class="row content show">
-        <div class="row content show">
+      <div class="row">
+        <h2 class="col-12 collapsed" data-bs-toggle="collapse" data-bs-target="#f-users" title="Show/Hide">Followed Users</h2>
+        <div id="f-users" class="row content show">
+          {% for followed_user in followed_users %}
+          <div class="col-md-6 mb-4">
+            <a href="{% url 'user_profile' user_id=followed_user.id %}">
+              <h4>{{ followed_user.username }}</h4>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="row">
+        <h2 class="col-12 collapsed" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide">New Followed Lists</h2>
+        <div id="f-lists" class="row content show">
           {% for list_preview in list_previews %}
           {% if list_preview.list.list_owner in followed_users %}
           <div class="col-md-6 mb-4">
@@ -49,13 +61,15 @@
       {% else %}
       <p>You are not following any users.</p>
       {% endif %}
+
+
       <hr>
       <br>
       {% endif %}
       {% endif %}
 
       {% if request.user.is_authenticated %}
-      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Recent Lists</h2>
+      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Newest Lists</h2>
       <div id="unauth-lists" class="row content show">
         <div class="row content show">
           {% for list_preview in list_previews %}
@@ -66,7 +80,7 @@
         </div>
       </div>
       {% else %}
-      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Recent Lists</h2>
+      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Newest Lists</h2>
       <div id="unauth-lists" class="row content show">
         <div class="row content show">
           {% for list_preview in list_previews %}
