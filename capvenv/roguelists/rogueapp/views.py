@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Game, ListDetailContent, UserList, ListDetail, Follow
+from .models import Game, ListDetailContent, UserList, ListDetail, Follow, FavoriteList
 from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
@@ -49,37 +49,68 @@ def home(request):
     return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users})
 
 
+from django.shortcuts import render, get_object_or_404
+from .models import User, UserList, Follow, FavoriteList, ListDetailContent
+
+
 def user_profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user_lists = UserList.objects.filter(list_owner=user)
     list_previews = []
-    for user_list in user_lists:
-        game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
-        game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
+    user_favorites = FavoriteList.objects.filter(user_id=user_id)
+    for ul in user_lists:
+        game_count = ListDetailContent.objects.filter(list_detail_id=ul.list_id).count()
+        game_titles = [ldc.steam_id.game_title for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()]
 
         # Add game images
         game_images = []
-        for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:3]:
+        for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:3]:
             game_images.append({
-                'game_id': list_detail_content.steam_id.steam_id,
-                'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
+                'game_id': ldc.steam_id.steam_id,
+                'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg"
             })
 
-        list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
+        list_previews.append({'list': ul, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
 
     is_following = False
     if request.user.is_authenticated:
         is_following = Follow.objects.filter(follower=request.user, following=user).exists()
 
+    favorite_lists = []
+    favorite_list_previews = []
+    if request.user.is_authenticated:
+        favorite_lists = [fl.list.user_list.list_id for fl in FavoriteList.objects.filter(user=request.user)]
+        if request.user == user:
+            for fl in user_favorites:
+                ul = fl.list.user_list
+                game_count = ListDetailContent.objects.filter(list_detail_id=ul.list_id).count()
+                game_titles = [ldc.steam_id.game_title for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()]
+
+                # Add game images
+                game_images = []
+                for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:3]:
+                    game_images.append({
+                        'game_id': ldc.steam_id.steam_id,
+                        'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg"
+                    })
+
+                favorite_list_previews.append({'list': ul, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
 
     context = {
         'user': user,
         'user_lists': user_lists,
         'list_previews': list_previews,
-        'is_following': is_following
+        'is_following': is_following,
+        'favorite_lists': favorite_lists,
+        'user_favorites': user_favorites,
+        'favorite_list_previews': favorite_list_previews,
+        'follower_count': user.followers.count(),
+        'followed_count': user.following.count(),
     }
 
     return render(request, 'rogueapp/user_profile.html', context)
+
+
 
 def login_user(request):
   if request.method == "POST":
@@ -296,3 +327,14 @@ def unfollow(request, user_id):
     user_to_unfollow = get_object_or_404(User, pk=user_id)
     Follow.objects.filter(follower=request.user, following=user_to_unfollow).delete()
     return redirect('user_profile', user_id=user_id)
+
+def add_favorite_list(request, list_id):
+    list_detail = get_object_or_404(ListDetail, pk=list_id)
+    user = request.user
+    favorite_list, created = FavoriteList.objects.get_or_create(user=user, list_id=list_id)
+    if created:
+        messages.success(request, 'List added to favorites!')
+    else:
+        messages.warning(request, 'List is already in favorites.')
+    context = {'list_detail': list_detail}
+    return redirect('user_profile', user_id=user.id)

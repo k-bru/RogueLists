@@ -1,36 +1,86 @@
 {% extends 'rogueapp/base.html' %}
 
 {% block content %}
-<h1>{{ user.username }}'s Profile</h1>
-{% if request.user.is_authenticated %}
-{% if request.user != user %}
-    {% if is_following %}
-        <form action="{% url 'unfollow' user.pk %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-secondary">Unfollow</button>
-        </form>
-    {% else %}
-        <form action="{% url 'follow' user.pk %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-secondary">Follow</button>
-        </form>
-    {% endif %}
-{% endif %}
-{% endif %}
-
-<h2>Lists</h2>
 <div class="container">
+  <div class="container text-center">
+  <h1>{{ user.username }}'s Profile</h1>
   <div class="row">
-    <div class="row col-md-12">
-      {% if user_lists %}
-      {% for list_preview in list_previews %}
-      {% include 'rogueapp/show_lists.html' %}
-      {% endfor %}
+    <div class="col">
+      <p>{{ follower_count }} followers</p>
+    </div>
+    <div class="col">
+      <p>{{ followed_count }} followed</p>
+    </div>
+  </div>
+  
+    {% if request.user.is_authenticated %}
+    {% if request.user != user %}
+    {% if is_following %}
+    <form action="{% url 'unfollow' user.pk %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-secondary mb-4">Unfollow</button>
+    </form>
+    {% else %}
+    <form action="{% url 'follow' user.pk %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-secondary mb-4">Follow</button>
+    </form>
+    {% endif %}
+    {% endif %}
+    
+    {% endif %}
+    
+    <div class="list-holder text-center" id="profile-flex">
+      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#user-lists" title="Show/Hide">Lists</h2>
+      <div id="user-lists" class="row content collapse show">
+        {% if user_lists %}
+        {% for list_preview in list_previews %}
+        <div class="col-md-6 mb-4 text-center">
+          {% include 'rogueapp/show_lists.html' %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>This user has no lists.</p>
+        {% endif %}
+      </div>
+      
+      
+      {% if request.user.is_authenticated %}
+      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#user-favorites" title="Show/Hide">Favorites</h2>
+      <div id="user-favorites" class="row content collapse show">
+        {% if user_favorites %}
+        {% for favorite_preview in favorite_list_previews %}
+        <div class="col-md-6 mb-4 text-center">
+          <div class="card">
+            <div class="card-header">
+              <strong><a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">{{ favorite_preview.list.list_name }}</a></strong><br>
+              <a href="{% url 'user_profile' user_id=favorite_preview.list.list_owner.id %}">{{ favorite_preview.list.list_owner.username }}</a>
+            </div>
+            <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
+              <div class="card-body">
+                <p class="card-text" id="game-count">{{ favorite_preview.game_count }} {% if favorite_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
+                <p class="card-text"><em>{{ favorite_preview.list.list_description }}</em></p>
+                <hr>
+                <div class="row justify-content-between align-items-end">
+                  {% for game_image in favorite_preview.game_images|slice:":9" %}
+                  <div class="col-4">
+                    <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
+                      <img class="w-100" src="{{ game_image.image_url }}">
+                    </a>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>This user has no favorite lists.</p>
+        {% endif %}
+      </div>
+      {% endif %}
     </div>
   </div>
 </div>
-{% else %}
-<p>This user has no lists.</p>
-{% endif %}
-
 {% endblock %}

@@ -93,9 +93,13 @@ a,
   text-align: center;
 }
 
-#list-flex {
+#profile-flex {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+}
+
+#user-lists {
   justify-content: center;
 }
 
@@ -106,12 +110,18 @@ a,
   margin: auto;
 }
 
-/* home page */
+/* home/profile page */
 .home-previews {
   align-items: center;
 }
 
-#home-page h2 {
+#profile-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.list-holder h2 {
   cursor: pointer;
   transition: .5s;
   background-color: var(--dark);
@@ -122,25 +132,25 @@ a,
   margin-bottom: 1rem;
 }
 
-#home-page h2:hover {
+.list-holder h2:hover {
   background-color: var(--denim);
 }
 
-#home-page h2.collapsed::after {
+.list-holder h2.collapsed::after {
   content: "\002B";
   color: var(--sky);
   font-weight: bold;
   float: right;
 }
 
-#home-page h2:not(.collapsed)::after {
+.list-holder h2:not(.collapsed)::after {
   content: "\2212";
   color: var(--sky);
   font-weight: bold;
   float: right;
 }
 
-#home-page h2:hover {
+.list-holder h2:hover {
   color: var(--sky);
   transition: .5s;
 }
@@ -149,6 +159,7 @@ a,
 #list-detail-card {
   position: relative;
 }
+
 .card {
   position: relative;
 }
@@ -192,8 +203,7 @@ a,
   margin-bottom: 1rem;
   border-radius: 1rem;
   border: 1px solid var(--denim);
-  height: fit-content;
-  min-height: 330px;
+  min-height: max-content;
 }
 
 .card .btn {
@@ -252,4 +262,9 @@ a,
 
 .card-footer {
   align-items: flex-end;
+}
+
+#game-count {
+  margin-bottom: .25rem;
+  height: fit-content;
 }

@@ -3,9 +3,9 @@
 {% block content %}
 <div class="container">
   <div class="row" id="home-flex">
-    <div class="row col-md-8" id="home-page">
+    <div class="row col-md-8 list-holder" id="home-page">
       {% if list_previews %}
-      <div class="card">
+      <div class="card" id="descript-card">
         <div class="card-heading">
           <h1 class="text-center p-lg-2">Create a List for Steam Games</h1>
         </div>
@@ -39,7 +39,7 @@
         <div class="row content show">
           {% for list_preview in list_previews %}
           {% if list_preview.list.list_owner in followed_users %}
-          <div class="col-md-4 mb-4">
+          <div class="col-md-6 mb-4">
             {% include 'rogueapp/show_lists.html' %}
           </div>
           {% endif %}
@@ -70,7 +70,7 @@
       <div id="unauth-lists" class="row content show">
         <div class="row content show">
           {% for list_preview in list_previews %}
-          <div class="col-md-4 mb-4">
+          <div class="col-md-6 mb-4">
             {% include 'rogueapp/show_lists.html' %}
           </div>
           {% endfor %}
@@ -80,13 +80,4 @@
     </div>
   </div>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const collapsedHeaders = document.querySelectorAll('#home-page h2.collapsed');
-    for (let header of collapsedHeaders) {
-      header.classList.remove('collapsed');
-      header.classList.add('show');
-    }
-  });
-</script>
 {% endblock %}

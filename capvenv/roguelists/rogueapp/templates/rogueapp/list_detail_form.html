@@ -12,13 +12,6 @@
     <option value="F" {% if detail.tier_rank in "F" %}selected{% endif %}>F</option>
   </select>
 </form>
-<script>
-  document.querySelectorAll('select[name="tier_rank"]').forEach(function (select) {
-    select.addEventListener('change', function () {
-      this.closest('form').submit();
-    });
-  });
-</script>
 {% endif %}
 {% endif %}
 {% endfor %}
