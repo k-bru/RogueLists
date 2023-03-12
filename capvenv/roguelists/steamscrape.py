@@ -56,7 +56,6 @@ def get_pagination():
 
 
 def scrap():
-  # resultNumber = 1
   count = 0
   datas = []
 
@@ -93,6 +92,11 @@ def scrap():
       if appId in checkedApps:
         count += 1
         print("APP ALREADY SCANNED")
+        continue
+      try:
+        tagids = i['data-ds-tagids']
+      except KeyError:
+        count += 1
         continue
       checkedApps.append(appId)
       title = i.find('div', 'col search_name ellipsis').text.strip().replace('\n', ' ')
@@ -169,8 +173,11 @@ def scrap():
       #For CSV
       if "," in title:
         title = title.replace(",", " —")
-      
-      
+      if "," in tagids:
+        tagids = tagids.replace(",",":")
+        tagids = str(tagids)
+        tagids = tagids[1:-2]
+
       if activeDiscount:
         data = {
           'steam_id' : appId,
@@ -178,6 +185,7 @@ def scrap():
           'base_price': price[1:],
           'current_price': discountedPrice[1:],
           'release_date': release,
+          'genres': tagids,
         }
       else:
         data = {
@@ -186,6 +194,7 @@ def scrap():
           'base_price': price[1:],
           'current_price': price[1:],
           'release_date': release,
+          'genres': tagids,
         }
       datas.append(data)
 
