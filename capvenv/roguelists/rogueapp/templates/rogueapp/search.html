@@ -8,7 +8,6 @@
 <h1>Search Games</h1>
 {% endif %}
 <form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" class="input-group mb-3">
-  {% csrf_token %}
   {% if searched == None %}
   <input type="search" class="form-control" placeholder="Search Games" aria-label="Search" name="searched" value="">
   {% else %}
@@ -108,8 +107,11 @@
         <div class="card-body">
           <h4 class="card-title text-md-center"><a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a></h4>
           <p class="card-text">
-            {{ game.genres_list }}
+            {% for genre in game.get_genres %}
+            <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
+            {% endfor %}
           </p>
+          
         </div>
         <div class="card-footer bg-transparent border-dark">
           <p class="card-title text-center p-lg-2">Release Date: {{game.release_date}}</p>

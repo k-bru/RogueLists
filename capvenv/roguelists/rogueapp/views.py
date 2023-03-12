@@ -151,7 +151,7 @@ def search(request):
     release_date_end = request.GET.get('max_release_date')
     sort_by = request.GET.get('sort_by', 'game_title')
     sort_order = request.GET.get('sort_order', 'asc')
-
+    
     games = Game.objects.all()
     if searched:
       genre = Genre.objects.filter(name__icontains=searched)
