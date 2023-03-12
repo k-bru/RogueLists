@@ -204,6 +204,7 @@ a,
   border-radius: 1rem;
   border: 1px solid var(--denim);
   min-height: max-content;
+  width: 100%;
 }
 
 .card .btn {
