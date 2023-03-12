@@ -1,0 +1,12 @@
+{% extends 'rogueapp/base.html' %}
+
+{% block content %}
+  <h1 class="text-center mb-4">All Genres</h1>
+  <div class="row text-center">
+    {% for genre in genres %}
+    <div class="col-sm-4 mb-3">
+      <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary btn-block" id="all-genres">{{ genre.name|safe }}</a>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}

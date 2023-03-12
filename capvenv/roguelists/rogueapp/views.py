@@ -344,3 +344,7 @@ def add_favorite_list(request, list_id):
         messages.warning(request, 'List is already in favorites.')
     context = {'list_detail': list_detail}
     return redirect('user_profile', user_id=user.id)
+
+def all_genres(request):
+  genres = Genre.objects.order_by('name')
+  return render(request, 'rogueapp/all_genres.html', {'genres': genres})

@@ -82,6 +82,11 @@
       <h4 class="card-title text-md-center">
         <a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none" title="{{game.game_title}}">{{game.game_title}}</a>
       </h4>
+      <p class="card-text">
+        {% for genre in game.get_genres %}
+        <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
+        {% endfor %}
+      </p>
       <p class="card-text text-center fw-bold p-lg-2">{{game.release_date}}</p>
       {% include 'rogueapp/list_detail_form.html' %}
       {% if request.user.is_authenticated %}

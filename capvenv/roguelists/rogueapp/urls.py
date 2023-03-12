@@ -24,6 +24,7 @@ urlpatterns = [
   path('unfollow/<int:user_id>/', views.unfollow, name='unfollow'),
   path('admin/', admin.site.urls),
   path('favorites/add/<int:list_id>/', views.add_favorite_list, name='add_favorite_list'),
+  path('genres/', views.all_genres, name='all_genres'),
 ]
 
 if DEBUG:
