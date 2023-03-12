@@ -174,7 +174,7 @@ def scrap():
       if "," in title:
         title = title.replace(",", " —")
       if "," in tagids:
-        tagids = tagids.replace(",",":")
+        tagids = tagids.replace(",","|")
         tagids = str(tagids)
         tagids = tagids[1:-2]
 

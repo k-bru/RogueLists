@@ -249,10 +249,11 @@ a,
 .card-body {
   height: fit-content;
   padding-bottom: 0 !important;
+  text-align: center;
 }
 
 .card-text {
-  height: 3rem;
+  height: fit-content;
   /* or any other fixed height */
   overflow: hidden;
   /* hide overflowing content */

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Game, ListDetailContent, UserList, ListDetail, Follow, FavoriteList
+from .models import Game, ListDetailContent, UserList, ListDetail, Follow, FavoriteList, Genre
 from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
@@ -9,6 +9,7 @@ from django.urls import reverse
 import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 def home(request):
     user_lists = UserList.objects.select_related('list_owner').all().order_by('-list_id')
@@ -47,11 +48,6 @@ def home(request):
 
             list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
     return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users})
-
-
-from django.shortcuts import render, get_object_or_404
-from .models import User, UserList, Follow, FavoriteList, ListDetailContent
-
 
 def user_profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
@@ -157,9 +153,17 @@ def search(request):
     sort_order = request.GET.get('sort_order', 'asc')
 
     games = Game.objects.all()
-
     if searched:
-        games = games.filter(game_title__icontains=searched)
+      genre = Genre.objects.filter(name__icontains=searched)
+      if genre.exists():
+          games = Game.objects.filter(
+              Q(genres__icontains=f"|{genre.first().id}|") | 
+              Q(genres__istartswith=f"{genre.first().id}|") | 
+              Q(genres__iendswith=f"|{genre.first().id}")
+          )
+      else:
+          games = Game.objects.filter(game_title__icontains=searched)
+
     if min_price:
         min_price = float(min_price)
         games = games.filter(current_price__gte=min_price)

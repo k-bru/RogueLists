@@ -11,9 +11,20 @@ class Game(models.Model):
   base_price = models.DecimalField(max_digits=5, decimal_places=2)
   current_price = models.DecimalField(max_digits=5, decimal_places=2)
   release_date = models.DateField()
+  genres = models.TextField()
   
   def __str__(self):
     return self.game_title
+  def get_genres(self):
+    if self.genres:
+        genre_ids = [int(''.join(filter(str.isdigit, id))) for id in self.genres.split('|') if id]
+        return Genre.objects.filter(id__in=genre_ids)
+    else:
+        return []
+
+  def genres_list(self):
+    genres = self.get_genres()
+    return ', '.join([genre.name for genre in genres])
 
 class UserList(models.Model):
   list_id = models.AutoField(primary_key=True)
@@ -49,8 +60,15 @@ class Follow(models.Model):
       unique_together = ('follower', 'following')
       
 class FavoriteList(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    list = models.ForeignKey(ListDetail, on_delete=models.CASCADE)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  list = models.ForeignKey(ListDetail, on_delete=models.CASCADE)
 
-    class Meta:
-        unique_together = ('user', 'list')
+  class Meta:
+    unique_together = ('user', 'list')
+
+class Genre(models.Model):
+  id = models.PositiveIntegerField(primary_key=True)
+  name = models.CharField(max_length=64)
+
+  def __str__(self):
+    return self.name
