@@ -60,7 +60,7 @@ def user_profile(request, user_id):
 
         # Add game images
         game_images = []
-        for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:3]:
+        for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:9]:
             game_images.append({
                 'game_id': ldc.steam_id.steam_id,
                 'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg"
@@ -84,7 +84,7 @@ def user_profile(request, user_id):
 
                 # Add game images
                 game_images = []
-                for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:3]:
+                for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:9]:
                     game_images.append({
                         'game_id': ldc.steam_id.steam_id,
                         'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg"
@@ -259,13 +259,13 @@ def add_to_list(request, list_id, game_id):
 
     # Check if the game is already in the list
     if ListDetailContent.objects.filter(list_detail_id=list_detail, steam_id=game_id).exists():
-        messages.warning(request, "This game is already in the list.")
+        messages.warning(request, "<p class='text-center'>This game is already in the list. <br><button class='text-center mt-4' onclick='goBack()'>Go Back</button></p>")
     else:
         # Create a new ListDetailContent object for the game and list detail
         game = get_object_or_404(Game, steam_id=game_id)
         new_list_detail_content = ListDetailContent(list_detail_id=list_detail, steam_id=game)
         new_list_detail_content.save()
-        messages.success(request, "Game added to list.")
+        messages.success(request, "<p class='text-center'>Game added to list. <br><button class='text-center mt-4' onclick='goBack()'>Go Back</button></p>")
 
     # Redirect to the list_detail view with the list_id parameter
     return redirect('list_detail', list_id=user_list.list_id)

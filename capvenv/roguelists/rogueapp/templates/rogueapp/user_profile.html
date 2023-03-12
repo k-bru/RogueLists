@@ -50,30 +50,32 @@
       <div id="user-favorites" class="row content collapse show">
         {% if user_favorites %}
         {% for favorite_preview in favorite_list_previews %}
-        <div class="col-md-6 mb-4 text-center">
-          <div class="card">
-            <div class="card-header">
-              <strong><a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">{{ favorite_preview.list.list_name }}</a></strong><br>
-              <a href="{% url 'user_profile' user_id=favorite_preview.list.list_owner.id %}">{{ favorite_preview.list.list_owner.username }}</a>
-            </div>
-            <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
-              <div class="card-body">
-                <p class="card-text" id="game-count">{{ favorite_preview.game_count }} {% if favorite_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
-                <p class="card-text"><em>{{ favorite_preview.list.list_description }}</em></p>
-                <hr>
-                <div class="row justify-content-between align-items-end">
-                  {% for game_image in favorite_preview.game_images|slice:":9" %}
-                  <div class="col-4">
-                    <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
-                      <img class="w-100" src="{{ game_image.image_url }}">
-                    </a>
-                  </div>
-                  {% endfor %}
-                </div>
+        <center>
+          <div class="col-md-6 mb-4 text-center">
+            <div class="card">
+              <div class="card-header">
+                <strong><a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">{{ favorite_preview.list.list_name }}</a></strong><br>
+                <a href="{% url 'user_profile' user_id=favorite_preview.list.list_owner.id %}">{{ favorite_preview.list.list_owner.username }}</a>
               </div>
-            </a>
+              <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
+                <div class="card-body">
+                  <p class="card-text" id="game-count">{{ favorite_preview.game_count }} {% if favorite_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
+                  <p class="card-text"><em>{{ favorite_preview.list.list_description }}</em></p>
+                  <hr>
+                  <div class="row justify-content-between align-items-end">
+                    {% for game_image in favorite_preview.game_images|slice:":9" %}
+                    <div class="col-4">
+                      <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
+                        <img class="w-100" src="{{ game_image.image_url }}">
+                      </a>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </a>
+            </div>
           </div>
-        </div>
+        </center>
         {% endfor %}
         {% else %}
         <p>This user has no favorite lists.</p>

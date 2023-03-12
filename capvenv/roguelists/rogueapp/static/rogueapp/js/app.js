@@ -11,3 +11,7 @@ document.querySelectorAll('select[name="tier_rank"]').forEach(function (select) 
     this.closest('form').submit();
   });
 });
+
+function goBack() {
+  window.history.back();
+}

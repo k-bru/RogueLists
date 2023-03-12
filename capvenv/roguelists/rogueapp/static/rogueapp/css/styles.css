@@ -281,7 +281,7 @@ a,
 }
 
 img {
-  border-radius: 1rem !important;
+  border-radius: .5rem !important;
 }
 
 .genre-link {
