@@ -230,7 +230,7 @@ def list_detail(request, list_id):
   games = Game.objects.filter(steam_id__in=list_detail_content.values_list('steam_id', flat=True))
 
   # Create separate lists for each tier of games
-  tier_A_games, tier_B_games, tier_C_games, tier_D_games, tier_F_games = [], [], [], [], []
+  tier_A_games, tier_B_games, tier_C_games, tier_D_games, tier_F_games, tier_Z_games = [], [], [], [], [], []
   for game in games:
     detail = list_detail_content.filter(steam_id=game.steam_id).first()
     if detail:
@@ -244,9 +244,11 @@ def list_detail(request, list_id):
         tier_D_games.append(game)
       elif detail.tier_rank == "F":
         tier_F_games.append(game)
-  tiers = (('A', tier_A_games), ('B', tier_B_games), ('C', tier_C_games), ('D', tier_D_games), ('F', tier_F_games))
+      elif detail.tier_rank == "Z":
+        tier_Z_games.append(game)
+  tiers = (('A', tier_A_games), ('B', tier_B_games), ('C', tier_C_games), ('D', tier_D_games), ('F', tier_F_games), ('Z', tier_Z_games))
   context = {'tier_A_games': tier_A_games, 'tier_B_games': tier_B_games, 'tier_C_games': tier_C_games,
-             'tier_D_games': tier_D_games, 'tier_F_games': tier_F_games, 'list_detail': list_detail,
+             'tier_D_games': tier_D_games, 'tier_F_games': tier_F_games, 'tier_Z_games': tier_Z_games, 'list_detail': list_detail,
              'list_detail_content': list_detail_content, 'tiers': tiers, 'today': today,}
   return render(request, 'rogueapp/list_detail.html', context)
 

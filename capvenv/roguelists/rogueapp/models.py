@@ -46,7 +46,7 @@ class ListDetailContent(models.Model):
   list_detail_content_id = models.AutoField(primary_key=True)
   list_detail_id = models.ForeignKey(ListDetail, to_field="list_detail_id", on_delete=models.CASCADE)
   steam_id = models.ForeignKey(Game, to_field="steam_id", on_delete=models.CASCADE)
-  tier_rank = models.CharField(max_length=1, null=True, default="A")
+  tier_rank = models.CharField(max_length=1, null=True, default="Z")
   
   def __str__(self):
     return str(self.list_detail_content_id)

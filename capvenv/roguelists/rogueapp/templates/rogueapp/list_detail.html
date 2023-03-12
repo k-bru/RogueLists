@@ -18,7 +18,7 @@
       {% csrf_token %}
       <label for="list_description" class="form-label"></label>
       <div class="input-group">
-        <input type="textarea" class="form-control" id="list_description" name="list_description" value="{{ list_detail.user_list.list_description }}">
+        <textarea class="form-control" id="list_description" name="list_description" rows="3">{{ list_detail.user_list.list_description }}</textarea>
         <button type="submit" class="btn">Edit Description</button>
       </div>
     </form>
@@ -34,7 +34,11 @@
 
 {% for tier, games in tiers %}
 {% if games %}
+{% if tier == 'Z' %}
+<h2>Unranked</h2>
+{% else %}
 <h2>{{ tier }} Tier</h2>
+{% endif %}
 <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-center">
   {% for game in games %}
   <div class="card m-2 col-lg-3">
@@ -99,7 +103,7 @@
 </div>
 {% endif %}
 {% endfor %}
-{% if not tier_A_games and not tier_B_games and not tier_C_games and not tier_D_games and not tier_F_games %}
+{% if not tier_A_games and not tier_B_games and not tier_C_games and not tier_D_games and not tier_F_games and not tier_Z_games %}
 <p>This list is currently empty.</p>
 {% endif %}
 {% endblock %}
