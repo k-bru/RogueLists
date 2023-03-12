@@ -204,7 +204,15 @@ a,
   border-radius: 1rem;
   border: 1px solid var(--denim);
   min-height: max-content;
+}
+
+#home-page .card:not(#descript-card) {
   width: 100%;
+  height: 100%;
+}
+
+#home-page img {
+  padding: .1rem;
 }
 
 .card .btn {
@@ -240,6 +248,7 @@ a,
 
 .card-body {
   height: fit-content;
+  padding-bottom: 0 !important;
 }
 
 .card-text {
