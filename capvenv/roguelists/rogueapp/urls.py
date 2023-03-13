@@ -25,6 +25,7 @@ urlpatterns = [
   path('admin/', admin.site.urls),
   path('favorites/add/<int:list_id>/', views.add_favorite_list, name='add_favorite_list'),
   path('genres/', views.all_genres, name='all_genres'),
+  path('portfolio/', views.portfolio, name='portfolio'),
 ]
 
 if DEBUG:

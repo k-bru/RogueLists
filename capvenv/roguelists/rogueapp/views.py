@@ -348,3 +348,28 @@ def add_favorite_list(request, list_id):
 def all_genres(request):
   genres = Genre.objects.order_by('name')
   return render(request, 'rogueapp/all_genres.html', {'genres': genres})
+
+def portfolio(request):
+    projects = [
+        {'name': 'RogueLists', 'url': 'https://kb-capstone.com', 'description': 'Django project built with web scraped data for Steam games.'},
+        {'name': 'YouTube to MP3 Conversion Tool', 'url': 'https://github.com/k-bru/YouTube-to-MP3-Converter', 'description': 'Enter a YouTube URL to download the audio in an mp3 format.'},
+        {'name': 'HTML Image Tag Generator', 'url': 'https://github.com/k-bru/HTML-Image-Tag-Generator', 'description': 'Open an image to copy a basic HTML img tag to your clipboard that contains the path, width, and height.'},
+        {'name': 'Dungeon Crawler Game (Python)', 'url': 'https://github.com/k-bru/Python-Dungeon-Crawler/blob/main/dungeonFinal.py', 'description': 'First large script written. Made in 2022 after studying Python for a couple months. Messy, but works.'},
+    ]
+    skills = ['Python', 'Django', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'Drupal', 'WordPress', 'Adobe Products']
+    jobs = [
+        {
+            'position': 'Federal Work Study',
+            'company': 'Asheville-Buncombe Technical Community College',
+            'start_date': 2022,
+            'responsibilities': ['Conversion of PDF to Web Pages', 'Fixed bugs', 'Optimized website performance', 'Manage overall website accessibility']
+        },
+        {
+            'position': 'Freelance Python Development',
+            'company': 'Freelance',
+            'start_date': 2022,
+            'responsibilities': ['Designed and implemented python scripts in a collaboration for private clients', 'Mostly web-scraping and outputting results to JSON']
+        }
+    ]
+    context = {'projects': projects, 'skills': skills, 'jobs': jobs}
+    return render(request, 'rogueapp/portfolio.html', context)
