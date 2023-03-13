@@ -27,9 +27,6 @@
         <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
       </li>
       {%endif %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-      </li>
       {% else %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'register_user' %}">Register</a>
@@ -38,21 +35,21 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'login' %}">Login</a>
       </li>
-
+      
       {% endif %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'all_genres' %}">Tags</a>
       </li>
       
     </ul>
-
+    
     {% if user.is_authenticated %}
-    <ul class="navbar-nav me-2">
-      <li class="nav-item text-white">
-        Logged in as <a id="log-message" href="{% url 'user_profile' user_id=user.id %}">{{ user }}</a>
+    <ul class="navbar-nav me-1">
+      <li class="nav-item d-flex align-items-center text-white">
+        Logged in as&nbsp;<a id="log-message" href="{% url 'user_profile' user_id=user.id %}" class="pe-2">{{ request.user }}</a>
+        <a class="btn m-2" href="{% url 'logout' %}" class="">Logout</a>
       </li>
-      
-    </ul>
+    </ul>     
     {% endif %}
 
     <form class="d-flex" method="GET" action="{% url 'search' %}">

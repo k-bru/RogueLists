@@ -3,16 +3,16 @@
 {% block content %}
 <div class="container">
   <div class="container text-center">
-  <h1>{{ user.username }}'s Profile</h1>
-  <div class="row">
-    <div class="col">
-      <p>{{ follower_count }} followers</p>
+    <h1>{{ user.username }}'s Profile</h1>
+    <div class="row">
+      <div class="col">
+        <p>{{ follower_count }} followers</p>
+      </div>
+      <div class="col">
+        <p>{{ followed_count }} followed</p>
+      </div>
     </div>
-    <div class="col">
-      <p>{{ followed_count }} followed</p>
-    </div>
-  </div>
-  
+
     {% if request.user.is_authenticated %}
     {% if request.user != user %}
     {% if is_following %}
@@ -27,24 +27,26 @@
     </form>
     {% endif %}
     {% endif %}
-    
+
     {% endif %}
-    
+
     <div class="list-holder text-center" id="profile-flex">
       <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#user-lists" title="Show/Hide">Lists</h2>
-      <div id="user-lists" class="row content collapse show">
+      <div id="user-lists" class="row content show">
         {% if user_lists %}
-        {% for list_preview in list_previews %}
-        <div class="col-md-6 mb-4 text-center">
-          {% include 'rogueapp/show_lists.html' %}
+        <div class="row" id="list-flex">
+          {% for list_preview in list_previews %}
+          <div class="col-md-6 mb-4">
+            {% include 'rogueapp/show_lists.html' %}
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
         {% else %}
         <p>This user has no lists.</p>
         {% endif %}
       </div>
-      
-      
+
+
       {% if request.user.is_authenticated %}
       <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#user-favorites" title="Show/Hide">Favorites</h2>
       <div id="user-favorites" class="row content collapse show">

@@ -96,7 +96,14 @@ a,
 #profile-flex {
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+
+#profile-flex h2 {
+  align-self: center;
+}
+
+#list-flex {
+  justify-content: center;
 }
 
 #user-lists {
@@ -160,6 +167,9 @@ a,
   position: relative;
 }
 
+#list-flex div .card {
+  padding-bottom: 1rem;
+}
 .card {
   position: relative;
 }
@@ -248,8 +258,8 @@ a,
 
 .card-body {
   height: fit-content;
-  padding-bottom: 0 !important;
   text-align: center;
+  padding-bottom: 0;
 }
 
 .card-text {
@@ -284,6 +294,9 @@ img {
   border-radius: .5rem !important;
 }
 
+.card img {
+  margin-top: 1rem;
+}
 .genre-link {
   display: inline-block;
   padding: 0.375rem 0.75rem;
@@ -292,6 +305,7 @@ img {
   border-radius: 0.25rem;
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  height: min-content;
 }
 
 .genre-link:hover {
