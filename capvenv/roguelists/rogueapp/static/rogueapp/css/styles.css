@@ -286,15 +286,15 @@ a,
 
 #game-count {
   height: fit-content;
-  margin-bottom: .25rem;
+  margin-bottom: .1rem;
 }
 
 img {
   border-radius: .5rem !important;
 }
 
-.card img {
-  margin-top: 1rem;
+.list-images {
+  margin: .25rem;
 }
 
 .genre-link {

@@ -33,8 +33,10 @@
         {% endblock %}
       </div>
     </main>
-    <footer>
+    <hr>
+    <footer class="text-center m-2">
       {% block footer %}
+      <a href="{% url 'portfolio' %}" class="">Portfolio</a>
       {% endblock %}
     </footer>
     {% block scripts %}

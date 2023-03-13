@@ -16,37 +16,24 @@ def home(request):
     list_previews = []
     followed_users = []
     if request.user.is_authenticated:
-        follows = Follow.objects.filter(follower=request.user)
-        followed_users = [follow.following for follow in follows]
-        for user_list in user_lists:
-            game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
-            game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
+      follows = Follow.objects.filter(follower=request.user)
+      followed_users = [follow.following for follow in follows]
 
-            # Add game images
-            game_images = []
-            for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:9]:
-                game_images.append({
-                    'game_id': list_detail_content.steam_id.steam_id,
-                    'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
-                })
+    user_lists = UserList.objects.all().order_by('-list_id')
+    for user_list in user_lists:
+        game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
+        game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
 
-            list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
-    else:
-        # Get all public lists
-        user_lists = UserList.objects.all().order_by('-list_id')
-        for user_list in user_lists:
-            game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
-            game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
+        # Add game images
+        game_images = []
+        for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:24]:
+            game_images.append({
+                'game_id': list_detail_content.steam_id.steam_id,
+                'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg",
+                'game_title': list_detail_content.steam_id.game_title
+            })
 
-            # Add game images
-            game_images = []
-            for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:9]:
-                game_images.append({
-                    'game_id': list_detail_content.steam_id.steam_id,
-                    'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg"
-                })
-
-            list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
+        list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
     return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users})
 
 def user_profile(request, user_id):
@@ -60,10 +47,11 @@ def user_profile(request, user_id):
 
         # Add game images
         game_images = []
-        for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:9]:
+        for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:24]:
             game_images.append({
                 'game_id': ldc.steam_id.steam_id,
-                'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg"
+                'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg",
+                'game_title': ldc.steam_id.game_title
             })
 
         list_previews.append({'list': ul, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
@@ -84,10 +72,11 @@ def user_profile(request, user_id):
 
                 # Add game images
                 game_images = []
-                for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:9]:
+                for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:24]:
                     game_images.append({
                         'game_id': ldc.steam_id.steam_id,
-                        'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg"
+                        'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg",
+                        'game_title': ldc.steam_id.game_title
                     })
 
                 favorite_list_previews.append({'list': ul, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
@@ -181,9 +170,6 @@ def search(request):
         games = games.order_by(sort_by)
     else:
         games = games.order_by(f'-{sort_by}')
-
-    if not searched and not min_price and not max_price and not release_date_start and not release_date_end:
-        games = Game.objects.all()
 
     return render(request, 'rogueapp/search.html', {'searched': searched,
                                                      'games': games,
@@ -351,7 +337,7 @@ def all_genres(request):
 
 def portfolio(request):
     projects = [
-        {'name': 'RogueLists', 'url': 'https://kb-capstone.com', 'description': 'Django project built with web scraped data for Steam games.'},
+        {'name': 'RogueLists', 'url': 'https://kbcapstone.com', 'description': 'Django project built with web scraped data for Steam games.'},
         {'name': 'YouTube to MP3 Conversion Tool', 'url': 'https://github.com/k-bru/YouTube-to-MP3-Converter', 'description': 'Enter a YouTube URL to download the audio in an mp3 format.'},
         {'name': 'HTML Image Tag Generator', 'url': 'https://github.com/k-bru/HTML-Image-Tag-Generator', 'description': 'Open an image to copy a basic HTML img tag to your clipboard that contains the path, width, and height.'},
         {'name': 'Dungeon Crawler Game (Python)', 'url': 'https://github.com/k-bru/Python-Dungeon-Crawler/blob/main/dungeonFinal.py', 'description': 'First large script written. Made in 2022 after studying Python for a couple months. Messy, but works.'},
