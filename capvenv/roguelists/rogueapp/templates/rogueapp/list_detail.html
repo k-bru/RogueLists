@@ -4,7 +4,7 @@
   <h2><em>{{ list_detail.user_list.list_name }}</em></h2>
   <p class='fw-bold'><a href="{% url 'user_profile' user_id=list_detail.user_list.list_owner.id%}">{{ list_detail.user_list.list_owner }}</a></p>
   <p><em>{{ list_detail.user_list.list_description }}</em></p>
-  {% if request.user == list_detail.user_list.list_owner %}
+  {% if request.user == list_detail.user_list.list_owner or request.user.is_superuser%}
   <div class="my-3">
     <form method="post" action="{% url 'update_list_name' list_id=list_detail.user_list.list_id %}">
       {% csrf_token %}
@@ -35,16 +35,16 @@
 {% for tier, games in tiers %}
 {% if games %}
 {% if tier == 'Z' %}
-<h2>Unranked</h2>
+<h2 class="text-center">Unranked</h2>
 {% else %}
-<h2>{{ tier }} Tier</h2>
+<h2 class="text-center">{{ tier }} Tier</h2>
 {% endif %}
 <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-center">
   {% for game in games %}
   <div class="card m-2 col-lg-3">
     {% for detail in list_detail_content %}
     {% if detail.steam_id.steam_id == game.steam_id %}
-    {% if request.user == list_detail.user_list.list_owner %}
+    {% if request.user == list_detail.user_list.list_owner or request.user.is_superuser%}
     <div id="remove-game-button" class="remove-container position-relative">
       <a id="remove-game-{{ game.steam_id }}" href="{% url 'remove_game' list_id=list_detail.user_list.list_id game_id=game.steam_id %}" class="btn btn-sm btn-link text-danger position-absolute top-0 mt-2 my-1 end-0 rounded-circle" title="Remove Game From List">
         <i class="fas fa-times" id="remove-game-x"></i>

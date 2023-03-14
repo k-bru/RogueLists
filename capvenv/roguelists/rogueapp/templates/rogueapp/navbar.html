@@ -1,14 +1,14 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <img src="{% static 'rogueapp/images/rogue-logo.png' %}" alt="RogueLists Logo" id="main-logo" >
+    <img src="{% static 'rogueapp/images/rogue-logo.png' %}" alt="RogueLists Logo" id="main-logo">
     <a class="navbar-brand" href="{% url 'home' %}">RogueLists</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        {% if user.is_authenticated %}
+        {% if request.user.is_authenticated and request.user.userlist_set.all%}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             My Lists
@@ -21,39 +21,33 @@
         </li>
         {% endif %}
 
-      {% if user.is_authenticated %}
-      {% else %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'register_user' %}">Register</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'login' %}">Login</a>
-      </li>      
-      {% endif %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'all_genres' %}">Tags</a>
-      </li>
-      {% if user.is_superuser %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-      </li>
-      {%endif %}
-      
-    </ul>
-    
-    {% if user.is_authenticated %}
-    <ul class="navbar-nav me-1">
-      <li class="nav-item d-flex align-items-center text-white">
-        Logged in as&nbsp;<a id="log-message" href="{% url 'user_profile' user_id=user.id %}" class="pe-2">{{ request.user }}</a>
-        <a class="btn m-2" href="{% url 'logout' %}" class="">Logout</a>
-      </li>
-    </ul>     
-    {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'all_genres' %}">Tags</a>
+        </li>
+        {% if request.user.is_superuser %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+        </li>
+        {%endif %}
 
-    <form class="d-flex" method="GET" action="{% url 'search' %}">
-      <input type="search" class="form-control me-2" placeholder="Search Games" aria-label="Search" name="searched">
-      <button class="btn btn-outline-secondary" type="submit">Search</button>
-    </form>
+      </ul>
+
+      {% if request.user.is_authenticated %}
+      <ul class="navbar-nav me-1">
+        <li class="nav-item d-flex align-items-center text-white">
+          Logged in as&nbsp;<a id="log-message" href="{% url 'user_profile' user_id=user.id %}" class="pe-2">{{ request.user }}</a>
+          <a class="btn m-2" href="{% url 'logout' %}" class="">Logout</a>
+          {% else %}
+          <a class="btn m-2" href="{% url 'login' %}">Login</a>
+          <a class="btn m-2" href="{% url 'register_user' %}">Register</a>
+        </li>
+      </ul>
+      {% endif %}
+
+      <form class="d-flex" method="GET" action="{% url 'search' %}">
+        <input type="search" class="form-control me-2" placeholder="Search Games" aria-label="Search" name="searched">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
     </div>
   </div>
 </nav>

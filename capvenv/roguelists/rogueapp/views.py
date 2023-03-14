@@ -292,10 +292,10 @@ def remove_game(request, list_id, game_id):
     list_detail_content.delete()
 
     # create an undo button with the reverse URL of the add_game view
-    undo_button = f'<a href="{reverse("add_to_list", args=[list_id, game_id])}" class="btn btn-sm btn-link">Undo</a>'
+    undo_button = f'<a href="{reverse("add_to_list", args=[list_id, game_id])}" class="text-center"><button class="text-center mt-4">Undo</button></a>'
 
     # add a success message with the undo button
-    messages.success(request, f"{list_detail_content.steam_id.game_title} successfully removed from list. {undo_button}")
+    messages.warning(request, f"<div class='text-center'>{list_detail_content.steam_id.game_title} successfully removed from list.<br> {undo_button}</div>")
 
     # redirect to the list_detail view with the list_id parameter
     return redirect('list_detail', list_id=user_list.list_id)
