@@ -1,23 +1,25 @@
 {% extends 'rogueapp/base.html' %}
 
 {% block content %}
-<h1>My Portfolio</h1>
-
-<h2>Projects</h2>
+<div class="text-center">
+  <h1>My Portfolio</h1>
+  <a href="https://github.com/k-bru" class="btn mb-5">GitHub</a><br>
+</div>
+<h2>Projects</h2><hr>
 
 {% for project in projects %}
 <a class="btn" href="{{ project.url }}">{{ project.name }}</a>
 <p>{{project.description}}</p>
 {% endfor %}
 
-<h2>Skills</h2>
+<h2>Skills</h2><hr>
 <ul>
   {% for skill in skills %}
   <li>{{ skill }}</li>
   {% endfor %}
 </ul>
 
-<h2>Technical Experience</h2>
+<h2>Technical Experience</h2><hr>
 {% for job in jobs %}
 <h3>{{ job.position }}</h3>
 <p>{{ job.company }} - <em>2022 to current</em></p>

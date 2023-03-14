@@ -3,42 +3,40 @@
     <strong><a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">{{ list_preview.list.list_name }}</a></strong><br>
     <a href="{% url 'user_profile' user_id=list_preview.list.list_owner.id %}">{{ list_preview.list.list_owner.username }}</a>
   </div>
-  <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-    <div class="card-body">
-      <p class="card-text" id="game-count">{{ list_preview.game_count }} {% if list_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
-      <p class="card-text"><em>{{ list_preview.list.list_description }}</em></p>
-      {% if request.user.is_authenticated and request.user != user %}
-      <form action="{% url 'add_favorite_list' list_id=list_preview.list.list_id %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-secondary">Add to Favorites</button>
-      </form>
-      {% endif %}
-      <hr>
-      <div class="row">
-        {% if list_preview.game_images|length == 1 %}
-        <div class="col-12">
-          <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-            <img class="w-100 text-center list-images large-image" src="{{ list_preview.game_images.0.image_url }}" alt="Capsule image for {{ list_preview.game_images.0.game_title }}">
-          </a>
-        </div>
-        {% elif list_preview.game_images|length == 2 %}
-        {% for game_image in list_preview.game_images %}
-        <div class="col-6">
-          <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-            <img class="w-100 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
-          </a>
-        </div>
-        {% endfor %}
-        {% else %}
-        {% for game_image in list_preview.game_images|slice:":24" %}
-        <div class="col-4">
-          <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-            <img class="w-100 text-center list-images" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
-          </a>
-        </div>
-        {% endfor %}
-        {% endif %}        
+  <div class="card-body">
+    <p class="card-text" id="game-count">{{ list_preview.game_count }} {% if list_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
+    <p class="card-text"><em>{{ list_preview.list.list_description }}</em></p>
+    {% if request.user.is_authenticated and request.user != user %}
+    <form action="{% url 'add_favorite_list' list_id=list_preview.list.list_id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-secondary">Add to Favorites</button>
+    </form>
+    {% endif %}
+    <hr>
+    <div class="row">
+      {% if list_preview.game_images|length == 1 %}
+      <div class="col-12">
+        <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
+          <img class="w-100 text-center list-images large-image" src="{{ list_preview.game_images.0.image_url }}" alt="Capsule image for {{ list_preview.game_images.0.game_title }}">
+        </a>
       </div>
+      {% elif list_preview.game_images|length == 2 %}
+      {% for game_image in list_preview.game_images %}
+      <div class="col-6">
+        <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
+          <img class="w-100 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
+        </a>
+      </div>
+      {% endfor %}
+      {% else %}
+      {% for game_image in list_preview.game_images|slice:":24" %}
+      <div class="col-4">
+        <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
+          <img class="w-100 text-center list-images" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
+        </a>
+      </div>
+      {% endfor %}
+      {% endif %}
     </div>
-  </a>
+  </div>
 </div>

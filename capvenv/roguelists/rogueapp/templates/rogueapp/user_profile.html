@@ -52,8 +52,7 @@
       <div id="user-favorites" class="row content collapse show">
         {% if user_favorites %}
         {% for favorite_preview in favorite_list_previews %}
-        <center>
-          <div class="col-md-6 mb-4 text-center">
+          <div class="col-md-6 mb-4 d-flex">
             <div class="card">
               <div class="card-header">
                 <strong><a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">{{ favorite_preview.list.list_name }}</a></strong><br>
@@ -68,7 +67,7 @@
                     {% for game_image in favorite_preview.game_images|slice:":9" %}
                     <div class="col-4">
                       <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
-                        <img class="w-100" src="{{ game_image.image_url }}">
+                        <img class="w-100 text-center list-images" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
                       </a>
                     </div>
                     {% endfor %}
@@ -77,7 +76,6 @@
               </a>
             </div>
           </div>
-        </center>
         {% endfor %}
         {% else %}
         <p>This user has no favorite lists.</p>
