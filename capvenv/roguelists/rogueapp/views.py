@@ -106,8 +106,8 @@ def login_user(request):
       login(request, user)
       return redirect('home')
     else:
-      messages.success(request, ("There Was An Error Logging In, Try Again..."))	
-      return redirect('login')	
+      messages.success(request, ("Invalid username/password combination. Please try again."))
+      return redirect('login')
   else:
     return render(request, 'authenticate/login.html', {})
 
@@ -140,14 +140,14 @@ def search(request):
     release_date_end = request.GET.get('max_release_date')
     sort_by = request.GET.get('sort_by', 'game_title')
     sort_order = request.GET.get('sort_order', 'asc')
-    
+
     games = Game.objects.all()
     if searched:
       genre = Genre.objects.filter(name__icontains=searched)
       if genre.exists():
           games = Game.objects.filter(
-              Q(genres__icontains=f"|{genre.first().id}|") | 
-              Q(genres__istartswith=f"{genre.first().id}|") | 
+              Q(genres__icontains=f"|{genre.first().id}|") |
+              Q(genres__istartswith=f"{genre.first().id}|") |
               Q(genres__iendswith=f"|{genre.first().id}")
           )
       else:
@@ -207,7 +207,7 @@ def create_list(request, game_id):
     # If the request method is GET, render the template with the form
     return render(request, 'rogueapp/create_list.html')
 
-  
+
 def list_detail(request, list_id):
   list_detail = get_object_or_404(ListDetail, pk=list_id)
   list_detail_content = ListDetailContent.objects.filter(list_detail_id=list_id)

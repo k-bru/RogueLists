@@ -10,7 +10,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if request.user.is_authenticated and request.user.userlist_set.all%}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="btn m-2 text-white nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             My Lists
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -22,32 +22,39 @@
         {% endif %}
 
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'all_genres' %}">Tags</a>
+          <a class="btn m-2 nav-link text-white" href="{% url 'all_genres' %}">Tags</a>
         </li>
         {% if request.user.is_superuser %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+          <a class="btn m-2 nav-link text-white" href="{% url 'admin:index' %}">Admin</a>
         </li>
         {%endif %}
 
       </ul>
 
+    <ul class="navbar-nav me-1 text-center align-items-center">
       {% if request.user.is_authenticated %}
-      <ul class="navbar-nav me-1">
-        <li class="nav-item d-flex align-items-center text-white">
+        <li class="nav-item align-items-center text-white text-center">
           Logged in as&nbsp;<a id="log-message" href="{% url 'user_profile' user_id=user.id %}" class="pe-2">{{ request.user }}</a>
-          <a class="btn m-2" href="{% url 'logout' %}" class="">Logout</a>
-          {% else %}
-          <a class="btn m-2" href="{% url 'login' %}">Login</a>
-          <a class="btn m-2" href="{% url 'register_user' %}">Register</a>
         </li>
-      </ul>
+        <li class="nav-item align-items-center text-white text-center"><a class="btn m-2 p-2 nav-link text-white mx-auto" href="{% url 'logout' %}">Logout</a></li>
+      {% else %}
+        <li class="nav-item align-items-center text-white text-center">
+          <a class="btn m-2 p-2 nav-link text-white" href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item align-items-center text-white text-center">
+          <a class="btn m-2 p-2 nav-link text-white" href="{% url 'register_user' %}">Register</a>
+        </li>
       {% endif %}
+      <li class="nav-item align-items-center text-white text-center m-2">
+        <form class="d-flex nav-link" method="GET" action="{% url 'search' %}">
+          <input type="search" class="form-control me-2" placeholder="Search Games" aria-label="Search" name="searched">
+          <button class="btn p-2 btn-outline-secondary nav-link text-white" type="submit">Search</button>
+        </form>
+      </li>
+    </ul>
 
-      <form class="d-flex" method="GET" action="{% url 'search' %}">
-        <input type="search" class="form-control me-2" placeholder="Search Games" aria-label="Search" name="searched">
-        <button class="btn btn-outline-secondary" type="submit">Search</button>
-      </form>
+
     </div>
   </div>
 </nav>
