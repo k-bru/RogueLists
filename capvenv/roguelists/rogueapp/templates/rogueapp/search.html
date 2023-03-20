@@ -109,7 +109,7 @@
         </div>
         <div class="card-body">
           <h4 class="card-title text-md-center"><a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a></h4>
-          <p class="card-text">
+          <p class="card-text text-center">
             {% for genre in game.get_genres %}
             <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
             {% endfor %}

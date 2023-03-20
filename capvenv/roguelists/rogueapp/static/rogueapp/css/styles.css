@@ -260,7 +260,10 @@ a,
 .card-body {
   height: fit-content;
   padding-bottom: 0;
-  text-align: center;
+}
+
+.card-body p {
+  text-align: left;
 }
 
 .card-text {
