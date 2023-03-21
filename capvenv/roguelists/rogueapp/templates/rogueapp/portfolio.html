@@ -22,7 +22,7 @@
 <h2>Technical Experience</h2><hr>
 {% for job in jobs %}
 <h3>{{ job.position }}</h3>
-<p>{{ job.company }} - <em>2022 to current</em></p>
+<p>{{ job.company }} - <em>{{job.start_date}} to {{job.end_date}}</em></p>
 <ul>
   {% for responsibility in job.responsibilities %}
   <li>{{ responsibility }}</li>

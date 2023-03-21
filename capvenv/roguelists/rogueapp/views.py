@@ -356,17 +356,26 @@ def portfolio(request):
     skills = ['Python', 'Django', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'Drupal', 'WordPress', 'Adobe Products']
     jobs = [
         {
+            'position': 'Junior Developer',
+            'company': 'StreamVu Ed',
+            'start_date': 2023,
+            'end_date': 'Current',
+            'responsibilities': ['Assemble on-site videography hardware for K-12 schools', 'Provide technical support for faculty members', 'Maintain and improve company software']
+        },
+        {
             'position': 'Federal Work Study',
             'company': 'Asheville-Buncombe Technical Community College',
             'start_date': 2022,
-            'responsibilities': ['Conversion of PDF to Web Pages', 'Fixed bugs', 'Optimized website performance', 'Manage overall website accessibility']
+            'end_date': 2023,
+            'responsibilities': ['Conversion of PDF to web pages', 'Fixed bugs', 'Optimized website performance', 'Manage overall website accessibility']
         },
         {
             'position': 'Freelance Python Development',
             'company': 'Freelance',
             'start_date': 2022,
+            'end_date': 'Current',
             'responsibilities': ['Designed and implemented python scripts in a collaboration for private clients', 'Mostly web-scraping and outputting results to JSON']
-        }
+        },
     ]
     context = {'projects': projects, 'skills': skills, 'jobs': jobs}
     return render(request, 'rogueapp/portfolio.html', context)
