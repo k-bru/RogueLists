@@ -19,7 +19,7 @@ def home(request):
       follows = Follow.objects.filter(follower=request.user)
       followed_users = [follow.following for follow in follows]
 
-    user_lists = UserList.objects.all().order_by('-list_id')
+    user_lists = user_lists[:10]
     for user_list in user_lists:
         game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
         game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]

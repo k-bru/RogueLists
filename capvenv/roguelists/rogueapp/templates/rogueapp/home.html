@@ -7,7 +7,7 @@
       {% if list_previews %}
       <div class="card" id="descript-card">
         <div class="card-heading">
-          <h1 class="p-lg-2">RogueLists</h1>
+          <h1 class="p-2">RogueLists</h1>
         </div>
         <div class="card-body">
           <p class="text-left">RogueLists is a proof of concept project designed to create and rank games found on Steam under the 'RogueLike' genre. Users are able to create and share lists with others and even follow others so that they can see any future lists they create. </p>
@@ -21,7 +21,7 @@
           <div class="row" id="list-flex">
             {% for list_preview in list_previews %}
             {% if list_preview.list.list_owner == request.user %}
-            <div class="col-md-6 mb-4">
+            <div class="col-lg-6 col-md-12 col-sm-12 mb-4">
               {% include 'rogueapp/show_lists.html' %}
             </div>
             {% endif %}
@@ -67,7 +67,6 @@
       {% endif %}
       {% endif %}
 
-      {% if request.user.is_authenticated %}
       <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Newest Lists</h2>
       <div id="unauth-lists" class="row content show">
         <div class="row content show">
@@ -78,18 +77,6 @@
           {% endfor %}
         </div>
       </div>
-      {% else %}
-      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Newest Lists</h2>
-      <div id="unauth-lists" class="row content show">
-        <div class="row content show">
-          {% for list_preview in list_previews %}
-          <div class="col-md-6 mb-4 d-flex">
-            {% include 'rogueapp/show_lists.html' %}
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      {% endif %}
     </div>
   </div>
 </div>
