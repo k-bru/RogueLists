@@ -4,13 +4,13 @@
   <h1 class="text-center mb-4">All Tags</h1>
   {% regroup genres|dictsort:"name" by name.0|lower as genre_groups %}
   <div class="row">
-    <div class="col-sm-12 d-flex flex-wrap justify-content-start">
+    <div class="col-sm-12 d-flex flex-wrap justify-content-center">
       {% for group in genre_groups %}
       {% if group.grouper == '8' %}
       <a href="#{{ group.grouper|upper }}" class="btn btn-secondary mx-1 my-1">{{ group.grouper|upper }}</a>
       </div>
       <br>
-      <div class="col-sm-12 d-flex flex-wrap justify-content-start">
+      <div class="col-sm-12 d-flex flex-wrap justify-content-center">
       {% else %}
       <a href="#{{ group.grouper|upper }}" class="btn btn-secondary mx-1 my-1">{{ group.grouper|upper }}</a>
       {% endif %}
