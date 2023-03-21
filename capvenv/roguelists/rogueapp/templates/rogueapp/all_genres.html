@@ -22,7 +22,11 @@
       <h2>{{ group.grouper|upper }}</h2>
       <div class="col-sm-6 d-flex flex-wrap align-items-stretch">
         {% for genre in group.list %}
+          {% if genre.name == 'E-Sports' %}
+          <a href="{% url 'search' %}?searched=eSports" class="genre-link btn btn-outline-secondary btn-block mb-3 me-2">{{ genre.name|safe }}</a>
+          {% else %}
           <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary btn-block mb-3 me-2">{{ genre.name|safe }}</a>
+          {% endif %}
         {% endfor %}
       </div>
     </div>

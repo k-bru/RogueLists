@@ -49,7 +49,7 @@
 
       {% if request.user.is_authenticated %}
       <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#user-favorites" title="Show/Hide">Favorites</h2>
-      <div id="user-favorites" class="row content collapse show">
+      <div id="user-favorites" class="row content collapse show justify-content-center">
         {% if user_favorites %}
         {% for favorite_preview in favorite_list_previews %}
           <div class="col-md-6 mb-4 d-flex">
@@ -60,7 +60,7 @@
               </div>
               <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
                 <div class="card-body">
-                  <p class="card-text" id="game-count">{{ favorite_preview.game_count }} {% if favorite_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
+                  <p class="card-text text-center" id="game-count">{{ favorite_preview.game_count }} {% if favorite_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
                   <p class="card-text"><em>{{ favorite_preview.list.list_description }}</em></p>
                   <hr>
                   <div class="row justify-content-between align-items-end">
