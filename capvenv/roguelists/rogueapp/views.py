@@ -330,6 +330,13 @@ def add_favorite_list(request, list_id):
         messages.warning(request, 'List is already in favorites.')
     context = {'list_detail': list_detail}
     return redirect('user_profile', user_id=user.id)
+  
+def remove_favorite_list(request, list_id):
+    favorite_list = get_object_or_404(FavoriteList, user=request.user, list_id=list_id)
+    favorite_list.delete()
+    undo_button = f'<a href="{reverse("add_favorite_list", args=[list_id])}" class="text-center"><button class="text-center mt-4">Undo</button></a>'
+    messages.warning(request, f"<div class='text-center'>List removed from favorites! <br> {undo_button}</div>")
+    return redirect('user_profile', user_id=request.user.id)
 
 def all_genres(request):
     genres = Genre.objects.order_by('name')

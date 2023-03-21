@@ -36,7 +36,7 @@
         {% if user_lists %}
         <div class="row" id="list-flex">
           {% for list_preview in list_previews %}
-          <div class="col-md-6 mb-4 d-flex">
+          <div class="col-md-6 mb-4 d-flex justify-content-center">
             {% include 'rogueapp/show_lists.html' %}
           </div>
           {% endfor %}
@@ -47,41 +47,19 @@
       </div>
 
 
-      {% if request.user.is_authenticated %}
+      {% if request.user == user %}
       <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#user-favorites" title="Show/Hide">Favorites</h2>
       <div id="user-favorites" class="row content collapse show justify-content-center">
         {% if user_favorites %}
         {% for favorite_preview in favorite_list_previews %}
-          <div class="col-md-6 mb-4 d-flex">
-            <div class="card">
-              <div class="card-header">
-                <strong><a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">{{ favorite_preview.list.list_name }}</a></strong><br>
-                <a href="{% url 'user_profile' user_id=favorite_preview.list.list_owner.id %}">{{ favorite_preview.list.list_owner.username }}</a>
-              </div>
-              <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
-                <div class="card-body">
-                  <p class="card-text text-center" id="game-count">{{ favorite_preview.game_count }} {% if favorite_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
-                  <p class="card-text"><em>{{ favorite_preview.list.list_description }}</em></p>
-                  <hr>
-                  <div class="row justify-content-between align-items-end">
-                    {% for game_image in favorite_preview.game_images|slice:":9" %}
-                    <div class="col-4">
-                      <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id %}">
-                        <img class="w-100 text-center list-images" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
-                      </a>
-                    </div>
-                    {% endfor %}
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
+        {% include 'rogueapp/show_favorites.html' %}
         {% endfor %}
         {% else %}
         <p>This user has no favorite lists.</p>
         {% endif %}
       </div>
       {% endif %}
+      
     </div>
   </div>
 </div>

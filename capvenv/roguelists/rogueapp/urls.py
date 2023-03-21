@@ -26,6 +26,7 @@ urlpatterns = [
   path('favorites/add/<int:list_id>/', views.add_favorite_list, name='add_favorite_list'),
   path('genres/', views.all_genres, name='all_genres'),
   path('portfolio/', views.portfolio, name='portfolio'),
+  path('remove_favorite_list/<int:list_id>/', views.remove_favorite_list, name='remove_favorite_list'),
 ]
 
 if DEBUG:

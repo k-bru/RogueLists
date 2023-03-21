@@ -30,25 +30,25 @@ a,
   transition: .5s;
 }
 
-#remove-game-button a {
+.remove-game-button a {
   background-color: var(--dark);
   color: var(--light);
   transition: .5s;
   z-index: 100;
 }
 
-#remove-game-button a:hover {
+.remove-game-button a:hover {
   background-color: var(--light);
   color: var(--denim);
   transition: .5s;
 }
 
-#remove-game-button a:hover #remove-game-x {
+.remove-game-button a:hover .remove-game-x {
   color: var(--denim);
   transition: .5s;
 }
 
-#remove-game-x {
+.remove-game-x {
   color: var(--light);
   transition: .5s;
 }

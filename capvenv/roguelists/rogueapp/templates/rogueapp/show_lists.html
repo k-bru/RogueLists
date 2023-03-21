@@ -15,7 +15,7 @@
     </form>
     {% endif %}
     <hr>
-    <div class="row">
+    <div class="row justify-content-center">
       {% if list_preview.game_images|length == 1 %}
       <div class="col-12">
         <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
@@ -24,7 +24,7 @@
       </div>
       {% elif list_preview.game_images|length == 2 %}
       {% for game_image in list_preview.game_images %}
-      <div class="col-6">
+      <div class="col-8">
         <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
           <img class="w-100 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
         </a>
@@ -32,7 +32,7 @@
       {% endfor %}
       {% else %}
       {% for game_image in list_preview.game_images|slice:":24" %}
-      <div class="col-4">
+      <div class="col-4 col-md-6">
         <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
           <img class="w-100 text-center list-images" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
         </a>

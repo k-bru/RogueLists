@@ -34,7 +34,7 @@
     <ul class="navbar-nav me-1 text-center align-items-center">
       {% if request.user.is_authenticated %}
         <li class="nav-item align-items-center text-white text-center">
-          Logged in as&nbsp;<a id="log-message" href="{% url 'user_profile' user_id=user.id %}" class="pe-2">{{ request.user }}</a>
+          Logged in as&nbsp;<a id="log-message" href="{% url 'user_profile' user_id=request.user.id %}" class="pe-2">{{ request.user }}</a>
         </li>
         <li class="nav-item align-items-center text-white text-center"><a class="btn m-2 p-2 nav-link text-white mx-auto" href="{% url 'logout' %}">Logout</a></li>
       {% else %}
