@@ -128,7 +128,8 @@ a,
   justify-content: center;
 }
 
-.list-holder h2 {
+.list-holder h2,
+.sort-holder h2 {
   background-color: var(--dark);
   border-radius: 1rem;
   color: var(--light);
@@ -139,28 +140,43 @@ a,
   width: 50%;
 }
 
-.list-holder h2:hover {
+.list-holder h2:hover,
+.sort-holder h2:hover {
   background-color: var(--denim);
+  color: var(--sky);
+  transition: .5s;
 }
 
-.list-holder h2.collapsed::after {
+.list-holder h2.collapsed::after,
+.sort-holder h2.collapsed::after {
   color: var(--sky);
   content: "\002B";
   float: right;
   font-weight: bold;
 }
 
-.list-holder h2:not(.collapsed)::after {
+.list-holder h2:not(.collapsed)::after,
+.sort-holder h2:not(.collapsed)::after {
   color: var(--sky);
   content: "\2212";
   float: right;
   font-weight: bold;
 }
 
-.list-holder h2:hover {
+/* .sort-holder h2.collapsed::after {
   color: var(--sky);
-  transition: .5s;
-}
+  content: "\2212";
+  float: right;
+  font-weight: bold;
+} */
+
+/* .sort-holder h2:not(.collapsed)::after {
+  color: var(--sky);
+  content: "\002B";
+  float: right;
+  font-weight: bold;
+} */
+
 
 /* cards and lists */
 #list-detail-card {
@@ -254,7 +270,7 @@ a,
   filter: invert();
   height: auto;
   margin-right: .5rem;
-  width: 1.6rem;
+  width: 2.75rem;
 }
 
 .card-body {
@@ -283,8 +299,21 @@ a,
   width: 100%;
 }
 
+.sort-holder h2.collapsed#sort-flex {
+  display: none;
+}
+
+.sort-holder h2.show+#sort-flex {
+  display: flex;
+}
+
 .card-footer {
   align-items: flex-end;
+}
+
+.card-info {
+  height: max-content;
+  margin: 1rem auto;
 }
 
 #game-count {
@@ -320,4 +349,8 @@ img {
 .genre-link:focus, .genre-link.focus {
   box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
   outline: 0;
+}
+
+.navbar-brand {
+  font-size: 1.75rem;
 }

@@ -332,8 +332,12 @@ def add_favorite_list(request, list_id):
     return redirect('user_profile', user_id=user.id)
 
 def all_genres(request):
-  genres = Genre.objects.order_by('name')
-  return render(request, 'rogueapp/all_genres.html', {'genres': genres})
+    genres = Genre.objects.order_by('name')
+    for genre in genres:
+      if genre.name == "eSports":
+        genre.name = "E-Sports"
+    return render(request, 'rogueapp/all_genres.html', {'genres': genres})
+
 
 def portfolio(request):
     projects = [

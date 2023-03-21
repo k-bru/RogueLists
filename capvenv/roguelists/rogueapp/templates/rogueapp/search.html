@@ -49,9 +49,9 @@
     </div>
   </div>
 
-  <div class="col-sm-12 col-md-4 text-center mx-auto list-holder">
+  <div class="col-sm-12 col-md-4 text-center mx-auto sort-holder">
     <h2 class="col-12 collapsed mx-auto" data-bs-toggle="collapse" data-bs-target="#sort-flex" title="Sort">Sort</h2>
-    <div id="sort-flex" class="row row-cols-2 row-cols-md-3">
+    <div id="sort-flex" class="row row-cols-2 row-cols-md-3 collapse">
       <div class="col">
         <button type="submit" name="sort_by" value="game_title" class="btn {% if sort_order == 'game_title' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Title (A-Z)</button>
       </div>
@@ -85,7 +85,7 @@
     <div class="col-sm-6 col-md-4 col-lg-3 mb-3 d-flex">
       <div class="card">
         <div id="search-detail-card" class="text-center align-items-center">
-          <a href="https://store.steampowered.com/app/{{game.steam_id}}"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top d-block">
+          <a href="https://store.steampowered.com/app/{{game.steam_id}}" target="_blank"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top d-block">
             <div id="search-price">
               {% if game.base_price > 0 %}
               {% if game.base_price == game.current_price %}
@@ -108,16 +108,16 @@
           </a>
         </div>
         <div class="card-body">
-          <h4 class="card-title text-md-center"><a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none">{{game.game_title}}</a></h4>
+          <h4 class="card-title text-md-center"><a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none" target="_blank">{{game.game_title}}</a></h4>
           <p class="card-text text-center">
             {% for genre in game.get_genres %}
             <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
             {% endfor %}
           </p>
-          
+
         </div>
         <div class="card-footer bg-transparent border-dark">
-          <p class="card-title text-center p-lg-2">Release Date: {{game.release_date}}</p>
+          <p class="card-title text-center p-lg-2">{{game.release_date}}</p>
           {% if request.user.is_authenticated %}
           <div class="dropdown text-center">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

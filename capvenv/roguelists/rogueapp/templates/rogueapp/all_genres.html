@@ -1,12 +1,30 @@
 {% extends 'rogueapp/base.html' %}
 
 {% block content %}
-<h1 class="text-center mb-4">All Tags</h1>
-<div class="row justify-content-center">
-  <div class="col-sm-6 d-flex flex-wrap align-items-stretch justify-content-center">
-    {% for genre in genres %}
-    <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary btn-block mb-3 me-2">{{ genre.name|safe }}</a>
-    {% endfor %}
+  <h1 class="text-center mb-4">All Tags</h1>
+  {% regroup genres|dictsort:"name" by name.0|lower as genre_groups %}
+  <div class="row">
+    <div class="col-sm-12 d-flex flex-wrap justify-content-start">
+      {% for group in genre_groups %}
+      {% if group.grouper == '8' %}
+      <a href="#{{ group.grouper|upper }}" class="btn btn-secondary mx-1 my-1">{{ group.grouper|upper }}</a>
+      </div>
+      <br>
+      <div class="col-sm-12 d-flex flex-wrap justify-content-start">
+      {% else %}
+      <a href="#{{ group.grouper|upper }}" class="btn btn-secondary mx-1 my-1">{{ group.grouper|upper }}</a>
+      {% endif %}
+      {% endfor %}
+    </div>
   </div>
-</div>
+  {% for group in genre_groups %}
+    <div class="row mt-2" id="{{ group.grouper|upper }}">
+      <h2>{{ group.grouper|upper }}</h2>
+      <div class="col-sm-6 d-flex flex-wrap align-items-stretch">
+        {% for genre in group.list %}
+          <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary btn-block mb-3 me-2">{{ genre.name|safe }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
 {% endblock %}
