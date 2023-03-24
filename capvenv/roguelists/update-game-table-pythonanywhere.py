@@ -6,6 +6,12 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 
+import os
+
+# construct file paths based on current directory
+db_path = os.path.join(os.getcwd(), 'db.sqlite3')
+csv_path = os.path.join(os.getcwd(), 'roguelike.csv')
+
 link = 'https://store.steampowered.com/search/results'
 # game = input('Enter game search: ')
 game = 'roguelike'
@@ -205,13 +211,13 @@ def scrap():
   #   json.dump(datas, outfile)
 
   df = pd.DataFrame(datas)
-  df.to_csv(f'home/kbru/RogueLists/capvenv/roguelists/{game}.csv', index=False, header=False)
+  df.to_csv(csv_path, index=False, header=False)
   print('all data was created')
 
 
 def updateGames():
   # connect to the database
-  conn = sqlite3.connect('home/kbru/RogueLists/capvenv/roguelists/db.sqlite3')
+  conn = sqlite3.connect(db_path)
   print(conn)
   c = conn.cursor()
 
@@ -224,7 +230,7 @@ def updateGames():
               release_date DATE,
               genres TEXT)''')
   # read the CSV file
-  with open('home/kbru/RogueLists/capvenv/roguelists/roguelike.csv', 'r', encoding='utf-8') as f:
+  with open(csv_path, 'r', encoding='utf-8') as f:
     reader = csv.reader(f)
     # next(reader) # skip the header row
     for row in reader:
