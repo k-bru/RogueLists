@@ -163,6 +163,11 @@ a,
   font-weight: bold;
 }
 
+#tier-collapse {
+  width: fit-content;
+  padding: .75rem 1rem;
+}
+
 /* .sort-holder h2.collapsed::after {
   color: var(--sky);
   content: "\2212";
@@ -264,6 +269,14 @@ a,
 #filter-form {
   margin: 0 auto 2rem;
   width: 75%;
+}
+
+.bi-pencil {
+  color: var(--sky);
+}
+
+.bi-pencil:hover {
+  cursor: pointer;
 }
 
 #main-logo {
