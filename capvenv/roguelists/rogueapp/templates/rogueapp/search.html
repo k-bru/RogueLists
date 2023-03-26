@@ -22,24 +22,24 @@
 
 {% if searched %}
 <form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" id="filter-form">
-  <div class="row justify-content-center text-center mx-auto" id="filters-container">
+  <div class="row mx-auto" id="filters-container">
     <div class="col-sm-6 col-md-4">
-      <label for="price_range">Price range:</label>
+      <label for="price_range">Price range</label>
       <div class="input-group">
-        <input type="number" name="min_price" id="min_price" placeholder="Min" class="form-control" value="{{ min_price }}">
+        <input type="number" name="min_price" id="min_price" placeholder="Min" class="form-control" value="{{ min_price }}" min="0">
         <span class="input-group-text">-</span>
-        <input type="number" name="max_price" id="max_price" placeholder="Max" class="form-control" value="{{ max_price }}">
+        <input type="number" name="max_price" id="max_price" placeholder="Max" class="form-control" value="{{ max_price }}" min="0">
       </div>
     </div>
     <div class="col-sm-6 col-md-4">
-      <label for="release_date_range">Release date range:</label>
+      <label for="release_date_range">Release date range</label>
       <div class="input-group">
         <input type="date" name="min_release_date" id="min_release_date" placeholder="Earliest" class="form-control" value="{{ release_date_start|date:'Y-m-d' }}">
         <span class="input-group-text">-</span>
         <input type="date" name="max_release_date" id="max_release_date" placeholder="Latest" class="form-control" value="{{ release_date_end|date:'Y-m-d' }}">
       </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    <div class="col-4">
       {% if not searched %}
       <input type="hidden" name="searched" value="">
       {% else %}
