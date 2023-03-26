@@ -53,27 +53,28 @@
     <h2 class="col-12 collapsed mx-auto" data-bs-toggle="collapse" data-bs-target="#sort-flex" title="Sort">Sort</h2>
     <div id="sort-flex" class="row row-cols-2 row-cols-md-3 collapse">
       <div class="col">
-        <button type="submit" name="sort_by" value="game_title" class="btn {% if sort_order == 'game_title' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Title (A-Z)</button>
+        <button type="submit" name="sort_by" value="game_title" class="{% if sort_by == 'game_title' %}btn btn-primary text-white border-white bg-dark{% else %}btn btn-primary{% endif %} btn-block">Title (A-Z)</button>
       </div>
       <div class="col">
-        <button type="submit" name="sort_by" value="-game_title" class="btn {% if sort_order == '-game_title' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Title (Z-A)</button>
+        <button type="submit" name="sort_by" value="-game_title" class="{% if sort_by == '-game_title' %}btn btn-primary text-white border-white bg-dark{% else %}btn btn btn-primary{% endif %} btn-block">Title (Z-A)</button>
       </div>
       <div class="w-100"></div> <!-- New row for prices -->
       <div class="col">
-        <button type="submit" name="sort_by" value="-current_price" class="btn {% if sort_order == '-current_price' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Price (high-low)</button>
+        <button type="submit" name="sort_by" value="-current_price" class="{% if sort_by == '-current_price' %}btn btn-primary text-white border-white bg-dark{% else %}btn btn btn-primary{% endif %} btn-block">Price (high-low)</button>
       </div>
       <div class="col">
-        <button type="submit" name="sort_by" value="current_price" class="btn {% if sort_order == 'current_price' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Price (low-high)</button>
+        <button type="submit" name="sort_by" value="current_price" class="{% if sort_by == 'current_price' %}btn btn-primary text-white border-white bg-dark{% else %}btn btn btn-primary{% endif %} btn-block">Price (low-high)</button>
       </div>
       <div class="w-100"></div> <!-- New row for release date buttons -->
       <div class="col">
-        <button type="submit" name="sort_by" value="-release_date" class="btn {% if sort_order == '-release_date' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Release date (newest-oldest)</button>
+        <button type="submit" name="sort_by" value="-release_date" class="{% if sort_by == '-release_date' %}btn btn-primary text-white border-white bg-dark{% else %}btn btn btn-primary{% endif %} btn-block">Release date (newest-oldest)</button>
       </div>
       <div class="col">
-        <button type="submit" name="sort_by" value="release_date" class="btn {% if sort_order == 'release_date' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-block">Release date (oldest-newest)</button>
+        <button type="submit" name="sort_by" value="release_date" class="{% if sort_by == 'release_date' %}btn btn-primary text-white border-white bg-dark{% else %}btn btn btn-primary{% endif %} btn-block">Release date (oldest-newest)</button>
       </div>
     </div>
   </div>
+  
   {% endif %}
 
 </form>
