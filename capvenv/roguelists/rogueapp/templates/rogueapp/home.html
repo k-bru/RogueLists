@@ -21,7 +21,7 @@
           <div class="row" id="list-flex">
             {% for list_preview in list_previews %}
             {% if list_preview.list.list_owner == request.user %}
-            <div class="col-lg-6 col-md-12 col-sm-12 mb-4">
+            <div class="col-md-6 mb-4">
               {% include 'rogueapp/show_lists.html' %}
             </div>
             {% endif %}
@@ -67,14 +67,16 @@
       {% endif %}
       {% endif %}
 
-      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Newest Lists</h2>
-      <div id="unauth-lists" class="row content show">
-        <div class="row content show">
-          {% for list_preview in list_previews %}
-          <div class="col-md-6 mb-4">
-            {% include 'rogueapp/show_lists.html' %}
+      <div class="row">
+        <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Newest Lists</h2>
+        <div id="unauth-lists" class="row content show">
+          <div class="row content show">
+            {% for list_preview in list_previews %}
+            <div class="col-md-6 mb-4">
+              {% include 'rogueapp/show_lists.html' %}
+            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
       </div>
     </div>
