@@ -108,7 +108,7 @@ def scrap():
         continue
       checkedApps.append(appId)
       title = i.find('div', 'col search_name ellipsis').text.strip().replace('\n', ' ')
-      
+
       if 'OST' in title:
         count += 1
         continue
@@ -117,29 +117,29 @@ def scrap():
         price = i.find('div', 'col search_price responsive_secondrow').text.strip()
       except Exception:
         activeDiscount = True
-        price = i.find('span', {'style': 'color: #888888;'}).text             
+        price = i.find('span', {'style': 'color: #888888;'}).text
         discountedPrice = i.find('div', 'col search_price discounted responsive_secondrow').find('br').next_sibling.strip()
-        
+
       if price == '' or 'free' in price.lower():
         price = '$0.00'
 
       if 'demo' in title.lower():
         count += 1
         continue
-      
+
       release = i.find('div', 'col search_released responsive_secondrow').text
       if release == '':
         count += 1
         continue
-      
+
       for word in blacklistlower:
         if word in release.lower() or word in title.lower() or word in price.lower():
           skipEntry = True
-          
+
       if skipEntry:
         count += 1
         continue
-      
+
       #Numerical Date Conversions
       #"Jul 8, 2023"
       if len(release) == 11 or len(release) == 12:
@@ -147,7 +147,7 @@ def scrap():
           if release[5] == "," or release[6] == ",":
             release = datetime.strptime(release, '%b %d, %Y')
             release = release.strftime('%Y-%m-%d')
-      #"2023"    
+      #"2023"
       elif len(release) == 4:
         if release[0:2] == "20":
           release = f"{release}-12-31"
@@ -177,7 +177,7 @@ def scrap():
       if release[4] != "-" and release[7] != "-":
         count += 1
         continue
-      
+
       #For CSV
       if "," in title:
         title = title.replace(",", " —")
@@ -208,7 +208,7 @@ def scrap():
 
       count += 1
       print(f'{count}. {title}. released: {release}. price: {price} . link: {url}')
-            
+
   # with open(f'resultfile/json_data_{game}.json', 'w+') as outfile:
   #   json.dump(datas, outfile)
 
@@ -242,23 +242,23 @@ def updateGames():
       current_price = float(row[3])
       release_date = datetime.strptime(row[4], '%Y-%m-%d').date()
       genres = row[5]
-      
+
       # check if the game already exists in the database
       c.execute("SELECT COUNT(*) FROM rogueapp_game WHERE steam_id=?", (steam_id,))
       result = c.fetchone()[0]
-      
+
       if result == 0:
         # game does not exist, insert a new record
         print(f"Inserting game {game_title} with steam_id {steam_id}")
-        c.execute("INSERT INTO rogueapp_game (steam_id, game_title, base_price, current_price, release_date, genres) VALUES (?, ?, ?, ?, ?, ?)", 
+        c.execute("INSERT INTO rogueapp_game (steam_id, game_title, base_price, current_price, release_date, genres) VALUES (?, ?, ?, ?, ?, ?)",
                   (steam_id, game_title, base_price, current_price, release_date, genres))
       else:
         # game already exists, update the record
         print(f"Updating game {game_title} with steam_id {steam_id}")
-        c.execute("UPDATE rogueapp_game SET game_title=?, base_price=?, current_price=?, release_date=?, genres=? WHERE steam_id=?", 
+        c.execute("UPDATE rogueapp_game SET game_title=?, base_price=?, current_price=?, release_date=?, genres=? WHERE steam_id=?",
                   (game_title, base_price, current_price, release_date, genres, steam_id))
     conn.commit()
-          
+
   conn.close()
 
 
