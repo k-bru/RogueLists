@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
   <div class="row" id="home-flex">
-    <div class="row col-md-8 list-holder" id="home-page">
+    <div class="row col-md-12 col-lg-9 list-holder" id="home-page">
       {% if list_previews %}
       <div class="card" id="descript-card">
         <div class="card-heading">
@@ -11,7 +11,7 @@
         </div>
         <div class="card-body">
           <p class="text-left">RogueLists is a proof of concept project designed to create and rank games found on Steam under the <a href="https://en.wikipedia.org/wiki/Roguelike" target="_blank"><em>RogueLike</em></a> genre. Users are able to create and share lists with others and even follow others so that they can see any future lists they create. </p>
-          <p class="text-left">Site is currently in development and is being worked on to improve your experience. Pricing is updated daily at 4:00 UTC.</p>
+          <p class="text-left">Site is currently in development and is being worked on to improve your experience. Pricing is updated daily at 04:00 UTC.</p>
         </div>
       </div>
       {% if request.user.is_authenticated %}
@@ -39,7 +39,7 @@
           {% for followed_user in followed_users %}
           <div class="col-md-6 mb-4">
             <a href="{% url 'user_profile' user_id=followed_user.id %}">
-              <h4>{{ followed_user.username }}</h4>
+              <h4 class="btn">{{ followed_user.username }}</h4>
             </a>
           </div>
           {% endfor %}

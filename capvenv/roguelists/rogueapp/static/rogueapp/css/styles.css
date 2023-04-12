@@ -21,7 +21,8 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:hover,
+.list-name a:hover {
   color: var(--sky);
 }
 
@@ -188,8 +189,8 @@ a,
   position: relative;
 }
 
-#list-flex div .card {
-  padding-bottom: 1rem;
+.ranked-card {
+  height: auto;
 }
 
 .card {
@@ -236,6 +237,7 @@ a,
   border: 1px solid var(--denim);
   margin-bottom: 1rem;
   min-height: max-content;
+  width: 30rem;
 }
 
 #home-page .card:not(#descript-card) {
@@ -271,8 +273,19 @@ a,
   width: 75%;
 }
 
+.list-name {
+  font-size: 2rem;
+}
+
+.list-name a {
+  color: #9bcef8;
+  transition: 500ms;
+}
+
 .bi-pencil {
   color: var(--sky);
+  font-size: 1.5rem;
+  padding: .5rem;
 }
 
 .bi-pencil:hover {
@@ -288,7 +301,6 @@ a,
 
 .card-body {
   height: fit-content;
-  padding-bottom: 0;
 }
 
 .card-body p {
@@ -298,6 +310,10 @@ a,
 .card-text {
   height: fit-content;
   overflow: hidden;
+}
+
+.card-header {
+  background-color: rgb(255,255,255,0.1);
 }
 
 #sort-flex .col {

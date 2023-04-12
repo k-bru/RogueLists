@@ -9,8 +9,10 @@ import time
 import os
 
 # construct file paths based on current directory
-db_path = os.path.join(os.getcwd(), 'db.sqlite3')
-csv_path = os.path.join(os.getcwd(), 'roguelike.csv')
+db_path = os.path.join('/home/kbru/RogueLists/capvenv/roguelists', 'db.sqlite3')
+csv_path = os.path.join('/home/kbru/RogueLists/capvenv/roguelists', 'roguelike.csv')
+# db_path = os.path.join(os.getcwd(), 'db.sqlite3')
+# csv_path = os.path.join(os.getcwd(), 'roguelike.csv')
 
 link = 'https://store.steampowered.com/search/results'
 # game = input('Enter game search: ')

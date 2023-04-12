@@ -188,10 +188,6 @@ a,
   position: relative;
 }
 
-#list-flex div .card {
-  padding-bottom: 1rem;
-}
-
 .card {
   position: relative;
 }
@@ -236,6 +232,7 @@ a,
   border: 1px solid var(--denim);
   margin-bottom: 1rem;
   min-height: max-content;
+  width: 30rem;
 }
 
 #home-page .card:not(#descript-card) {
@@ -271,6 +268,11 @@ a,
   width: 75%;
 }
 
+.list-name {
+  color: rgba(0,0,0,0.5)!important;
+  font-size: 2rem;
+}
+
 .bi-pencil {
   color: var(--sky);
 }
@@ -288,7 +290,6 @@ a,
 
 .card-body {
   height: fit-content;
-  padding-bottom: 0;
 }
 
 .card-body p {
@@ -298,6 +299,10 @@ a,
 .card-text {
   height: fit-content;
   overflow: hidden;
+}
+
+.card-header {
+  background-color: rgb(255,255,255,0.1);
 }
 
 #sort-flex .col {

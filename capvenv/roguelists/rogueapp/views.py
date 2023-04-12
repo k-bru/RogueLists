@@ -9,7 +9,7 @@ from django.urls import reverse
 import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Count
 
 def home(request):
     user_lists = UserList.objects.select_related('list_owner').all().order_by('-list_id')
@@ -18,21 +18,25 @@ def home(request):
     if request.user.is_authenticated:
       follows = Follow.objects.filter(follower=request.user)
       followed_users = [follow.following for follow in follows]
-
+    favorite_counts = {}
+    favorites = FavoriteList.objects.values('list_id').annotate(favorite_count=Count('id'))
+    for favorite in favorites:
+        favorite_counts[favorite['list_id']] = favorite['favorite_count']
+    
     for user_list in user_lists:
         game_count = ListDetailContent.objects.filter(list_detail_id=user_list.list_id).count()
         game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
 
         # Add game images
         game_images = []
-        for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:24]:
+        for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()[:6]:
             game_images.append({
                 'game_id': list_detail_content.steam_id.steam_id,
                 'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg",
                 'game_title': list_detail_content.steam_id.game_title
             })
 
-        list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images})
+        list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images, 'favorite_count': favorite_counts.get(user_list.list_id, 0)})
     return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users})
 
 def user_profile(request, user_id):
@@ -46,7 +50,7 @@ def user_profile(request, user_id):
 
         # Add game images
         game_images = []
-        for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:24]:
+        for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:6]:
             game_images.append({
                 'game_id': ldc.steam_id.steam_id,
                 'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg",
@@ -71,7 +75,7 @@ def user_profile(request, user_id):
 
                 # Add game images
                 game_images = []
-                for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:24]:
+                for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()[:6]:
                     game_images.append({
                         'game_id': ldc.steam_id.steam_id,
                         'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{ldc.steam_id.steam_id}/capsule_231x87.jpg",
@@ -355,7 +359,7 @@ def portfolio(request):
     skills = ['Python', 'Django', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'Drupal', 'WordPress', 'Adobe Products']
     jobs = [
         {
-            'position': 'Junior Developer',
+            'position': 'Junior Developer/Hardware Technician',
             'company': 'StreamVu Ed',
             'start_date': 2023,
             'end_date': 'Current',

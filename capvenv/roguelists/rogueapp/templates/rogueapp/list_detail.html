@@ -2,19 +2,19 @@
 {% block content %}
 <div id="user-list-heading">
   <div class="list-name-container">
-    <h2><em>{{ list_detail.user_list.list_name }}</em> <span id="edit-name-icon" class="text-primary"><i class="bi bi-pencil" title="Edit Name"></i></span></h2>
-    <p class='fw-bold mt-2'><a href="{% url 'user_profile' user_id=list_detail.user_list.list_owner.id%}">{{ list_detail.user_list.list_owner }}</a></p>
-    <p class="mb-0"><em>{{ list_detail.user_list.list_description }}</em> <span id="edit-description-icon" class="text-primary"><i class="bi bi-pencil" title="Edit Description"></i></span></p>
+    <h2><em>{{ list_detail.user_list.list_name }}</em> {% if request.user == list_detail.user_list.list_owner or request.user.is_superuser %}<span id="edit-name-icon" class="text-primary"><i class="bi bi-pencil" title="Edit Name"></i></span>{% endif %}</h2>
     <div class="d-none" id="name-input-container">
       <form method="post" action="{% url 'update_list_name' list_id=list_detail.user_list.list_id %}">
         {% csrf_token %}
         <label for="list_name" class="form-label"></label>
         <div class="input-group">
           <input type="text" class="form-control" id="list_name" name="list_name" value="{{ list_detail.user_list.list_name }}">
-          <button type="submit" class="btn btn-primary" id="save-name-btn">Save Name</button>
+          <button type="submit" class="btn btn-primary" id="save-name-btn">Save List Name</button>
         </div>
       </form>
     </div>
+    <p class='fw-bold mt-2'><a href="{% url 'user_profile' user_id=list_detail.user_list.list_owner.id%}">{{ list_detail.user_list.list_owner }}</a></p>
+    <p class="mb-0"><em>{% if list_detail.user_list.list_description %}{{ list_detail.user_list.list_description }}{% else %}Add a description{% endif %}</em> {% if request.user == list_detail.user_list.list_owner or request.user.is_superuser %}<span id="edit-description-icon" class="text-primary"><i class="bi bi-pencil" title="Edit Description"></i></span>{% endif %}</p>
   </div>
   <div class="list-description-container">
     <div class="d-none" id="description-input-container">
@@ -57,10 +57,6 @@
       </ul>
   </div>
 </div>
-
-
-
-
 <hr>
 
 {% for tier, games in tiers %}
@@ -70,71 +66,73 @@
 {% else %}
 <h2 class="text-center mt-4">{{ tier }} Tier</h2>
 {% endif %}
-<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 justify-content-center">
+<div class="row d-flex justify-content-center align-items-stretch">
   {% for game in games %}
-  <div class="card m-2 col-lg-3">
-    {% for detail in list_detail_content %}
-    {% if detail.steam_id.steam_id == game.steam_id %}
-    {% if request.user == list_detail.user_list.list_owner or request.user.is_superuser%}
-    <div id="" class="remove-container position-relative remove-game-button">
-      <a id="remove-game-{{ game.steam_id }}" href="{% url 'remove_game' list_id=list_detail.user_list.list_id game_id=game.steam_id %}" class="btn btn-sm btn-link text-danger position-absolute top-0 mt-2 my-1 end-0 rounded-circle" title="Remove Game From List">
-        <i class="fas fa-times remove-game-x"></i>
-      </a>
-    </div>
-
-    {% endif %}
-    {% endif %}
-    {% endfor %}
-    <a href="https://store.steampowered.com/app/{{game.steam_id}}" target="_blank">
-      <div id="list-detail-card">
-        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2" title="{{game.game_title}}" alt="Capsule image for {{game.game_title}}">
-        <div>
-          {% if game.base_price > 0 %}
-          {% if game.base_price == game.current_price %}
-          <p class="card-text text-center fw-bold p-lg-2">${{game.base_price}}</p>
-          {% endif %}
-          {% if game.base_price > game.current_price %}
-          <div id="sale-container">
-            <p class="card-text text-center fw-bold p-lg-2 text-decoration-line-through">${{game.base_price}}</p>
-          </div>
-          <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
-          {% endif %}
-          {% endif %}
-          {% if game.current_price == 0 and game.release_date > today %}
-          <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
-          {% elif game.current_price == 0 %}
-          <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
-          {% else %}
-          {% endif %}
-        </div>
+  <div class="col-sm-4 col-md-6 col-lg-6 col-xl-4 mb-4 ranked-card">
+    <div class="card mx-auto h-100 w-75">
+      {% for detail in list_detail_content %}
+      {% if detail.steam_id.steam_id == game.steam_id %}
+      {% if request.user == list_detail.user_list.list_owner or request.user.is_superuser%}
+      <div id="" class="remove-container position-relative remove-game-button">
+        <a id="remove-game-{{ game.steam_id }}" href="{% url 'remove_game' list_id=list_detail.user_list.list_id game_id=game.steam_id %}" class="btn btn-sm btn-link text-danger position-absolute top-0 mt-2 my-1 end-0 rounded-circle" title="Remove Game From List">
+          <i class="fas fa-times remove-game-x"></i>
+        </a>
       </div>
-    </a>
-    <div class="card-body">
-      <h4 class="card-title text-center">
-        <a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none" title="{{game.game_title}}" target="_blank">{{game.game_title}}</a>
-      </h4>
-      <div class="card-info">
-        <p class="card-text text-center">
-          {% for genre in game.get_genres %}
-          <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
-          {% endfor %}
-        </p>
-      </div>
-      <p class="card-text text-center fw-bold p-lg-2">{{game.release_date}}</p>
-      {% include 'rogueapp/list_detail_form.html' %}
-      {% if request.user.is_authenticated %}
-      <div class="dropdown text-center">
-        <button class="btn dropdown-toggle mb-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-          Add to list
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          {% for user_list in request.user.userlist_set.all %}
-          <li><a class="dropdown-item" href="{% url 'add_to_list' list_id=user_list.list_id game_id=game.steam_id %}">{{ user_list.list_name }}</a></li>
-          {% endfor %}
-          <li><a class="dropdown-item fw-bold" href="{% url 'create_list' game_id=game.steam_id %}">Add to new list</a></li>
-        </ul>
-      </div>
+  
       {% endif %}
+      {% endif %}
+      {% endfor %}
+      <a href="https://store.steampowered.com/app/{{game.steam_id}}" target="_blank">
+        <div id="list-detail-card">
+          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2" title="{{game.game_title}}" alt="Capsule image for {{game.game_title}}">
+          <div>
+            {% if game.base_price > 0 %}
+            {% if game.base_price == game.current_price %}
+            <p class="card-text text-center fw-bold p-lg-2">${{game.base_price}}</p>
+            {% endif %}
+            {% if game.base_price > game.current_price %}
+            <div id="sale-container">
+              <p class="card-text text-center fw-bold p-lg-2 text-decoration-line-through">${{game.base_price}}</p>
+            </div>
+            <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
+            {% endif %}
+            {% endif %}
+            {% if game.current_price == 0 and game.release_date > today %}
+            <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
+            {% elif game.current_price == 0 %}
+            <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
+            {% else %}
+            {% endif %}
+          </div>
+        </div>
+      </a>
+      <div class="card-body">
+        <h4 class="card-title text-center">
+          <a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none" title="{{game.game_title}}" target="_blank">{{game.game_title}}</a>
+        </h4>
+        <div class="card-info">
+          <p class="card-text text-center">
+            {% for genre in game.get_genres %}
+            <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
+            {% endfor %}
+          </p>
+        </div>
+        <p class="card-text text-center fw-bold p-lg-2">{{game.release_date}}</p>
+        {% include 'rogueapp/list_detail_form.html' %}
+        {% if request.user.is_authenticated %}
+        <div class="dropdown text-center">
+          <button class="btn dropdown-toggle mb-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            Add to list
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for user_list in request.user.userlist_set.all %}
+            <li><a class="dropdown-item" href="{% url 'add_to_list' list_id=user_list.list_id game_id=game.steam_id %}">{{ user_list.list_name }}</a></li>
+            {% endfor %}
+            <li><a class="dropdown-item fw-bold" href="{% url 'create_list' game_id=game.steam_id %}">Add to new list</a></li>
+          </ul>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
   {% endfor %}
