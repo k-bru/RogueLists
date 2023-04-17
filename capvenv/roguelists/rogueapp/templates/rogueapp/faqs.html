@@ -1,0 +1,13 @@
+{% extends 'rogueapp/base.html' %}
+
+{% block content %}
+<h1 class="">Frequently Asked Questions</h1>
+<ul class="faq-list">
+    {% for q in faqs %}
+    <li class="mb-4">
+        <h2 class="card-header mb-3 faq-q">{{ q.question }}</h2>
+        <p>{{ q.answer }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -23,6 +23,9 @@
         <li class="nav-item">
           <a class="btn m-2 nav-link text-white" href="{% url 'all_genres' %}">Tags</a>
         </li>
+        <li class="nav-item">
+          <a class="btn m-2 nav-link text-white" href="{% url 'faqs' %}">FAQs</a>
+        </li>
         {% if request.user.is_superuser %}
         <li class="nav-item">
           <a class="btn m-2 nav-link text-white" href="{% url 'admin:index' %}">Admin</a>

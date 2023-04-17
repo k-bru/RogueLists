@@ -277,31 +277,31 @@ def delete_list(request, list_id):
   return render(request, 'rogueapp/delete_list.html', {'user_list': user_list})
 
 def update_tier_rank(request, pk):
-    list_detail_content = get_object_or_404(ListDetailContent, pk=pk)
-    if request.method == 'POST':
-        list_detail_content.tier_rank = request.POST.get('tier_rank')
-        list_detail_content.save()
-        list_detail = list_detail_content.list_detail_id
-        messages.success(request, ("Tier Rank Updated."))
-        return redirect('list_detail', list_id=list_detail.pk)
-    return render(request, 'rogueapp/update_tier_rank.html', {'list_detail_content': list_detail_content})
+  list_detail_content = get_object_or_404(ListDetailContent, pk=pk)
+  if request.method == 'POST':
+    list_detail_content.tier_rank = request.POST.get('tier_rank')
+    list_detail_content.save()
+    list_detail = list_detail_content.list_detail_id
+    messages.success(request, ("Tier Rank Updated."))
+    return redirect('list_detail', list_id=list_detail.pk)
+  return render(request, 'rogueapp/update_tier_rank.html', {'list_detail_content': list_detail_content})
 
 def remove_game(request, list_id, game_id):
-    # get the list_detail_content object that needs to be removed
-    user_list = UserList.objects.get(list_id=list_id)
-    list_detail = ListDetail.objects.get(user_list=user_list)
-    list_detail_content = get_object_or_404(ListDetailContent, list_detail_id=list_detail, steam_id=game_id)
-    # remove the list_detail_content object
-    list_detail_content.delete()
+  # get the list_detail_content object that needs to be removed
+  user_list = UserList.objects.get(list_id=list_id)
+  list_detail = ListDetail.objects.get(user_list=user_list)
+  list_detail_content = get_object_or_404(ListDetailContent, list_detail_id=list_detail, steam_id=game_id)
+  # remove the list_detail_content object
+  list_detail_content.delete()
 
-    # create an undo button with the reverse URL of the add_game view
-    undo_button = f'<a href="{reverse("add_to_list", args=[list_id, game_id])}" class="text-center"><button class="text-center mt-4">Undo</button></a>'
+  # create an undo button with the reverse URL of the add_game view
+  undo_button = f'<a href="{reverse("add_to_list", args=[list_id, game_id])}" class="text-center"><button class="text-center mt-4">Undo</button></a>'
 
-    # add a success message with the undo button
-    messages.warning(request, f"<div class='text-center'>{list_detail_content.steam_id.game_title} successfully removed from list.<br> {undo_button}</div>")
+  # add a success message with the undo button
+  messages.warning(request, f"<div class='text-center'>{list_detail_content.steam_id.game_title} successfully removed from list.<br> {undo_button}</div>")
 
-    # redirect to the list_detail view with the list_id parameter
-    return redirect('list_detail', list_id=user_list.list_id)
+  # redirect to the list_detail view with the list_id parameter
+  return redirect('list_detail', list_id=user_list.list_id)
 
 def update_list_description(request, list_id):
   user_list = UserList.objects.get(list_id=list_id)
@@ -314,71 +314,108 @@ def update_list_description(request, list_id):
   return render(request, 'rogueapp/update_list_description.html', {'user_list': user_list})
 
 def follow(request, user_id):
-    user_to_follow = get_object_or_404(User, pk=user_id)
-    follow_obj, created = Follow.objects.get_or_create(follower=request.user, following=user_to_follow)
-    return redirect('user_profile', user_id=user_id)
+  user_to_follow = get_object_or_404(User, pk=user_id)
+  follow_obj, created = Follow.objects.get_or_create(follower=request.user, following=user_to_follow)
+  return redirect('user_profile', user_id=user_id)
 
 def unfollow(request, user_id):
-    user_to_unfollow = get_object_or_404(User, pk=user_id)
-    Follow.objects.filter(follower=request.user, following=user_to_unfollow).delete()
-    return redirect('user_profile', user_id=user_id)
+  user_to_unfollow = get_object_or_404(User, pk=user_id)
+  Follow.objects.filter(follower=request.user, following=user_to_unfollow).delete()
+  return redirect('user_profile', user_id=user_id)
 
 def add_favorite_list(request, list_id):
-    list_detail = get_object_or_404(ListDetail, pk=list_id)
-    user = request.user
-    favorite_list, created = FavoriteList.objects.get_or_create(user=user, list_id=list_id)
-    if created:
-        messages.success(request, 'List added to favorites!')
-    else:
-        messages.warning(request, 'List is already in favorites.')
-    context = {'list_detail': list_detail}
-    return redirect('user_profile', user_id=user.id)
+  list_detail = get_object_or_404(ListDetail, pk=list_id)
+  user = request.user
+  favorite_list, created = FavoriteList.objects.get_or_create(user=user, list_id=list_id)
+  if created:
+    messages.success(request, 'List added to favorites!')
+  else:
+    messages.warning(request, 'List is already in favorites.')
+  context = {'list_detail': list_detail}
+  return redirect('user_profile', user_id=user.id)
   
 def remove_favorite_list(request, list_id):
-    favorite_list = get_object_or_404(FavoriteList, user=request.user, list_id=list_id)
-    favorite_list.delete()
-    undo_button = f'<a href="{reverse("add_favorite_list", args=[list_id])}" class="text-center"><button class="text-center mt-4">Undo</button></a>'
-    messages.warning(request, f"<div class='text-center'>List removed from favorites! <br> {undo_button}</div>")
-    return redirect('user_profile', user_id=request.user.id)
+  favorite_list = get_object_or_404(FavoriteList, user=request.user, list_id=list_id)
+  favorite_list.delete()
+  undo_button = f'<a href="{reverse("add_favorite_list", args=[list_id])}" class="text-center"><button class="text-center mt-4">Undo</button></a>'
+  messages.warning(request, f"<div class='text-center'>List removed from favorites! <br> {undo_button}</div>")
+  return redirect('user_profile', user_id=request.user.id)
 
 def all_genres(request):
-    genres = Genre.objects.order_by('name')
-    for genre in genres:
-      if genre.name == "eSports":
-        genre.name = "E-Sports"
-    return render(request, 'rogueapp/all_genres.html', {'genres': genres})
+  genres = Genre.objects.order_by('name')
+  for genre in genres:
+    if genre.name == "eSports":
+      genre.name = "E-Sports"
+  return render(request, 'rogueapp/all_genres.html', {'genres': genres})
 
 
 def portfolio(request):
-    projects = [
-        {'name': 'RogueLists', 'url': 'https://kbcapstone.com', 'description': 'Django project built with web scraped data for Steam games.'},
-        {'name': 'YouTube to MP3 Conversion Tool', 'url': 'https://github.com/k-bru/YouTube-to-MP3-Converter', 'description': 'Enter a YouTube URL to download the audio in an mp3 format.'},
-        {'name': 'HTML Image Tag Generator', 'url': 'https://github.com/k-bru/HTML-Image-Tag-Generator', 'description': 'Open an image to copy a basic HTML img tag to your clipboard that contains the path, width, and height.'},
-        {'name': 'Dungeon Crawler Game (Python)', 'url': 'https://github.com/k-bru/Python-Dungeon-Crawler/blob/main/dungeonFinal.py', 'description': 'First large script written. Made in 2022 after studying Python for a couple months. Messy, but works.'},
-    ]
-    skills = ['Python', 'Django', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'Drupal', 'WordPress', 'Adobe Products']
-    jobs = [
-        {
-            'position': 'Junior Developer/Hardware Technician',
-            'company': 'StreamVu Ed',
-            'start_date': 2023,
-            'end_date': 'Current',
-            'responsibilities': ['Assemble on-site videography hardware for K-12 schools', 'Provide technical support for faculty members', 'Maintain and improve company software']
-        },
-        {
-            'position': 'Federal Work Study',
-            'company': 'Asheville-Buncombe Technical Community College',
-            'start_date': 2022,
-            'end_date': 2023,
-            'responsibilities': ['Conversion of PDF to web pages', 'Fixed bugs', 'Optimized website performance', 'Manage overall website accessibility']
-        },
-        {
-            'position': 'Freelance Python Development',
-            'company': 'Freelance',
-            'start_date': 2022,
-            'end_date': 'Current',
-            'responsibilities': ['Designed and implemented python scripts in a collaboration for private clients', 'Mostly web-scraping and outputting results to JSON']
-        },
-    ]
-    context = {'projects': projects, 'skills': skills, 'jobs': jobs}
-    return render(request, 'rogueapp/portfolio.html', context)
+  projects = [
+      {'name': 'RogueLists', 'url': 'https://kbcapstone.com', 'description': 'Django project built with web scraped data for Steam games.'},
+      {'name': 'YouTube to MP3 Conversion Tool', 'url': 'https://github.com/k-bru/YouTube-to-MP3-Converter', 'description': 'Enter a YouTube URL to download the audio in an mp3 format.'},
+      {'name': 'HTML Image Tag Generator', 'url': 'https://github.com/k-bru/HTML-Image-Tag-Generator', 'description': 'Open an image to copy a basic HTML img tag to your clipboard that contains the path, width, and height.'},
+      {'name': 'Dungeon Crawler Game (Python)', 'url': 'https://github.com/k-bru/Python-Dungeon-Crawler/blob/main/dungeonFinal.py', 'description': 'First large script written. Made in 2022 after studying Python for a couple months. Messy, but works.'},
+  ]
+  skills = ['Python', 'Django', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'Drupal', 'WordPress', 'Adobe Products']
+  jobs = [
+      {
+          'position': 'Junior Developer/Hardware Technician',
+          'company': 'StreamVu Ed',
+          'start_date': 2023,
+          'end_date': 'Current',
+          'responsibilities': ['Assemble on-site videography hardware for K-12 schools', 'Provide technical support for faculty members', 'Maintain and improve company software']
+      },
+      {
+          'position': 'Federal Work Study',
+          'company': 'Asheville-Buncombe Technical Community College',
+          'start_date': 2022,
+          'end_date': 2023,
+          'responsibilities': ['Conversion of PDF to web pages', 'Fixed bugs', 'Optimized website performance', 'Manage overall website accessibility']
+      },
+      {
+          'position': 'Freelance Python Development',
+          'company': 'Freelance',
+          'start_date': 2022,
+          'end_date': 'Current',
+          'responsibilities': ['Designed and implemented python scripts in a collaboration for private clients', 'Mostly web-scraping and outputting results to JSON']
+      },
+  ]
+  context = {'projects': projects, 'skills': skills, 'jobs': jobs}
+  return render(request, 'rogueapp/portfolio.html', context)
+  
+def faqs(request):
+  faqs = [
+    {
+      'question': 'What is the purpose of this site?',
+      'answer': 'As stated on the home page, RogueLists is a Django-based project that uses web-scraped data to populate and update a database of game info of games on Steam under the term "RogueLike". The purpose of this site is to invite users to create and share lists of particular games. These lists can be used to create personal tier lists, create watch-lists for upcoming games, or simply to browse and look for any new games they may enjoy.'
+    },
+    {
+      'question': 'This is a bit overwhelming, where should I start?',
+      'answer': 'Feeling a little confused? The best way to browse and discover new games is to check out the "Tags", where you can browse games by genre. Each genre in the search can lead you to the discovery of a new game.'
+    },
+    {
+      'question': 'How do I make a list?',
+      'answer': 'At the moment, making a list is limited only to registered users. To create a list, find a game you want to add to the list and click the "Add to List" button, from there you will be prompted to fill in the name and description of your newly created list.'
+    },
+    {
+      'question': 'What does "Roguelike" mean?',
+      'answer': 'The term "roguelike" originally referred to a type of video game that was inspired by the 1980 game "Rogue\". These games typically feature randomly generated levels, permadeath (meaning the player character dies permanently and the game must be restarted), turn-based gameplay, and an emphasis on exploration and strategy. Over time, the definition of a roguelike has broadened to include games that may not meet all of the original criteria but still share some of the core elements. For example, some modern roguelikes may have real-time gameplay or a persistent world, but they still prioritize procedural generation, difficulty, and permadeath.'
+    },
+    {
+      'question': 'Why only Roguelike games?',
+      'answer': 'This website was created with very little experience in this field to begin with. The phrase "Don\'t bite off more than you can chew" rings very true for this. The Roguelike genre was large enough to work with a good amount of data, but small enough to not be as punishing for an intermediate developer.'
+    },
+    {
+      'question': 'How is this data acquired?',
+      'answer': 'Data for this site is acquired through a daily sweep using a Python script that searches Steam with the term "Roguelike", which then is sent to the database where it will update prices or add new games.'
+    },
+    {
+      'question': 'I found a bug, how can I report this?',
+      'answer': 'Thanks for wanting to help! Bug reports can be submitted through this Google form.'
+    },
+    {
+      'question': 'Can you add X game?',
+      'answer': 'Requests for games to be added will be considered once the site is more stable.'
+    },
+  ]
+  return render(request, 'rogueapp/faqs.html', {'faqs': faqs})
