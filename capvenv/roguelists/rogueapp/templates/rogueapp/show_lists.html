@@ -25,7 +25,7 @@
     {% if request.user.is_authenticated and request.user != user %}
     <form action="{% url 'add_favorite_list' list_id=list_preview.list.list_id %}">
       {% csrf_token %}
-      <button type="submit" class="btn btn-secondary">Add to Favorites</button>
+      <button type="submit" class="btn btn-secondary">Like</button>
     </form>
     {% endif %}
     
