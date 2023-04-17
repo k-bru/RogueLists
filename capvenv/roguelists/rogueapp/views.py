@@ -402,7 +402,7 @@ def faqs(request):
       'answer': 'The term "roguelike" originally referred to a type of video game that was inspired by the 1980 game "Rogue\". These games typically feature randomly generated levels, permadeath (meaning the player character dies permanently and the game must be restarted), turn-based gameplay, and an emphasis on exploration and strategy. Over time, the definition of a roguelike has broadened to include games that may not meet all of the original criteria but still share some of the core elements. For example, some modern roguelikes may have real-time gameplay or a persistent world, but they still prioritize procedural generation, difficulty, and permadeath.'
     },
     {
-      'question': 'Why only Roguelike games?',
+      'question': 'Why only roguelike games?',
       'answer': 'This website was created with very little experience in this field to begin with. The phrase "Don\'t bite off more than you can chew" rings very true for this. The Roguelike genre was large enough to work with a good amount of data, but small enough to not be as punishing for an intermediate developer.'
     },
     {
