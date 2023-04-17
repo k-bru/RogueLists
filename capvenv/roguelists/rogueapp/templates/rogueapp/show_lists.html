@@ -3,14 +3,24 @@
     <strong class="list-name"><a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">{{ list_preview.list.list_name }}</a></strong><br>
     <a href="{% url 'user_profile' user_id=list_preview.list.list_owner.id %}">{{ list_preview.list.list_owner.username }}</a>
   </div>
-  <div class="card-body">
+  <div class="card-body list-description">
     <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
       {% if list_preview.favorite_count > 0 %}
       <p class="card-text text-center" id="game-count">{{ list_preview.favorite_count }} {% if list_preview.favorite_count == 1 %}like{% else %}likes{% endif %}</p>
+      {% else %}
+      <p class="card-text text-center" id="game-count">0 likes</p>
       {% endif %}
       {% if list_preview.list.list_description %}
       <p class="card-text p-2"><em>{{ list_preview.list.list_description }}</em></p>
+      {% else %}
+      <p class="card-text p-2"><em>No description</em></p>
       {% endif %}
+      {% if list_preview.game_count == 1 %}
+      <p class="btn text-center card-text">{{list_preview.game_count}} game</p>
+      {% else %}
+      <p class="btn text-center card-text">{{list_preview.game_count}} games</p>
+      {% endif %}
+      <hr>
     </a>
     {% if request.user.is_authenticated and request.user != user %}
     <form action="{% url 'add_favorite_list' list_id=list_preview.list.list_id %}">
@@ -18,43 +28,41 @@
       <button type="submit" class="btn btn-secondary">Add to Favorites</button>
     </form>
     {% endif %}
-    {% if not list_preview.list.list_description and list_preview.favorite_count == 0 %}
-    {% else %}
-    <hr>
-    {% endif %}
     
-    <div class="row d-flex">
-      {% if list_preview.game_images|length == 1 %}
-      <div class="col-12">
-        <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-          <img class="w-100 text-center list-images large-image" src="{{ list_preview.game_images.0.image_url }}" alt="Capsule image for {{ list_preview.game_images.0.game_title }}">
-        </a>
+    <div class="container">
+      <div class="row d-flex" id="image-container">
+        {% if list_preview.game_images|length == 1 %}
+        <div class="col-12">
+          <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
+            <img class="w-75 text-center list-images large-image" src="{{ list_preview.game_images.0.image_url }}" alt="Capsule image for {{ list_preview.game_images.0.game_title }}">
+          </a>
+        </div>
+        {% elif list_preview.game_images|length == 2 %}
+        {% for game_image in list_preview.game_images %}
+        <div class="col-8">
+          <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
+            <img class="w-100 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
+          </a>
+        </div>
+        {% endfor %}
+        {% elif list_preview.game_images|length == 3 %}
+        {% for game_image in list_preview.game_images %}
+        <div class="col-8">
+          <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
+            <img class="w-75 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
+          </a>
+        </div>
+        {% endfor %}
+        {% else %}
+        {% for game_image in list_preview.game_images|slice:":6" %}
+        <div class="col-sm-4 col-md-6 col-lg-6">
+          <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
+            <img class="w-100 text-center list-images" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
+          </a>
+        </div>
+        {% endfor %}
+        {% endif %}
       </div>
-      {% elif list_preview.game_images|length == 2 %}
-      {% for game_image in list_preview.game_images %}
-      <div class="col-8">
-        <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-          <img class="w-100 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
-        </a>
-      </div>
-      {% endfor %}
-      {% elif list_preview.game_images|length == 3 %}
-      {% for game_image in list_preview.game_images %}
-      <div class="col-8">
-        <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-          <img class="w-100 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
-        </a>
-      </div>
-      {% endfor %}
-      {% else %}
-      {% for game_image in list_preview.game_images|slice:":6" %}
-      <div class="col-sm-4 col-md-6 col-lg-6">
-        <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-          <img class="w-100 text-center list-images" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
-        </a>
-      </div>
-      {% endfor %}
-      {% endif %}
     </div>
   </div>
 </div>

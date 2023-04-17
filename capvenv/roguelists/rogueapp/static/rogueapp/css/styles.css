@@ -274,7 +274,7 @@ a,
 }
 
 .list-name {
-  font-size: 2rem;
+  font-size: 1.6rem;
 }
 
 .list-name a {
@@ -314,6 +314,8 @@ a,
 
 .card-header {
   background-color: rgb(255,255,255,0.1);
+  border-top-left-radius: 1rem!important;
+  border-top-right-radius: 1rem!important;
 }
 
 #sort-flex .col {
@@ -382,4 +384,13 @@ img {
 
 .navbar-brand {
   font-size: 1.75rem;
+}
+
+#image-container {
+  min-height: min-content;
+  max-height: max-content;
+}
+
+.list-description {
+  min-height: 6rem;
 }

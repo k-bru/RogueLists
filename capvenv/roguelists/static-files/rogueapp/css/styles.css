@@ -21,7 +21,8 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:hover,
+.list-name a:hover {
   color: var(--sky);
 }
 
@@ -188,6 +189,10 @@ a,
   position: relative;
 }
 
+.ranked-card {
+  height: auto;
+}
+
 .card {
   position: relative;
 }
@@ -269,12 +274,18 @@ a,
 }
 
 .list-name {
-  color: rgba(0,0,0,0.5)!important;
-  font-size: 2rem;
+  font-size: 1.6rem;
+}
+
+.list-name a {
+  color: #9bcef8;
+  transition: 500ms;
 }
 
 .bi-pencil {
   color: var(--sky);
+  font-size: 1.5rem;
+  padding: .5rem;
 }
 
 .bi-pencil:hover {
@@ -303,6 +314,7 @@ a,
 
 .card-header {
   background-color: rgb(255,255,255,0.1);
+  border-radius: .5rem;
 }
 
 #sort-flex .col {
