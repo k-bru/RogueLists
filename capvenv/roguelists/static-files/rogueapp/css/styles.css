@@ -138,7 +138,7 @@ a,
   margin-bottom: 1rem;
   padding: .5rem;
   transition: .5s;
-  width: 50%;
+  width: 20rem;
 }
 
 .list-holder h2:hover,
@@ -314,7 +314,8 @@ a,
 
 .card-header {
   background-color: rgb(255,255,255,0.1);
-  border-radius: .5rem;
+  border-top-left-radius: 1rem!important;
+  border-top-right-radius: 1rem!important;
 }
 
 #sort-flex .col {
@@ -383,4 +384,43 @@ img {
 
 .navbar-brand {
   font-size: 1.75rem;
+}
+
+#image-container {
+  min-height: min-content;
+  max-height: max-content;
+}
+
+.list-description {
+  min-height: 6rem;
+}
+
+ul.faq-list {
+  list-style: none;
+  margin-top: 2rem;
+  padding-left: 0;
+}
+
+ul li .faq-q {
+  max-width: fit-content;
+}
+
+#filters-container {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+#filters-container label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#filter-range {
+  display: flex;
+  flex-direction: row;
 }

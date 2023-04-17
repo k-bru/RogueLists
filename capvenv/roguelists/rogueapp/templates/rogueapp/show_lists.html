@@ -30,7 +30,7 @@
     {% endif %}
     
     <div class="container">
-      <div class="row d-flex" id="image-container">
+      <div class="row d-flex justify-content-center" id="image-container">
         {% if list_preview.game_images|length == 1 %}
         <div class="col-12">
           <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">

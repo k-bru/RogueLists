@@ -48,14 +48,14 @@
 
 
       {% if request.user == user %}
-      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#user-favorites" title="Show/Hide">Favorites</h2>
+      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#user-favorites" title="Show/Hide">Likes</h2>
       <div id="user-favorites" class="row content collapse show justify-content-center">
         {% if user_favorites %}
         {% for favorite_preview in favorite_list_previews %}
         {% include 'rogueapp/show_favorites.html' %}
         {% endfor %}
         {% else %}
-        <p>This user has no favorite lists.</p>
+        <p>This user has no liked lists.</p>
         {% endif %}
       </div>
       {% endif %}

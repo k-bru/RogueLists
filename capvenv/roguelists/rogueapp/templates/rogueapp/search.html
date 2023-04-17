@@ -22,35 +22,9 @@
 
 {% if searched %}
 <form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" id="filter-form">
-  <div class="row mx-auto" id="filters-container">
-    <div class="col-sm-6 col-md-4">
-      <label for="price_range">Price range</label>
-      <div class="input-group">
-        <input type="number" name="min_price" id="min_price" placeholder="Min" class="form-control" value="{{ min_price }}" min="0">
-        <span class="input-group-text">-</span>
-        <input type="number" name="max_price" id="max_price" placeholder="Max" class="form-control" value="{{ max_price }}" min="0">
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4">
-      <label for="release_date_range">Release date range</label>
-      <div class="input-group">
-        <input type="date" name="min_release_date" id="min_release_date" placeholder="Earliest" class="form-control" value="{{ release_date_start|date:'Y-m-d' }}">
-        <span class="input-group-text">-</span>
-        <input type="date" name="max_release_date" id="max_release_date" placeholder="Latest" class="form-control" value="{{ release_date_end|date:'Y-m-d' }}">
-      </div>
-    </div>
-    <div class="col-4">
-      {% if not searched %}
-      <input type="hidden" name="searched" value="">
-      {% else %}
-      <input type="hidden" name="searched" value="{{ searched }}">
-      {% endif %}
-      <button type="submit" class="btn btn-secondary btn-block mt-auto">Filter</button>
-    </div>
-  </div>
-
-  <div class="col-sm-12 col-md-4 text-center mx-auto sort-holder">
-    <h2 class="col-12 collapsed mx-auto" data-bs-toggle="collapse" data-bs-target="#sort-flex" title="Sort">Sort</h2>
+  
+  <div class="col-sm-12 text-center mx-auto sort-holder">
+    <h2 class="col-sm-12 collapsed mx-auto" data-bs-toggle="collapse" data-bs-target="#sort-flex" title="Sort">Sort/Filter</h2>
     <div id="sort-flex" class="row row-cols-2 row-cols-md-3 collapse">
       <div class="col">
         <button type="submit" name="sort_by" value="game_title" class="{% if sort_by == 'game_title' %}btn btn-primary text-white border-white bg-dark{% else %}btn btn-primary{% endif %} btn-block">Title (A-Z)</button>
@@ -72,11 +46,39 @@
       <div class="col">
         <button type="submit" name="sort_by" value="release_date" class="{% if sort_by == 'release_date' %}btn btn-primary text-white border-white bg-dark{% else %}btn btn btn-primary{% endif %} btn-block">Release date (oldest-newest)</button>
       </div>
+      <div class="w-100">
+        <div class="row mx-auto" id="filters-container">
+          <div class="row mb-3">
+            <label for="price_range">Price range</label>
+            <div class="input-group">
+              <input type="number" name="min_price" id="min_price" placeholder="Min" class="form-control" value="{{ min_price }}" min="0">
+              <span class="input-group-text">-</span>
+              <input type="number" name="max_price" id="max_price" placeholder="Max" class="form-control" value="{{ max_price }}" min="0">
+            </div>
+          </div>
+          <div class="row mb-3" id="filter-range">
+            <label for="release_date_range">Release date range</label>
+            <div class="input-group pb-2">
+              <input type="date" name="min_release_date" id="min_release_date" placeholder="Earliest" class="form-control" value="{{ release_date_start|date:'Y-m-d' }}">
+              <span class="input-group-text">-</span>
+              <input type="date" name="max_release_date" id="max_release_date" placeholder="Latest" class="form-control" value="{{ release_date_end|date:'Y-m-d' }}">
+            </div>
+          </div>
+          <div class="col-4">
+            {% if not searched %}
+            <input type="hidden" name="searched" value="">
+            {% else %}
+            <input type="hidden" name="searched" value="{{ searched }}">
+            {% endif %}
+            <button type="submit" class="btn btn-secondary btn-block mt-auto">Filter</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   
   {% endif %}
-
+  
 </form>
 
 {% if searched %}

@@ -86,6 +86,7 @@ a,
 #home-page {
   justify-content: space-around;
   justify-items: center;
+  margin: auto;
 }
 
 #home-page div,
@@ -94,12 +95,14 @@ a,
   text-align: center;
 }
 
-#profile-flex {
+#profile-flex,
+#home-flex {
   display: flex;
   flex-direction: column;
 }
 
-#profile-flex h2 {
+#profile-flex h2,
+#home-flex h2 {
   align-self: center;
 }
 
@@ -138,7 +141,7 @@ a,
   margin-bottom: 1rem;
   padding: .5rem;
   transition: .5s;
-  width: 50%;
+  width: 20rem;
 }
 
 .list-holder h2:hover,
@@ -403,4 +406,24 @@ ul.faq-list {
 
 ul li .faq-q {
   max-width: fit-content;
+}
+
+#filters-container {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+#filters-container label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#filter-range {
+  display: flex;
+  flex-direction: row;
 }
