@@ -86,6 +86,7 @@ a,
 #home-page {
   justify-content: space-around;
   justify-items: center;
+  margin: auto;
 }
 
 #home-page div,
@@ -94,12 +95,14 @@ a,
   text-align: center;
 }
 
-#profile-flex {
+#profile-flex,
+#home-flex {
   display: flex;
   flex-direction: column;
 }
 
-#profile-flex h2 {
+#profile-flex h2,
+#home-flex h2 {
   align-self: center;
 }
 
@@ -423,4 +426,31 @@ ul li .faq-q {
 #filter-range {
   display: flex;
   flex-direction: row;
+}
+
+.btn-primary {
+  position: relative;
+}
+
+.follow_count {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: .9rem;
+  padding: .5rem;
+  margin-left: auto;
+}
+
+.pointer:hover {
+  color: var(--sky);
+  cursor: pointer;
+  transition: 500ms;
+}
+
+.pointer {
+  transition: 500ms;
+}
+
+#followers {
+  align-self: center;
 }

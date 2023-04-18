@@ -208,7 +208,7 @@ def create_list(request, game_id):
         new_list_detail_content.save()
 
         # Redirect the user to the new list detail page
-        return redirect('list_detail', list_id=new_list.list_id)
+        return redirect('list_detail', list_id=new_list.list_id, user_id=request.user.id)
 
     # If the request method is GET, render the template with the form
     return render(request, 'rogueapp/create_list.html')
@@ -260,7 +260,7 @@ def add_to_list(request, list_id, game_id):
         messages.success(request, "<p class='text-center'>Game added to list. <br><button class='text-center mt-4' onclick='goBack()'>Go Back</button></p>")
 
     # Redirect to the list_detail view with the list_id parameter
-    return redirect('list_detail', list_id=user_list.list_id)
+    return redirect('list_detail', list_id=user_list.list_id, user_id=request.user.id)
 
 def update_list_name(request, list_id):
   user_list = UserList.objects.get(list_id=list_id)

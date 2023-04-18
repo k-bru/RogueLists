@@ -1,6 +1,14 @@
 {% extends 'rogueapp/base.html' %}
 
 {% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'users' %}">Users</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'user_profile' user_id=user.id %}">{{ user.username }}</a></li>
+  </ol>
+</nav>
+
 <div class="container">
   <div class="container text-center">
     <h1>{{ user.username }}'s Profile</h1>

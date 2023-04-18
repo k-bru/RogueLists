@@ -440,3 +440,17 @@ ul li .faq-q {
   padding: .5rem;
   margin-left: auto;
 }
+
+.pointer:hover {
+  color: var(--sky);
+  cursor: pointer;
+  transition: 500ms;
+}
+
+.pointer {
+  transition: 500ms;
+}
+
+#followers {
+  align-self: center;
+}

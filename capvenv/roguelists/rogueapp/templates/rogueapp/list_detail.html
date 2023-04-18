@@ -1,8 +1,17 @@
 {% extends 'rogueapp/base.html' %}
 {% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'users' %}">Users</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'user_profile' user_id=list_detail.user_list.list_owner.id %}">{{ list_detail.user_list.list_owner }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ list_detail.user_list.list_name }}</li>
+  </ol>
+</nav>
+
 <div id="user-list-heading">
   <div class="list-name-container">
-    <h2><em>{{ list_detail.user_list.list_name }}</em> {% if request.user == list_detail.user_list.list_owner or request.user.is_superuser %}<span id="edit-name-icon" class="text-primary"><i class="bi bi-pencil" title="Edit Name"></i></span>{% endif %}</h2>
+    <h2><em>{{ list_detail.user_list.list_name }}</em> {% if request.user == list_detail.user_list.list_owner %}<span id="edit-name-icon" class="text-primary"><i class="bi bi-pencil" title="Edit Name"></i></span>{% endif %}</h2>
     <div class="d-none" id="name-input-container">
       <form method="post" action="{% url 'update_list_name' list_id=list_detail.user_list.list_id %}">
         {% csrf_token %}
@@ -14,7 +23,7 @@
       </form>
     </div>
     <p class='fw-bold mt-2'><a href="{% url 'user_profile' user_id=list_detail.user_list.list_owner.id%}">{{ list_detail.user_list.list_owner }}</a></p>
-    <p class="mb-0"><em>{% if list_detail.user_list.list_description %}{{ list_detail.user_list.list_description }}{% else %}Add a description{% endif %}</em> {% if request.user == list_detail.user_list.list_owner or request.user.is_superuser %}<span id="edit-description-icon" class="text-primary"><i class="bi bi-pencil" title="Edit Description"></i></span>{% endif %}</p>
+    <p class="mb-0"><em>{% if list_detail.user_list.list_description %}{{ list_detail.user_list.list_description }}{% else %}Add a description{% endif %}</em> {% if request.user == list_detail.user_list.list_owner %}<span id="edit-description-icon" class="text-primary"><i class="bi bi-pencil" title="Edit Description"></i></span>{% endif %}</p>
   </div>
   <div class="list-description-container">
     <div class="d-none" id="description-input-container">

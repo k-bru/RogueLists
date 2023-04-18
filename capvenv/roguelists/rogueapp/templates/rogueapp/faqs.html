@@ -1,6 +1,12 @@
 {% extends 'rogueapp/base.html' %}
 
 {% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'faqs' %}">FAQs</a></li>
+  </ol>
+</nav>
 <h1 class="">Frequently Asked Questions</h1>
 <ul class="faq-list">
   <li class="mb-4">
