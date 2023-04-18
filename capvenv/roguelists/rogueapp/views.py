@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Game, ListDetailContent, UserList, ListDetail, Follow, FavoriteList, Genre
 from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from .forms import RegisterUserForm
 from django.urls import reverse
@@ -10,6 +10,9 @@ import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
+from django.db import models
+
+User = get_user_model()
 
 def home(request):
     user_lists = UserList.objects.select_related('list_owner').all().order_by('-list_id')
@@ -384,38 +387,11 @@ def portfolio(request):
   return render(request, 'rogueapp/portfolio.html', context)
   
 def faqs(request):
-  faqs = [
-    {
-      'question': 'What is the purpose of this site?',
-      'answer': 'As stated on the home page, RogueLists is a Django-based project that uses web-scraped data to populate and update a database of game info of games on Steam under the term "RogueLike". The purpose of this site is to invite users to create and share lists of particular games. These lists can be used to create personal tier lists, create watch-lists for upcoming games, or simply to browse and look for any new games they may enjoy.'
-    },
-    {
-      'question': 'This is a bit overwhelming, where should I start?',
-      'answer': 'Feeling a little confused? The best way to browse and discover new games is to check out the "Tags", where you can browse games by genre. Each genre in the search can lead you to the discovery of a new game.'
-    },
-    {
-      'question': 'How do I make a list?',
-      'answer': 'At the moment, making a list is limited only to registered users. To create a list, find a game you want to add to the list and click the "Add to List" button, from there you will be prompted to fill in the name and description of your newly created list.'
-    },
-    {
-      'question': 'What does "Roguelike" mean?',
-      'answer': 'The term "roguelike" originally referred to a type of video game that was inspired by the 1980 game "Rogue\". These games typically feature randomly generated levels, permadeath (meaning the player character dies permanently and the game must be restarted), turn-based gameplay, and an emphasis on exploration and strategy. Over time, the definition of a roguelike has broadened to include games that may not meet all of the original criteria but still share some of the core elements. For example, some modern roguelikes may have real-time gameplay or a persistent world, but they still prioritize procedural generation, difficulty, and permadeath.'
-    },
-    {
-      'question': 'Why only roguelike games?',
-      'answer': 'This website was created with very little experience in this field to begin with. The phrase "Don\'t bite off more than you can chew" rings very true for this. The Roguelike genre was large enough to work with a good amount of data, but small enough to not be as punishing for an intermediate developer.'
-    },
-    {
-      'question': 'How is this data acquired?',
-      'answer': 'Data for this site is acquired through a daily sweep using a Python script that searches Steam with the term "Roguelike", which then is sent to the database where it will update prices or add new games.'
-    },
-    {
-      'question': 'I found a bug, how can I report this?',
-      'answer': 'Thanks for wanting to help! Bug reports can be submitted through this Google form.'
-    },
-    {
-      'question': 'Can you add X game?',
-      'answer': 'Requests for games to be added will be considered once the site is more stable.'
-    },
-  ]
-  return render(request, 'rogueapp/faqs.html', {'faqs': faqs})
+  return render(request, 'rogueapp/faqs.html')
+
+def users(request):
+  users = User.objects.all()
+  followed_users = User.objects.annotate(num_followers=models.Count('followers')).order_by('-num_followers')[:10]
+  context = {'users': users,
+             'followed_users': followed_users}
+  return render(request, 'rogueapp/users.html', context)

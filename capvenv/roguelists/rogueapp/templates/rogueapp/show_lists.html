@@ -4,12 +4,13 @@
     <a href="{% url 'user_profile' user_id=list_preview.list.list_owner.id %}">{{ list_preview.list.list_owner.username }}</a>
   </div>
   <div class="card-body list-description">
+    {% if request.user.is_authenticated and request.user != user %}
+    <form action="{% url 'add_favorite_list' list_id=list_preview.list.list_id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-secondary mb-2">Like</button>
+    </form>
+    {% endif %}
     <a href="{% url 'list_detail' list_id=list_preview.list.list_id %}">
-      {% if list_preview.favorite_count > 0 %}
-      <p class="card-text text-center" id="game-count">{{ list_preview.favorite_count }} {% if list_preview.favorite_count == 1 %}like{% else %}likes{% endif %}</p>
-      {% else %}
-      <p class="card-text text-center" id="game-count">0 likes</p>
-      {% endif %}
       {% if list_preview.list.list_description %}
       <p class="card-text p-2"><em>{{ list_preview.list.list_description }}</em></p>
       {% else %}
@@ -20,15 +21,9 @@
       {% else %}
       <p class="btn text-center card-text">{{list_preview.game_count}} games</p>
       {% endif %}
-      <hr>
     </a>
-    {% if request.user.is_authenticated and request.user != user %}
-    <form action="{% url 'add_favorite_list' list_id=list_preview.list.list_id %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-secondary">Like</button>
-    </form>
-    {% endif %}
-    
+    <hr>
+
     <div class="container">
       <div class="row d-flex justify-content-center" id="image-container">
         {% if list_preview.game_images|length == 1 %}

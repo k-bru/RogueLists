@@ -48,8 +48,8 @@
 
 
       {% if request.user == user %}
-      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#user-favorites" title="Show/Hide">Likes</h2>
-      <div id="user-favorites" class="row content collapse show justify-content-center">
+      <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#likes" title="Show/Hide">Likes</h2>
+      <div id="likes" class="row content collapse show justify-content-center">
         {% if user_favorites %}
         {% for favorite_preview in favorite_list_previews %}
         {% include 'rogueapp/show_favorites.html' %}

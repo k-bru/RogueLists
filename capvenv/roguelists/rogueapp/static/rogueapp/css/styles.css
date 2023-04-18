@@ -427,3 +427,16 @@ ul li .faq-q {
   display: flex;
   flex-direction: row;
 }
+
+.btn-primary {
+  position: relative;
+}
+
+.follow_count {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: .9rem;
+  padding: .5rem;
+  margin-left: auto;
+}

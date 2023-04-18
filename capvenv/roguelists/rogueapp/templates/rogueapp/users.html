@@ -1,0 +1,18 @@
+{% extends 'rogueapp/base.html' %}
+
+{% block content %}
+<div class="list-holder text-center">
+  <h2 class="mb-4 collapsed" data-bs-toggle="collapse" data-bs-target="#all_users" title="Show/Hide">Users</h2>
+  <div class="mb-4 row content show" id="all_users">
+      {% for user in users %}
+      <a href="{% url 'user_profile' user.id %}" class="btn btn-primary m-2 w-25" title="{{user.username}}'s Profile">{{ user.username }}</a>
+      {% endfor %}
+  </div>
+  <h2 class="mb-4 w-75 collapsed" data-bs-toggle="collapse" data-bs-target="#followers" title="Show/Hide">Top Followed Users</h2>
+  <div class="mb-4 row content show" id="followers">
+    {% for user in followed_users %}
+    <a href="{% url 'user_profile' user.id %}" class="btn btn-primary m-2 w-25 d-flex align-items-center">{{ user.username }}<span class="follow_count ms-auto">{{ user.num_followers }} followers</span></a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
