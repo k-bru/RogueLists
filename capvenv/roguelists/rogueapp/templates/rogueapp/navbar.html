@@ -9,7 +9,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if request.user.is_authenticated and request.user.userlist_set.all%}
         <li class="nav-item dropdown">
-          <a class="btn m-2 text-white nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="btn m-1 text-white nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             My Lists
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -21,20 +21,14 @@
         {% endif %}
 
         <li class="nav-item">
-          <a class="btn m-2 nav-link text-white" href="{% url 'all_genres' %}">Tags</a>
+          <a class="btn m-1 nav-link text-white" href="{% url 'all_genres' %}">Tags</a>
         </li>
         <li class="nav-item">
-          <a class="btn m-2 nav-link text-white" href="{% url 'users' %}">Users</a>
+          <a class="btn m-1 nav-link text-white" href="{% url 'users' %}">Users</a>
         </li>
         <li class="nav-item">
-          <a class="btn m-2 nav-link text-white" href="{% url 'faqs' %}">FAQs</a>
+          <a class="btn m-1 nav-link text-white" href="{% url 'faqs' %}">FAQs</a>
         </li>
-        {% if request.user.is_superuser %}
-        <li class="nav-item">
-          <a class="btn m-2 nav-link text-white" href="{% url 'admin:index' %}">Admin</a>
-        </li>
-        {%endif %}
-
       </ul>
 
     <ul class="navbar-nav me-1 text-center align-items-center">

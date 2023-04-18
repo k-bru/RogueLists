@@ -16,7 +16,7 @@
 
   <body>
     {% include 'rogueapp/navbar.html' %}
-    <br />
+    <br>
     <main>
       <div class="container">
         {% if messages %}
@@ -35,9 +35,13 @@
       </div>
     </main>
     <hr>
-    <footer class="text-center m-2">
+    <footer class="text-center d-flex justify-content-between m-3">
       {% block footer %}
-      <a href="{% url 'portfolio' %}" class="">Portfolio</a>
+      <a href="{% url 'portfolio' %}" class="btn text-white m-2">Portfolio</a>
+      <p class="m-1 pt-1 text-center">Copyright &copy; 2023 RogueLists</p>
+      {% if request.user.is_superuser %}
+      <a class="btn text-white m-2" href="{% url 'admin:index' %}">Admin</a>
+      {%endif %}
       {% endblock %}
     </footer>
     {% block scripts %}

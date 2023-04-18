@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="row">
-        <h2 class="col-12 collapsed" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide">New Followed Lists</h2>
+        <h2 class="col-12 collapsed w-50" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide">New Followed Lists</h2>
         <div id="f-lists" class="row content show">
           {% for list_preview in list_previews %}
           {% if list_preview.list.list_owner in followed_users %}
@@ -59,7 +59,12 @@
         </div>
       </div>
       {% else %}
-      <p class="text-center">You are not following any users.</p>
+      <div class="row">
+        <h2 class="col-12 collapsed w-50" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide">New Followed Lists</h2>
+        <div id="f-lists" class="row content show">
+          <p class="text-center">You are not following any users.</p>
+        </div>
+      </div>
       {% endif %}
 
 
