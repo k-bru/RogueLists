@@ -14,7 +14,8 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             {% for user_list in request.user.userlist_set.all %}
-            <li><a class="dropdown-item" href="{% url 'list_detail' list_id=user_list.list_id %}">{{ user_list.list_name }}</a></li>
+            <li><a class="dropdown-item" href="{% url 'list_detail' list_id=user_list.list_id user_id=user_list.list_owner.id %}
+              ">{{ user_list.list_name }}</a></li>
             {% endfor %}
           </ul>
         </li>

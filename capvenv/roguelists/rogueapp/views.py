@@ -214,7 +214,7 @@ def create_list(request, game_id):
     return render(request, 'rogueapp/create_list.html')
 
 
-def list_detail(request, list_id):
+def list_detail(request, user_id, list_id):
   list_detail = get_object_or_404(ListDetail, pk=list_id)
   list_detail_content = ListDetailContent.objects.filter(list_detail_id=list_id)
   today = datetime.date.today()
