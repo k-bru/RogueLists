@@ -1,3 +1,14 @@
+"""
+This script is designed to scrape data from the Steam store website for games matching the "roguelike" search term and save the scraped data to a CSV file. It then updates a SQLite database with the scraped data.
+
+The script starts by getting the total number of pages of search results and then loops through each page, scraping game data from each search result. The function applies some filters to avoid scraping irrelevant data, such as games containing certain keywords. The function also performs numerical date conversions and validates date strings to ensure that only valid data is saved to the CSV file.
+
+The data is then saved to a CSV file and read from the CSV file to update a SQLite database. The script checks if the game already exists in the database and inserts a new record if it doesn't exist, or updates the record if it does exist.
+
+Overall, this script automates the process of scraping game data from the Steam store website, and enables the user to easily update a database with the scraped data.
+
+Author: Keegan Brunmeier 2023
+"""
 import csv
 import sqlite3
 from datetime import datetime
@@ -5,41 +16,41 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
-
 import os
+
 
 # construct file paths based on current directory
 db_path = os.path.join('/home/kbru/RogueLists/capvenv/roguelists', 'db.sqlite3')
 csv_path = os.path.join('/home/kbru/RogueLists/capvenv/roguelists', 'roguelike.csv')
-# db_path = os.path.join(os.getcwd(), 'db.sqlite3')
-# csv_path = os.path.join(os.getcwd(), 'roguelike.csv')
 
+# Initialize key variables
 link = 'https://store.steampowered.com/search/results'
-# game = input('Enter game search: ')
 game = 'roguelike'
 head = {'cookie': 'sessionid=cd46137aee87759ca68f1347'}
 blacklistlower = ['bundle', 'demo', 'soundtrack', 'dlc', 'sound track', ' pack', 'double xp', 'triple xp', 'double money', 'triple money', 'audiobook', 'coming soon', 'to be announced', 'free demo', 'free trial', 'game assets', '- skin', 'bonus content', 'skill upgrade', 'unlock all', 'skins']
 
-checkedApps = []
-dataset = []
-
-# try:
-#   os.mkdir('resultfile')
-# except FileExistsError:
-#   pass
-
-
 def get_pagination():
+  """
+  Returns the total number of pages of search results for the given game term.
+
+  :return: The total number of pages of search results.
+  """
   total_item = 1
+  
+  # Set up the initial request parameters.
   param = {
     'term': game,
     'page': 1,
   }
 
+  # Send a request to the Steam search page and parse the HTML response.
   req = requests.get(link, headers=head, params=param)
   soup = BeautifulSoup(req.text, 'html.parser')
+  
+  # Find the pagination links on the search results page.
   page_item = soup.find('div', 'search_pagination_right').find_all('a')
 
+  # Attempt to extract the total number of pages from the pagination links.
   try:
     total_item = int(page_item[4].text)
   except Exception:
@@ -62,11 +73,76 @@ def get_pagination():
             pass
   return 1 + total_item
 
+def convert_release_date(release):
+  """
+  Convert a Steam release date string to a standardized format.
 
-def scrap():
+  :param release: The release date string to convert.
+  :return: The converted release date string in the format 'YYYY-MM-DD', or None if the input was not valid.
+  """
+  #"Jul 8, 2023"
+  if len(release) == 11 or len(release) == 12:
+    if release[-4:-2] == "20":
+      if release[5] == "," or release[6] == ",":
+        release = datetime.strptime(release, '%b %d, %Y')
+        release = release.strftime('%Y-%m-%d')
+        
+  #"2023"
+  elif len(release) == 4:
+    if release[0:2] == "20":
+      release = f"{release}-12-31"
+      
+  #"Q2 2026"
+  elif release[0] == 'Q':
+    if len(release) == 7:
+      qConvertMonth = (int(release[1]) * 3)
+      qConvertYear = release[-4:]
+      release = f"{qConvertMonth} {qConvertYear}"
+      release = datetime.strptime(release, '%m %Y')
+      release = release.strftime('%Y-%m-%d')
+      
+  #"November 2021"
+  elif release[5] != "," and release[6] != ",":
+    if release[-4:-2] == "20":
+      if release[0] != "Q":
+        if release[3] != " " and release[0:3] != "May":
+          if len(release) != 4:
+            release = datetime.strptime(release, '%B %Y')
+            release = release.strftime('%Y-%m-%d')
+  
+  #"Mar 2022"
+  elif len(release) == 8:
+    if release[-4:-2] == "20":
+      if release[3] == " ":
+        release = datetime.strptime(release, '%b %Y')
+        release = release.strftime('%Y-%m-%d')
+  
+  #Invalid Date strings
+  else:
+    release = None
+
+  return release
+
+def scrapeData():
+  """
+  This function scrapes data from the Steam store website for games matching the 'roguelike' search term,
+  and saves the scraped data to a CSV file. The function starts by getting the total number of pages of search results,
+  then loops through each page, scraping game data from each search result. The function applies some filters to avoid
+  scraping irrelevant data, such as games containing certain keywords. The function also performs numerical date conversions
+  and validates date strings to ensure that only valid data is saved to the CSV file. Finally, the function saves the scraped
+  data to a CSV file.
+
+  Function arguments: None
+
+  Returns: None
+  """
+  
+  # Initialize variables
   count = 0
   datas = []
+  checkedApps = []
 
+  # This loop iterates over the pages of search results, using the get_pagination() function to determine the total number of pages. The loop uses the requests module to send an HTTP GET request to the Steam website for each search result page. If a timeout occurs, the function waits for 60 seconds before retrying.
   for j in range(1, get_pagination()):
     param = {
       'term': game,
@@ -85,6 +161,8 @@ def scrap():
     except AttributeError:
       count += 1
       continue
+    
+    # Extract the game data from each search result page using BeautifulSoup to parse the HTML content. If the content cannot be extracted, the loop increments the count and continues to the next iteration.
     for i in content:
       activeDiscount = False
       skipEntry = False
@@ -112,7 +190,8 @@ def scrap():
       if 'OST' in title:
         count += 1
         continue
-
+      
+      # Extract the game data for each game from the search results. The loop extracts the game's URL, app ID, tags, and title. It applies some filters to exclude games containing certain keywords (in this case, 'bundle' and 'OST'). If the game has already been scanned (as tracked by the checkedApps list), it skips that game and continues to the next iteration.
       try:
         price = i.find('div', 'col search_price responsive_secondrow').text.strip()
       except Exception:
@@ -140,45 +219,18 @@ def scrap():
         count += 1
         continue
 
-      #Numerical Date Conversions
-      #"Jul 8, 2023"
-      if len(release) == 11 or len(release) == 12:
-        if release[-4:-2] == "20":
-          if release[5] == "," or release[6] == ",":
-            release = datetime.strptime(release, '%b %d, %Y')
-            release = release.strftime('%Y-%m-%d')
-      #"2023"
-      elif len(release) == 4:
-        if release[0:2] == "20":
-          release = f"{release}-12-31"
-      #"Q2 2026"
-      elif release[0] == 'Q':
-        if len(release) == 7:
-          qConvertMonth = (int(release[1]) * 3)
-          qConvertYear = release[-4:]
-          release = f"{qConvertMonth} {qConvertYear}"
-          release = datetime.strptime(release, '%m %Y')
-          release = release.strftime('%Y-%m-%d')
-      #"November 2021"
-      elif release[5] != "," and release[6] != ",":
-        if release[-4:-2] == "20":
-          if release[0] != "Q":
-            if release[3] != " " and release[0:3] != "May":
-              if len(release) != 4:
-                release = datetime.strptime(release, '%B %Y')
-                release = release.strftime('%Y-%m-%d')
-      #"Mar 2022"
-      elif len(release) == 8:
-        if release[-4:-2] == "20":
-          if release[3] == " ":
-            release = datetime.strptime(release, '%b %Y')
-            release = release.strftime('%Y-%m-%d')
+      # Converts the release date string to a standardized date format using the convert_release_date() function, and validates the date string to ensure that only valid data is saved to the CSV file.
+      release = convert_release_date(release)
+      if release is None:
+        count += 1
+        continue
+
       #"Invalid Date strings"
       if release[4] != "-" and release[7] != "-":
         count += 1
         continue
 
-      #For CSV
+      # Replaces any commas in the game title and tag IDs with an em dash and a vertical bar, respectively, to avoid issues when saving the data to a CSV file.
       if "," in title:
         title = title.replace(",", " —")
       if "," in tagids:
@@ -209,16 +261,26 @@ def scrap():
       count += 1
       print(f'{count}. {title}. released: {release}. price: {price} . link: {url}')
 
-  # with open(f'resultfile/json_data_{game}.json', 'w+') as outfile:
-  #   json.dump(datas, outfile)
-
   df = pd.DataFrame(datas)
+  
+  # Saves the scraped data to a CSV file using the Pandas library
   df.to_csv(csv_path, index=False, header=False)
   print('all data was created')
 
 
 def updateGames():
-  # connect to the database
+  """
+  This function updates the game records in the SQLite database by reading data from the CSV file generated by the scrapeData() function.
+  The function starts by creating a connection to the database and creating the Game table if it does not exist. The CSV file is then read,
+  and each row is processed by extracting the relevant data and checking if the game already exists in the database. If the game exists,
+  its record is updated, and if not, a new record is inserted. Finally, the function commits the changes to the database and closes the connection.
+
+  Function arguments: None
+
+  Returns: None
+  """
+  
+  # Connect to the database
   conn = sqlite3.connect(db_path)
   print(conn)
   c = conn.cursor()
@@ -239,7 +301,10 @@ def updateGames():
       steam_id = int(row[0])
       game_title = row[1]
       base_price = float(row[2])
-      current_price = float(row[3])
+      if row[3] == 'ree':
+        current_price = 0
+      else:
+        current_price = float(row[3])
       release_date = datetime.strptime(row[4], '%Y-%m-%d').date()
       genres = row[5]
 
@@ -263,9 +328,18 @@ def updateGames():
 
 
 def run():
-  get_pagination()
-  scrap()
-  updateGames()
+  """
+  This function calls the other functions needed to run the rogue-like Steam game scraper.
+  It first calls get_pagination() to get the total number of pages of search results for the given search term.
+  It then calls scrapeData() to scrape game data from each search result and save it to a CSV file.
+  Finally, it calls updateGames() to insert new records or update existing records in the SQLite database.
 
+  Function arguments: None
+
+  Returns: None
+  """
+  get_pagination()
+  scrapeData()
+  updateGames()
 
 run()

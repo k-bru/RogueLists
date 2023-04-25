@@ -3,8 +3,13 @@ from django.contrib.auth.models import User
 from django import forms
 from .models import UserList, ListDetailContent, Game
 
-
 class RegisterUserForm(UserCreationForm):
+  """
+  A form for user registration with fields for username, email, and passwords.
+
+  Attributes:
+  email (EmailField): Field for user's email address.
+  """
   email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
   class Meta:

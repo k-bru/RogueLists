@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
+/* main site colors */
 :root {
   --black: #171a21;
   --dark: #1b2838;
@@ -13,7 +14,6 @@ body {
   color: var(--light);
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 }
-
 
 /* links and buttons */
 a {
@@ -79,6 +79,11 @@ a,
   transition: .5s;
 }
 
+.btn-primary {
+  position: relative;
+}
+
+/* Home Page/Profiles */
 #home-flex {
   justify-content: center;
 }
@@ -114,14 +119,12 @@ a,
   justify-content: center;
 }
 
-/* user messages */
 #user-list-heading {
   margin: auto;
   text-align: center;
   width: 50%;
 }
 
-/* home/profile page */
 .home-previews {
   align-items: center;
 }
@@ -171,21 +174,6 @@ a,
   width: fit-content;
   padding: .75rem 1rem;
 }
-
-/* .sort-holder h2.collapsed::after {
-  color: var(--sky);
-  content: "\2212";
-  float: right;
-  font-weight: bold;
-} */
-
-/* .sort-holder h2:not(.collapsed)::after {
-  color: var(--sky);
-  content: "\002B";
-  float: right;
-  font-weight: bold;
-} */
-
 
 /* cards and lists */
 #list-detail-card {
@@ -321,6 +309,20 @@ a,
   border-top-right-radius: 1rem!important;
 }
 
+.card-footer {
+  align-items: flex-end;
+}
+
+.card-info {
+  height: max-content;
+  margin: 1rem auto;
+}
+
+.list-description {
+  min-height: 6rem;
+}
+
+/* Sorts/Filters */
 #sort-flex .col {
   align-items: center;
   display: flex;
@@ -341,20 +343,32 @@ a,
   display: flex;
 }
 
-.card-footer {
-  align-items: flex-end;
-}
-
-.card-info {
-  height: max-content;
-  margin: 1rem auto;
-}
-
 #game-count {
   height: fit-content;
   margin-bottom: .1rem;
 }
 
+#filters-container {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+#filters-container label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#filter-range {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Images */
 img {
   border-radius: .5rem !important;
 }
@@ -363,6 +377,12 @@ img {
   margin: .25rem;
 }
 
+#image-container {
+  min-height: min-content;
+  max-height: max-content;
+}
+
+/* Genres */
 .genre-link {
   border-radius: 0.25rem;
   display: inline-block;
@@ -389,15 +409,7 @@ img {
   font-size: 1.75rem;
 }
 
-#image-container {
-  min-height: min-content;
-  max-height: max-content;
-}
-
-.list-description {
-  min-height: 6rem;
-}
-
+/* ULs */
 ul.faq-list {
   list-style: none;
   margin-top: 2rem;
@@ -408,30 +420,7 @@ ul li .faq-q {
   max-width: fit-content;
 }
 
-#filters-container {
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  align-items: center;
-}
-
-#filters-container label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-#filter-range {
-  display: flex;
-  flex-direction: row;
-}
-
-.btn-primary {
-  position: relative;
-}
-
+/* MISC */
 .follow_count {
   position: absolute;
   bottom: 0;

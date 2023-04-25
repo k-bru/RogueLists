@@ -1,3 +1,5 @@
+#This file contains the URL patterns for the RogueLists Django project.
+
 from django.urls import path
 from . import views
 from roguelists.settings import DEBUG, STATIC_ROOT, STATIC_URL, MEDIA_ROOT, MEDIA_URL

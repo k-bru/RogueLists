@@ -1,9 +1,23 @@
+/**
+ * Adds event listeners and initializes the page on DOMContentLoaded.
+ * 
+ * Initializes the page by showing collapsed headers with the CSS selector '.list-holder h2.collapsed'
+ * and hiding collapsed headers with the CSS selector '.sort-holder h2.show'.
+ * 
+ * Adds a change event listener to each select dropdown with the name 'tier_rank'. When a user changes
+ * the dropdown value, the form closest to the dropdown is submitted.
+ */
 document.addEventListener("DOMContentLoaded", function () {
+  // Show collapsed headers that are initially hidden.
   showCollapsedHeaders('.list-holder h2.collapsed');
+
+  // Hide collapsed headers that are initially displayed.
   hideCollapsedHeaders('.sort-holder h2.show');
 
+  // Add change event listeners to 'tier_rank' select dropdowns.
   document.querySelectorAll('select[name="tier_rank"]').forEach(function (select) {
     select.addEventListener('change', function () {
+      // Submit the form closest to the dropdown when the value is changed
       this.closest('form').submit();
     });
   });
