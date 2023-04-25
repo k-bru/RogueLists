@@ -1,5 +1,6 @@
 Project Title: RogueLists
-Project Overview
+
+Project Overview:
 RogueLists is a Django-based web application that uses web-scraped data to populate and update a database of game information for games on Steam that fall under the genre of "rogueLike". The purpose of this application is to allow users to create and share lists of their favorite games in this genre. These lists can be used to create personal tier lists, create watch-lists for upcoming games, or simply to browse and discover new games that they may enjoy.
 
 Live Site:
