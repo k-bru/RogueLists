@@ -144,7 +144,7 @@ a,
   margin-bottom: 1rem;
   padding: .5rem;
   transition: .5s;
-  width: 20rem;
+  width: 18.5rem;
 }
 
 .list-holder h2:hover,
@@ -370,14 +370,14 @@ a,
 
 /* Images */
 img {
-  border-radius: .5rem !important;
+  border-radius: 1rem !important;
 }
 
 .list-images {
   margin: .25rem;
 }
 
-#image-container {
+.image-container {
   min-height: min-content;
   max-height: max-content;
 }
@@ -442,4 +442,32 @@ ul li .faq-q {
 
 #followers {
   align-self: center;
+}
+
+/* SCROLL TO TOP BUTTON */
+#back-to-top {
+  display: none;
+  position: fixed;
+  bottom: 68px;
+  right: 35px;
+  z-index: 99;
+  font-size: 1.5rem;
+  border: none;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #000;
+  cursor: pointer;
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
+}
+
+#back-to-top:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #000;
+}
+
+.game-img-height {
+  height: fit-content;
+  align-content: center;
 }

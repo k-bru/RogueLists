@@ -72,4 +72,39 @@ function addEditNameAndDescriptionListeners() {
   });
 }
 
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function () { scrollFunction() };
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("back-to-top").style.display = "block";
+  } else {
+    document.getElementById("back-to-top").style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
+function searchUsers() {
+  const UserNames = document.querySelectorAll('.user-name');
+  const UserSearch = document.querySelector('#user-search');
+  
+  UserSearch.addEventListener('input', () => {
+    const query = UserSearch.value.toLowerCase();
+    UserNames.forEach((UserName) => {
+      const NAME = UserName.textContent.toLowerCase();
+      if (NAME.includes(query)) {
+        UserName.style.display = 'inline-block';
+      } else {
+        UserName.style.display = 'none';
+      }
+    });
+  });
+}
+
 addEditNameAndDescriptionListeners();
+searchUsers()
