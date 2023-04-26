@@ -30,7 +30,7 @@
 
 {% if searched %}
 <form method="GET" action="{% url 'search' %}?{% if searched != 'None' %}searched={{ searched }}&{% endif %}" id="filter-form">
-  
+
   <div class="col-sm-12 text-center mx-auto sort-holder">
     <h2 class="col-sm-12 collapsed mx-auto" data-bs-toggle="collapse" data-bs-target="#sort-flex" title="Sort">Sort/Filter</h2>
     <div id="sort-flex" class="row row-cols-2 row-cols-md-3 collapse">
@@ -72,6 +72,9 @@
               <input type="date" name="max_release_date" id="max_release_date" placeholder="Latest" class="form-control" value="{{ release_date_end|date:'Y-m-d' }}">
             </div>
           </div>
+          <div class="form-group form-check">
+            <label class="form-check-label pb-2" for="on_sale_checkbox"><span class="on-sale-text">On Sale<input type="checkbox" name="on_sale" class="form-check-input pt-1" id="on_sale_checkbox" {% if on_sale %}checked{% endif %}></span></label>
+          </div>
           <div class="col-4">
             {% if not searched %}
             <input type="hidden" name="searched" value="">
@@ -84,9 +87,9 @@
       </div>
     </div>
   </div>
-  
+
   {% endif %}
-  
+
 </form>
 
 {% if searched %}

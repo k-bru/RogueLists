@@ -2,6 +2,17 @@
 
 {% block content %}
 <div class="container">
+  <div class="mb-3">
+    {% if request.user.is_authenticated %}
+    <a href="#my-list-h2">My Lists</a> |
+    {% endif %}
+    {% if followed_users %}
+    <a href="#fol-user-h2">Followed Users</a> |
+    <a href="#new-fol-h2">New Followed Lists</a> |
+    {% endif %}
+    <a href="#pop-h2">Popular Games</a>
+    <a href="#fol-list-h2">Newest Lists</a> |
+  </div>
   <div class="row col-md-12 col-lg-9 list-holder" id="home-page">
     {% if list_previews %}
     <div class="card" id="descript-card">
@@ -16,7 +27,7 @@
     </div>
     <div class="list-holder text-center" id="home-flex">
       {% if request.user.is_authenticated %}
-      <h2 class="col-12 collapsed" data-bs-toggle="collapse" data-bs-target="#my-lists" title="Show/Hide">My Lists</h2>
+      <h2 class="col-12 collapsed" data-bs-toggle="collapse" data-bs-target="#my-lists" title="Show/Hide" id="my-list-h2">My Lists</h2>
       <div id="my-lists" class="row content show">
         <div class="row content show">
           <div class="row" id="list-flex">
@@ -35,19 +46,19 @@
 
       {% if followed_users %}
       <div class="row">
-        <h2 class="col-12 collapsed" data-bs-toggle="collapse" data-bs-target="#f-users" title="Show/Hide">Followed Users</h2>
+        <h2 class="col-12 collapsed" data-bs-toggle="collapse" data-bs-target="#f-users" title="Show/Hide" id="fol-user-h2">Followed Users</h2>
         <div id="f-users" class="row content show">
           {% for followed_user in followed_users %}
           <div class="col-md-6 mb-4">
             <a href="{% url 'user_profile' user_id=followed_user.id %}">
-              <h3 class="btn">{{ followed_user.username }}</h3>
+              <h3 class="card pt-3">{{ followed_user.username }}</h3>
             </a>
           </div>
           {% endfor %}
         </div>
       </div>
       <div class="row">
-        <h2 class="col-12 collapsed w-50" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide">New Followed Lists</h2>
+        <h2 class="col-12 collapsed w-50" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide" id="new-fol-h2">New Followed Lists</h2>
         <div id="f-lists" class="row content show">
           {% for list_preview in list_previews %}
           {% if list_preview.list.list_owner in followed_users %}
@@ -60,7 +71,7 @@
       </div>
       {% else %}
       <div class="row">
-        <h2 class="col-12 collapsed w-50" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide">New Followed Lists</h2>
+        <h2 class="col-12 collapsed w-50" data-bs-toggle="collapse" data-bs-target="#f-lists" title="Show/Hide" id="fol-list-h2">Followed Lists</h2>
         <div id="f-lists" class="row content show">
           <p class="text-center">You are not following any users.</p>
         </div>
@@ -74,7 +85,7 @@
       {% endif %}
 
       <div class="row">
-        <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide">Newest Lists</h2>
+        <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide" id="new-h2">Newest Lists</h2>
         <div id="unauth-lists" class="row content show">
           <div class="row content show">
             {% for list_preview in list_previews %}
@@ -89,7 +100,7 @@
       <hr>
 
       <div class="row mt-2">
-        <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#popular-games" title="Show/Hide">Popular Games</h2>
+        <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#popular-games" title="Show/Hide" id="pop-h2">Popular Games</h2>
         <div id="popular-games" class="row content show">
           {% include 'rogueapp/show_games.html' %}
         </div>

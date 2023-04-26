@@ -9,7 +9,7 @@ from django.urls import reverse
 import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Count
+from django.db.models import Q, Count, F
 from django.db import models
 
 User = get_user_model()
@@ -288,6 +288,9 @@ def search(request):
     games = games.order_by(sort_by)
   else:
     games = games.order_by(f'-{sort_by}')
+    
+  if 'on_sale' in request.GET and request.GET['on_sale']:
+    games = games.filter(current_price__lt=F('base_price'))
 
   # Pass the search results and search criteria to the template
   return render(request, 'rogueapp/search.html', {'searched': searched,
