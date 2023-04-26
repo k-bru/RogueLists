@@ -30,6 +30,8 @@ def home(request):
   
   # Initialize variables to store list previews, followed users, and favorite counts
   list_previews = []
+  new_lists = user_lists[:8]
+  new_list_previews = []
   followed_users = []
   
   # If the user is authenticated, get a list of users they are following
@@ -59,10 +61,27 @@ def home(request):
 
     # Add the list preview to the list_previews variable
     list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images, 'favorite_count': favorite_counts.get(user_list.list_id, 0)})
+    
+  for new_list in new_lists:
+    new_game_count = ListDetailContent.objects.filter(list_detail_id=new_list.list_id).count()
+    new_game_titles = [list_detail_content.steam_id.game_title for list_detail_content in ListDetailContent.objects.filter(list_detail_id=user_list.list_id).all()]
+
+    # Add game images for the list preview
+    new_game_images = []
+    for list_detail_content in ListDetailContent.objects.filter(list_detail_id=new_list.list_id).all()[:6]:
+        new_game_images.append({
+            'game_id': list_detail_content.steam_id.steam_id,
+            'image_url': f"https://cdn.cloudflare.steamstatic.com/steam/apps/{list_detail_content.steam_id.steam_id}/capsule_231x87.jpg",
+            'game_title': list_detail_content.steam_id.game_title
+        })
+
+    # Add the list preview to the list_previews variable
+    new_list_previews.append({'list': new_list, 'game_count': new_game_count, 'game_titles': new_game_titles, 'game_images': new_game_images, 'new_lists': new_lists})
   
   topGames = Game.objects.annotate(num_list_details=Count('listdetailcontent')).order_by('-num_list_details')[:9]
+  
   # Render the home page template with the list previews and followed users  
-  return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users, 'top_games': topGames})
+  return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users, 'top_games': topGames, 'new_list_previews': new_list_previews})
 
 def user_profile(request, user_id):
   """

@@ -8,16 +8,16 @@
   </ol>
 </nav>
 <div class="list-holder text-center">
-  <h2 class="mb-4 collapsed" data-bs-toggle="collapse" data-bs-target="#all_users" title="Show/Hide">Users</h2>
-  <div class="mb-4 row content show" id="all_users">
-    {% for user in users %}
-    <a href="{% url 'user_profile' user.id %}" class="btn m-2 w-25" title="{{user.username}}'s Profile">{{ user.username }}</a>
-    {% endfor %}
-  </div>
   <h2 class="mb-4 w-75 collapsed" data-bs-toggle="collapse" data-bs-target="#followers" title="Show/Hide">Top Followed Users</h2>
   <div class="mb-4 row content show" id="followers">
     {% for user in followed_users %}
-    <a href="{% url 'user_profile' user.id %}" class="btn btn-primary m-2 w-50 text-center d-flex align-items-center text-white border-white">{{ user.username }}<span class="follow_count ms-auto text-white">{% if user.num_followers == 1 %}{{ user.num_followers}} follower{% else %}{{ user.num_followers }} followers{% endif %}</span></a>
+    <a href="{% url 'user_profile' user.id %}" class="btn btn-primary m-2 w-25 text-center d-flex align-items-center text-white border-white">{{ user.username }}<span class="follow_count ms-auto text-white">{% if user.num_followers == 1 %}{{ user.num_followers}} follower{% else %}{{ user.num_followers }} followers{% endif %}</span></a>
+    {% endfor %}
+  </div>
+  <h2 class="mb-4 collapsed" data-bs-toggle="collapse" data-bs-target="#all_users" title="Show/Hide">All Users</h2>
+  <div class="mb-4 row content show" id="all_users">
+    {% for user in users %}
+    <a href="{% url 'user_profile' user.id %}" class="btn m-2 w-25" title="{{user.username}}'s Profile">{{ user.username }}</a>
     {% endfor %}
   </div>
 </div>

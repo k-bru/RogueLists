@@ -22,7 +22,7 @@
         </div>
       </form>
     </div>
-    <p class='fw-bold mt-2'><a href="{% url 'user_profile' user_id=list_detail.user_list.list_owner.id%}">{{ list_detail.user_list.list_owner }}</a></p>
+    <p class='fw-bold btn mt-2'><a href="{% url 'user_profile' user_id=list_detail.user_list.list_owner.id%}">{{ list_detail.user_list.list_owner }}</a></p>
     <p class="mb-0"><em>{% if list_detail.user_list.list_description %}{{ list_detail.user_list.list_description }}{% else %}Add a description{% endif %}</em> {% if request.user == list_detail.user_list.list_owner %}<span id="edit-description-icon" class="text-primary"><i class="bi bi-pencil" title="Edit Description"></i></span>{% endif %}</p>
   </div>
   <div class="list-description-container">

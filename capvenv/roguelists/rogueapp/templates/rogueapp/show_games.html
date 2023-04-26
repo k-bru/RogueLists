@@ -28,7 +28,7 @@
       </a>
       <div class="card-body">
         <h3 class="card-title">{{ game.game_title }}</h3>
-        <p class="card-text text-center pt-2">Appears in {{ game.num_list_details }} lists</p>
+        <p class="card-text text-center pt-2">Appears in {{ game.num_list_details }} {% if game.num_list_details == 1 %}list{% else %}lists{% endif %}</p>
         <div class="genres-list">
           {% for genre in game.get_genres %}
           <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>

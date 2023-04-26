@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-  <div class="mb-3">
+  <div class="mb-3 text-end">
     {% if request.user.is_authenticated %}
     <a href="#my-list-h2">My Lists</a> |
     {% endif %}
@@ -10,8 +10,8 @@
     <a href="#fol-user-h2">Followed Users</a> |
     <a href="#new-fol-h2">New Followed Lists</a> |
     {% endif %}
+    <a href="#new-h2">Newest Lists</a> |
     <a href="#pop-h2">Popular Games</a>
-    <a href="#fol-list-h2">Newest Lists</a> |
   </div>
   <div class="row col-md-12 col-lg-9 list-holder" id="home-page">
     {% if list_previews %}
@@ -88,9 +88,9 @@
         <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#unauth-lists" title="Show/Hide" id="new-h2">Newest Lists</h2>
         <div id="unauth-lists" class="row content show">
           <div class="row content show">
-            {% for list_preview in list_previews %}
+            {% for new_list_preview in new_list_previews %}
             <div class="col-md-6 mb-4">
-              {% include 'rogueapp/show_lists.html' %}
+              {% include 'rogueapp/show_new_lists.html' %}
             </div>
             {% endfor %}
           </div>

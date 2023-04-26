@@ -144,7 +144,7 @@ a,
   margin-bottom: 1rem;
   padding: .5rem;
   transition: .5s;
-  width: 17.5rem;
+  width: 18.5rem;
 }
 
 .list-holder h2:hover,
@@ -377,7 +377,7 @@ img {
   margin: .25rem;
 }
 
-#image-container {
+.image-container {
   min-height: min-content;
   max-height: max-content;
 }
@@ -448,8 +448,8 @@ ul li .faq-q {
 #back-to-top {
   display: none;
   position: fixed;
-  bottom: 20px;
-  right: 30px;
+  bottom: 68px;
+  right: 35px;
   z-index: 99;
   font-size: 1.5rem;
   border: none;
@@ -465,4 +465,9 @@ ul li .faq-q {
 #back-to-top:hover {
   background-color: rgba(255, 255, 255, 0.8);
   color: #000;
+}
+
+.game-img-height {
+  height: fit-content;
+  align-content: center;
 }

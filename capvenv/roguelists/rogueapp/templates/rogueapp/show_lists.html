@@ -4,7 +4,7 @@
     <a href="{% url 'user_profile' user_id=list_preview.list.list_owner.id %}">{{ list_preview.list.list_owner.username }}</a>
   </div>
   <div class="card-body list-description">
-    {% if request.user.is_authenticated and request.user != user %}
+    {% if request.user.is_authenticated and request.user != list_preview.list.list_owner.id %}
     <form action="{% url 'add_favorite_list' list_id=list_preview.list.list_id %}">
       {% csrf_token %}
       <button type="submit" class="btn btn-secondary mb-2">Like</button>
@@ -20,7 +20,7 @@
     <hr>
 
     <div class="container">
-      <div class="row d-flex justify-content-center" id="image-container">
+      <div class="row d-flex justify-content-center game-img-height">
         {% if list_preview.game_images|length == 1 %}
         <div class="col-12">
           <a href="{% url 'list_detail' list_id=list_preview.list.list_id user_id=list_preview.list.list_owner.id %}">
@@ -29,9 +29,9 @@
         </div>
         {% elif list_preview.game_images|length == 2 %}
         {% for game_image in list_preview.game_images %}
-        <div class="col-8 mt-2">
+        <div class="col-8">
           <a href="{% url 'list_detail' list_id=list_preview.list.list_id user_id=list_preview.list.list_owner.id %}">
-            <img class="w-100 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
+            <img class="w-75 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
           </a>
         </div>
         {% endfor %}
@@ -47,7 +47,7 @@
         {% for game_image in list_preview.game_images|slice:":6" %}
         <div class="col-sm-4 col-md-6 col-lg-6">
           <a href="{% url 'list_detail' list_id=list_preview.list.list_id user_id=list_preview.list.list_owner.id %}">
-            <img class="w-100 text-center list-images" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
+            <img class="w-75 text-center list-images" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
           </a>
         </div>
         {% endfor %}
