@@ -1,0 +1,57 @@
+<div class="row content show">
+  {% for game in top_games %}
+  <div class="col-md-4 mb-4">
+    <div class="card home-page-top-games">
+      <a href="https://store.steampowered.com/app/{{game.steam_id}}" target="_blank">
+        <div id="list-detail-card">
+          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top" title="{{game.game_title}}" alt="Capsule image for {{game.game_title}}">
+          <div>
+            {% if game.base_price > 0 %}
+            {% if game.base_price == game.current_price %}
+            <p class="card-text text-center fw-bold p-lg-2">${{game.base_price}}</p>
+            {% endif %}
+            {% if game.base_price > game.current_price %}
+            <div id="sale-container">
+              <p class="card-text text-center fw-bold p-lg-2 text-decoration-line-through">${{game.base_price}}</p>
+            </div>
+            <p class="card-text text-center fw-bold p-lg-2">${{game.current_price}}</p>
+            {% endif %}
+            {% endif %}
+            {% if game.current_price == 0 and game.release_date > today %}
+            <p class="card-text text-center fw-bold p-lg-2">Unreleased</p>
+            {% elif game.current_price == 0 %}
+            <p class="card-text text-center fw-bold p-lg-2">Free To Play</p>
+            {% else %}
+            {% endif %}
+          </div>
+        </div>
+      </a>
+      <div class="card-body">
+        <h3 class="card-title">{{ game.game_title }}</h3>
+        <p class="card-text text-center pt-2">Appears in {{ game.num_list_details }} lists</p>
+        <div class="genres-list">
+          {% for genre in game.get_genres %}
+          <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
+          {% endfor %}
+        </div>
+        {% if game.num_list_details > 0 %}
+        {% endif %}
+        <p class="card-text mt-auto text-center">Release date: {{ game.release_date }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<style>
+  .genres-list .genre-link {
+    display: inline-block;
+  }
+
+  .home-page-top-games .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+</style>

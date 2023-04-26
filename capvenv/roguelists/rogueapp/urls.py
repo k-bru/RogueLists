@@ -31,6 +31,7 @@ urlpatterns = [
   path('remove_favorite_list/<int:list_id>/', views.remove_favorite_list, name='remove_favorite_list'),
   path('faqs/', views.faqs, name='faqs'),
   path('users/', views.users, name='users'),
+  path('games/', views.show_games, name='show_games'),
 ]
 
 if DEBUG:

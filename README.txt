@@ -1,7 +1,7 @@
 Project Title: RogueLists
 
 Project Overview:
-RogueLists is a Django-based web application that uses web-scraped data to populate and update a database of game information for games on Steam that fall under the genre of "rogueLike". 
+RogueLists is a Django-based web application that uses web-scraped data to populate and update a database of game information for games on Steam that fall under the genre of "roguelike". 
 The purpose of this application is to allow users to create and share lists of their favorite games in this genre. These lists can be used to create personal tier lists, create watch-lists for upcoming games, or simply to browse and discover new games that they may enjoy.
 
 Live Site:
@@ -18,6 +18,7 @@ Core Files:
 RogueLists\capvenv\roguelists\rogueapp\models.py - contains database model and table structures
 RogueLists\capvenv\roguelists\rogueapp\urls.py - contains url and slug render logic
 RogueLists\capvenv\roguelists\rogueapp\views.py - contains logic for views and how pages know what to render
+RogueLists\capvenv\roguelists\update-game-table-pythonanywhere.py - web scraping python script that is run daily on host to update DB games/prices
 
 Local Installation and Setup
 To get started locally with RogueLists, you'll need to follow these steps:

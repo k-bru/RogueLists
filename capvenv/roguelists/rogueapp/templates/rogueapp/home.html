@@ -40,7 +40,7 @@
           {% for followed_user in followed_users %}
           <div class="col-md-6 mb-4">
             <a href="{% url 'user_profile' user_id=followed_user.id %}">
-              <h4 class="btn">{{ followed_user.username }}</h4>
+              <h3 class="btn">{{ followed_user.username }}</h3>
             </a>
           </div>
           {% endfor %}
@@ -85,6 +85,16 @@
           </div>
         </div>
       </div>
+
+      <hr>
+
+      <div class="row mt-2">
+        <h2 class="collapsed" data-bs-toggle="collapse" data-bs-target="#popular-games" title="Show/Hide">Popular Games</h2>
+        <div id="popular-games" class="row content show">
+          {% include 'rogueapp/show_games.html' %}
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

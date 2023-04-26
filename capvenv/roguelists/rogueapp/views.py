@@ -60,8 +60,9 @@ def home(request):
     # Add the list preview to the list_previews variable
     list_previews.append({'list': user_list, 'game_count': game_count, 'game_titles': game_titles, 'game_images': game_images, 'favorite_count': favorite_counts.get(user_list.list_id, 0)})
   
+  topGames = Game.objects.annotate(num_list_details=Count('listdetailcontent')).order_by('-num_list_details')[:9]
   # Render the home page template with the list previews and followed users  
-  return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users})
+  return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users, 'top_games': topGames})
 
 def user_profile(request, user_id):
   """
@@ -704,3 +705,14 @@ def users(request):
   context = {'users': users,
              'followed_users': followed_users}
   return render(request, 'rogueapp/users.html', context)
+
+def show_games(request):
+  """
+  View to display games that appear the most in lists.
+  """
+  games = Game.objects.annotate(
+    num_list_details=Count('listdetailcontent'),
+    num_lists=Count('listdetailcontent__list', distinct=True),
+  ).order_by('-num_list_details')[:10]
+  context = {'games': games}
+  return render(request, 'rogueapp/show_games.html', context)
