@@ -4,12 +4,6 @@
     <a href="{% url 'user_profile' user_id=new_list_preview.list.list_owner.id %}">{{ new_list_preview.list.list_owner.username }}</a>
   </div>
   <div class="card-body list-description">
-    {% if request.user.is_authenticated and request.user != new_list_preview.list.list_owner.id %}
-    <form action="{% url 'add_favorite_list' list_id=new_list_preview.list.list_id %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-secondary mb-2">Like</button>
-    </form>
-    {% endif %}
     <a href="{% url 'list_detail' list_id=new_list_preview.list.list_id user_id=new_list_preview.list.list_owner.id %}">
       {% if new_list_preview.game_count == 1 %}
       <p class="btn text-center card-text">{{new_list_preview.game_count}} game</p>

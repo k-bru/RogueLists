@@ -125,7 +125,6 @@ def user_profile(request, user_id):
   is_following = False
   if request.user.is_authenticated:
     is_following = Follow.objects.filter(follower=request.user, following=user).exists()
-
   # Get a list of the current user's favorite lists, if the user is logged in
   favorite_lists = []
   favorite_list_previews = []
@@ -160,6 +159,7 @@ def user_profile(request, user_id):
     'favorite_list_previews': favorite_list_previews,
     'follower_count': user.followers.count(),
     'followed_count': user.following.count(),
+    'list_detail': list_detail
   }
 
   return render(request, 'rogueapp/user_profile.html', context)
@@ -383,6 +383,9 @@ def list_detail(request, user_id, list_id):
   list_detail_content = ListDetailContent.objects.filter(list_detail_id=list_id)
   today = datetime.date.today()
   
+  user_list = get_object_or_404(ListDetail, pk=list_id)
+  is_favorited = FavoriteList.objects.filter(user=request.user, list=user_list).exists()
+  
   # Get all games in the list
   games = Game.objects.filter(steam_id__in=list_detail_content.values_list('steam_id', flat=True))
 
@@ -406,7 +409,7 @@ def list_detail(request, user_id, list_id):
   tiers = (('A', tier_A_games), ('B', tier_B_games), ('C', tier_C_games), ('D', tier_D_games), ('F', tier_F_games), ('Z', tier_Z_games))
   context = {'tier_A_games': tier_A_games, 'tier_B_games': tier_B_games, 'tier_C_games': tier_C_games,
              'tier_D_games': tier_D_games, 'tier_F_games': tier_F_games, 'tier_Z_games': tier_Z_games, 'list_detail': list_detail,
-             'list_detail_content': list_detail_content, 'tiers': tiers, 'today': today,}
+             'list_detail_content': list_detail_content, 'tiers': tiers, 'today': today, 'user_list': user_list, 'is_favorited': is_favorited}
   return render(request, 'rogueapp/list_detail.html', context)
 
 def add_to_list(request, list_id, game_id):
@@ -595,7 +598,7 @@ def unfollow(request, user_id):
   Follow.objects.filter(follower=request.user, following=user_to_unfollow).delete()
   return redirect('user_profile', user_id=user_id)
 
-def add_favorite_list(request, list_id):
+def add_favorite_list(request, user_id, list_id):
   """
   This function adds the given list to the current user's favorite lists if it doesn't already exist.
 
@@ -613,14 +616,11 @@ def add_favorite_list(request, list_id):
   list_detail = get_object_or_404(ListDetail, pk=list_id)
   user = request.user
   favorite_list, created = FavoriteList.objects.get_or_create(user=user, list_id=list_id)
-  if created:
-    messages.success(request, 'List added to likes!')
-  else:
-    messages.warning(request, 'List is already liked.')
-  context = {'list_detail': list_detail}
-  return redirect('user_profile', user_id=user.id)
   
-def remove_favorite_list(request, list_id):
+  context = {'list_detail': list_detail}
+  return redirect('list_detail', user_id=list_detail.user_list.list_owner.id, list_id=list_detail.user_list.list_id)
+  
+def remove_favorite_list(request, user_id, list_id):
   """
   Removes a favorite list for the logged-in user with the specified list_id.
 
@@ -636,11 +636,8 @@ def remove_favorite_list(request, list_id):
   """
   favorite_list = get_object_or_404(FavoriteList, user=request.user, list_id=list_id)
   favorite_list.delete()
-  
-  # Create an undo button with the reverse URL of the add_favorite_list view
-  undo_button = f'<a href="{reverse("add_favorite_list", args=[list_id])}" class="text-center"><button class="text-center mt-4">Undo</button></a>'
-  messages.warning(request, f"<div class='text-center'>List removed from likes! <br> {undo_button}</div>")
-  return redirect('user_profile', user_id=request.user.id)
+  list_detail = get_object_or_404(ListDetail, pk=list_id)
+  return redirect('list_detail', user_id=list_detail.user_list.list_owner.id, list_id=list_detail.user_list.list_id)
 
 def all_genres(request):
   """
