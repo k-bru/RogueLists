@@ -384,8 +384,11 @@ def list_detail(request, user_id, list_id):
   today = datetime.date.today()
   
   user_list = get_object_or_404(ListDetail, pk=list_id)
-  is_favorited = FavoriteList.objects.filter(user=request.user, list=user_list).exists()
-  
+  if request.user.is_authenticated:
+    is_favorited = FavoriteList.objects.filter(user=request.user, list=user_list).exists()
+  else:
+    is_favorited = False
+    
   # Get all games in the list
   games = Game.objects.filter(steam_id__in=list_detail_content.values_list('steam_id', flat=True))
 
@@ -604,6 +607,7 @@ def add_favorite_list(request, user_id, list_id):
 
   Args:
       request (HttpRequest): the HTTP request object
+      user_id: The ID of the user who owns the list.
       list_id (int): the ID of the UserList object to add to favorites
 
   Returns:
@@ -627,6 +631,7 @@ def remove_favorite_list(request, user_id, list_id):
   Args:
     request: the HTTP request object.
     list_id: the ID of the list to remove from the user's favorites.
+    user_id: The ID of the user who owns the list.
 
   Returns:
     A redirect to the user's profile page.
