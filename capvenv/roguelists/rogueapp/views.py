@@ -9,7 +9,7 @@ from django.urls import reverse
 import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Count, F
+from django.db.models import Q, Count, F, Func
 from django.db import models
 
 User = get_user_model()
@@ -722,7 +722,7 @@ def users(request):
   Returns:
       Rendered HTML template with the list of all users and the top 10 followed users.
   """
-  users = User.objects.all()
+  users = User.objects.annotate(lower_username=Func('username', function='LOWER')).order_by('lower_username')
   followed_users = User.objects.annotate(num_followers=models.Count('followers')).order_by('-num_followers')[:10]
   context = {'users': users,
              'followed_users': followed_users}

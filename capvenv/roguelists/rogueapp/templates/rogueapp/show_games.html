@@ -37,6 +37,19 @@
         {% if game.num_list_details > 0 %}
         {% endif %}
         <p class="card-text mt-auto text-center">Release date: {{ game.release_date }}</p>
+        {% if request.user.is_authenticated %}
+        <div class="dropdown text-center">
+          <button class="btn dropdown-toggle mb-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            Add to list
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for user_list in request.user.userlist_set.all %}
+            <li><a class="dropdown-item" href="{% url 'add_to_list' list_id=user_list.list_id game_id=game.steam_id %}">{{ user_list.list_name }}</a></li>
+            {% endfor %}
+            <li><a class="dropdown-item fw-bold" href="{% url 'create_list' game_id=game.steam_id %}">Add to new list</a></li>
+          </ul>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
