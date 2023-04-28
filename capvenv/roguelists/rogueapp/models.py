@@ -33,7 +33,8 @@ class Game(models.Model):
   def get_genres(self):
     """
     Returns the Genre objects associated with the Game object.
-
+    Genres are stored in a 123|456|78|9 format, where each integer represents Steam's ID of that particular genre within their store.
+    These Genres are iterated through and associated with the proper name found in the Genre table
     Returns:
         QuerySet: A QuerySet of Genre objects associated with the Game object.
     """
