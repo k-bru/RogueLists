@@ -176,7 +176,7 @@ a,
 }
 
 /* cards and lists */
-#list-detail-card {
+.list-detail-card {
   position: relative;
 }
 
@@ -188,18 +188,19 @@ a,
   position: relative;
 }
 
-#search-detail-card {
+.search-detail-card {
   position: relative;
 }
 
-#search-price {
+.search-price {
   background-color: var(--black);
+  border-radius: .5rem;
   bottom: 0;
   position: absolute;
   right: 0;
 }
 
-#list-detail-card div {
+.list-detail-card div {
   background-color: var(--black);
   bottom: 0;
   position: absolute;
@@ -212,12 +213,12 @@ a,
   width: 80%;
 }
 
-#list-detail-card div p {
+.list-detail-card div p {
   color: var(--light);
   transition: .5s;
 }
 
-#list-detail-card div p:hover {
+.list-detail-card div p:hover {
   color: var(--sky);
   transition: .5s;
 }
@@ -305,6 +306,7 @@ a,
 
 .card-header {
   background-color: rgb(255,255,255,0.1);
+  /* card-header bootstrap class overrides these without important, still want to retain the other values from card-header */
   border-top-left-radius: 1rem!important;
   border-top-right-radius: 1rem!important;
 }
@@ -369,8 +371,15 @@ a,
 }
 
 /* Images */
-img {
-  border-radius: 1rem !important;
+img,
+.list-detail-card > img,
+.search-detail-card a img {
+  border-radius: 1rem;
+}
+
+.game-img-height {
+  align-content: center;
+  height: fit-content;
 }
 
 .list-images {
@@ -378,8 +387,8 @@ img {
 }
 
 .image-container {
-  min-height: min-content;
   max-height: max-content;
+  min-height: min-content;
 }
 
 /* Genres */
@@ -446,28 +455,23 @@ ul li .faq-q {
 
 /* SCROLL TO TOP BUTTON */
 #back-to-top {
-  display: none;
-  position: fixed;
-  bottom: 68px;
-  right: 35px;
-  z-index: 99;
-  font-size: 1.5rem;
-  border: none;
-  outline: none;
   background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  border-radius: 50%;
+  bottom: 68px;
   color: #000;
   cursor: pointer;
-  border-radius: 50%;
+  display: none;
+  font-size: 1.5rem;
   height: 3rem;
+  outline: none;
+  position: fixed;
+  right: 35px;
   width: 3rem;
+  z-index: 99;
 }
 
 #back-to-top:hover {
   background-color: rgba(255, 255, 255, 0.8);
   color: #000;
-}
-
-.game-img-height {
-  height: fit-content;
-  align-content: center;
 }

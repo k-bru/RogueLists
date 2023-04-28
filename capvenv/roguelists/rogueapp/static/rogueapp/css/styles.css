@@ -188,11 +188,11 @@ a,
   position: relative;
 }
 
-#search-detail-card {
+.search-detail-card {
   position: relative;
 }
 
-#search-price {
+.search-price {
   background-color: var(--black);
   border-radius: .5rem;
   bottom: 0;
@@ -372,7 +372,8 @@ a,
 
 /* Images */
 img,
-.list-detail-card > img {
+.list-detail-card > img,
+.search-detail-card a img {
   border-radius: 1rem;
 }
 

@@ -71,10 +71,9 @@ function addEditNameAndDescriptionListeners() {
     descriptionInputContainer.classList.toggle('d-none');
   });
 }
-
-// When the user scrolls down 20px from the top of the document, show the button
-window.onscroll = function () { scrollFunction() };
-
+/**
+ *  When the user scrolls down 20px from the top of the document, show the button
+ */
 function scrollFunction() {
   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
     document.getElementById("back-to-top").style.display = "block";
@@ -83,28 +82,34 @@ function scrollFunction() {
   }
 }
 
-// When the user clicks on the button, scroll to the top of the document
+/**
+ * When the user clicks on the button, scroll to the top of the document
+ */
 function topFunction() {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
+/**
+ * Function to update search results on users page
+*/
 function searchUsers() {
-  const UserNames = document.querySelectorAll('.user-name');
-  const UserSearch = document.querySelector('#user-search');
+  const userNames = document.querySelectorAll('.user-name');
+  const userSearch = document.querySelector('#user-search');
   
-  UserSearch.addEventListener('input', () => {
-    const query = UserSearch.value.toLowerCase();
-    UserNames.forEach((UserName) => {
-      const NAME = UserName.textContent.toLowerCase();
-      if (NAME.includes(query)) {
-        UserName.style.display = 'inline-block';
+  userSearch.addEventListener('input', () => {
+    const query = userSearch.value.toLowerCase();
+    userNames.forEach((userName) => {
+      const name = userName.textContent.toLowerCase();
+      if (name.includes(query)) {
+        userName.style.display = 'inline-block';
       } else {
-        UserName.style.display = 'none';
+        userName.style.display = 'none';
       }
     });
   });
 }
 
+window.onscroll = function () { scrollFunction() };
+searchUsers();
 addEditNameAndDescriptionListeners();
-searchUsers()
