@@ -102,8 +102,8 @@
       {% endif %}
       {% endfor %}
       <a href="https://store.steampowered.com/app/{{game.steam_id}}" target="_blank">
-        <div id="list-detail-card">
-          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top pt-2" title="{{game.game_title}}" alt="Capsule image for {{game.game_title}}">
+        <div class="list-detail-card">
+          <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top" title="{{game.game_title}}" alt="Capsule image for {{game.game_title}}">
           <div>
             {% if game.base_price > 0 %}
             {% if game.base_price == game.current_price %}

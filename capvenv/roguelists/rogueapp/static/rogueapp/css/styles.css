@@ -176,7 +176,7 @@ a,
 }
 
 /* cards and lists */
-#list-detail-card {
+.list-detail-card {
   position: relative;
 }
 
@@ -200,7 +200,7 @@ a,
   right: 0;
 }
 
-#list-detail-card div {
+.list-detail-card div {
   background-color: var(--black);
   bottom: 0;
   position: absolute;
@@ -213,12 +213,12 @@ a,
   width: 80%;
 }
 
-#list-detail-card div p {
+.list-detail-card div p {
   color: var(--light);
   transition: .5s;
 }
 
-#list-detail-card div p:hover {
+.list-detail-card div p:hover {
   color: var(--sky);
   transition: .5s;
 }
@@ -371,7 +371,8 @@ a,
 }
 
 /* Images */
-img {
+img,
+.list-detail-card > img {
   border-radius: 1rem;
 }
 
