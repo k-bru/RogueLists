@@ -132,7 +132,7 @@
         <div class="card-info">
           <p class="card-text text-center">
             {% for genre in game.get_genres %}
-            <a href="{% url 'search' %}?searched={{ genre.name }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
+            <a href="{% url 'search' %}?searched={{ genre.name|urlencode }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
             {% endfor %}
           </p>
         </div>
@@ -140,10 +140,10 @@
         {% include 'rogueapp/list_detail_form.html' %}
         {% if request.user.is_authenticated %}
         <div class="dropdown text-center">
-          <button class="btn dropdown-toggle mb-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+          <button class="btn dropdown-toggle mb-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             Add to list
           </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <ul class="dropdown-menu">
             {% for user_list in request.user.userlist_set.all %}
             <li><a class="dropdown-item" href="{% url 'add_to_list' list_id=user_list.list_id game_id=game.steam_id %}">{{ user_list.list_name }}</a></li>
             {% endfor %}

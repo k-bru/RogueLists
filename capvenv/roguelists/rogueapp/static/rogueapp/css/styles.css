@@ -305,10 +305,10 @@ a,
 }
 
 .card-header {
-  background-color: rgb(255,255,255,0.1);
+  background-color: rgb(255, 255, 255, 0.1);
   /* card-header bootstrap class overrides these without important, still want to retain the other values from card-header */
-  border-top-left-radius: 1rem!important;
-  border-top-right-radius: 1rem!important;
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
 }
 
 .card-footer {
@@ -372,7 +372,7 @@ a,
 
 /* Images */
 img,
-.list-detail-card > img,
+.list-detail-card>img,
 .search-detail-card a img {
   border-radius: 1rem;
 }
@@ -474,4 +474,14 @@ ul li .faq-q {
 #back-to-top:hover {
   background-color: rgba(255, 255, 255, 0.8);
   color: #000;
+}
+
+.genres-list .genre-link {
+  display: inline-block;
+}
+
+.home-page-top-games .card-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
