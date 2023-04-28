@@ -62,7 +62,7 @@
     </div>
     {% endif %}
 </div>
-<div class="sort-holder mx-4">
+<div class="sort-holder mx-4 mt-4">
   <h2 class="collapsed" id="tier-collapse" data-bs-toggle="collapse" data-bs-target="#tier-explanation" title="Show/Hide">Tiers Explained&nbsp;</h2>
   <div id="tier-explanation" class="collapse">
     <p>In this list, each item is assigned to one of six tiers: A Tier, B Tier, C Tier, D Tier, F Tier, or Unranked.</p>
@@ -87,7 +87,7 @@
 {% endif %}
 <div class="row d-flex justify-content-center align-items-stretch">
   {% for game in games %}
-  <div class="col-sm-4 col-md-6 col-lg-6 col-xl-4 mb-4 ranked-card">
+  <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4 mb-4 ranked-card">
     <div class="card mx-auto h-100 w-75">
       {% for detail in list_detail_content %}
       {% if detail.steam_id.steam_id == game.steam_id %}
