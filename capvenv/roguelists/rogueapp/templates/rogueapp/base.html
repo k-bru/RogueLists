@@ -40,7 +40,7 @@
     <footer class="text-center d-flex justify-content-between m-3">
       {% block footer %}
       <a href="{% url 'portfolio' %}" class="btn text-white m-2">Portfolio</a>
-      <p class="m-1 pt-1 text-center">Copyright &copy; 2023 RogueLists</p>
+      <p class="m-1 pt-1 text-center">RogueLists is licensed under the MIT License. Feel free to use this code for personal or commercial projects.</p>
       {% if request.user.is_superuser %}
       <a class="btn text-white m-2" href="{% url 'admin:index' %}">Admin</a>
       {%endif %}

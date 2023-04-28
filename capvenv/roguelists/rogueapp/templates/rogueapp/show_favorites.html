@@ -11,14 +11,14 @@
         <div class="container">
           <div class="row d-flex justify-content-center game-img-height">
             {% if favorite_preview.game_images|length == 1 %}
-            <div class="col-12">
+            <div class="col-lg-8 col-md-12 col-sm-12">
               <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id user_id=favorite_preview.list.list_owner.id %}">
-                <img class="w-75 text-center list-images large-image" src="{{ favorite_preview.game_images.0.image_url }}" alt="Capsule image for {{ favorite_preview.game_images.0.game_title }}">
+                <img class="w-100 text-center list-images large-image" src="{{ favorite_preview.game_images.0.image_url }}" alt="Capsule image for {{ favorite_preview.game_images.0.game_title }}">
               </a>
             </div>
             {% elif favorite_preview.game_images|length == 2 %}
             {% for game_image in favorite_preview.game_images %}
-            <div class="col-8 mt-2">
+            <div class="col-lg-8 col-md-6 col-sm-4">
               <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id user_id=favorite_preview.list.list_owner.id %}">
                 <img class="w-100 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
               </a>
@@ -26,9 +26,9 @@
             {% endfor %}
             {% elif favorite_preview.game_images|length == 3 %}
             {% for game_image in favorite_preview.game_images %}
-            <div class="col-8">
+            <div class="col-lg-8 col-md-6 col-sm-4">
               <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id user_id=favorite_preview.list.list_owner.id %}">
-                <img class="w-75 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
+                <img class="w-100 text-center list-images large-image" src="{{ game_image.image_url }}" alt="Capsule image for {{ game_image.game_title }}">
               </a>
             </div>
             {% endfor %}
