@@ -249,7 +249,7 @@ a,
   background-color: var(--light);
   border-radius: .5rem;
   bottom: 2.5rem;
-  color: var(--dark);
+  color: var(--dark) !important;
   font-size: 90%;
   position: absolute;
   right: .25rem;
