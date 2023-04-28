@@ -6,7 +6,7 @@ from roguelists.settings import DEBUG, STATIC_ROOT, STATIC_URL, MEDIA_ROOT, MEDI
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
-from django.conf.urls import handler404
+
 
 
 urlpatterns = [
@@ -35,8 +35,6 @@ urlpatterns = [
   path('users/', views.users, name='users'),
   path('games/', views.show_games, name='show_games'),
 ]
-
-handler404 = 'rogueapp.views.custom_404'
 
 if DEBUG:
   urlpatterns += static(STATIC_URL, document_root = STATIC_ROOT)
