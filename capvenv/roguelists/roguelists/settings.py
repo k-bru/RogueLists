@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-a(*cfmt0!iz0nk^7#xrhns(*9o_i6#i1rrsvq7n**k&ql)bhr6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['kbru.pythonanywhere.com', 'www.kbcapstone.com', 'www.kb-capstone.com', '127.0.0.1']
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Game, ListDetailContent, UserList, ListDetail, Follow, FavoriteList, Genre
-from django.http import JsonResponse
+from django.http import HttpResponseNotFound
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
@@ -740,3 +740,6 @@ def show_games(request):
   ).order_by('-num_list_details')[:10]
   context = {'games': games}
   return render(request, 'rogueapp/show_games.html', context)
+
+def custom_404(request, exception):
+  return render(request, '404.html', {})
