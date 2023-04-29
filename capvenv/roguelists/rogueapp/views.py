@@ -33,6 +33,7 @@ def home(request):
   new_lists = user_lists[:8]
   new_list_previews = []
   followed_users = []
+  today = datetime.date.today()
   
   # If the user is authenticated, get a list of users they are following
   if request.user.is_authenticated:
@@ -81,7 +82,7 @@ def home(request):
   topGames = Game.objects.annotate(num_list_details=Count('listdetailcontent')).order_by('-num_list_details')[:9]
   
   # Render the home page template with the list previews and followed users  
-  return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users, 'top_games': topGames, 'new_list_previews': new_list_previews})
+  return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users, 'top_games': topGames, 'new_list_previews': new_list_previews, 'today': today})
 
 def user_profile(request, user_id):
   """
@@ -734,11 +735,13 @@ def show_games(request):
   """
   View to display games that appear the most in lists.
   """
+  today = datetime.date.today()
   games = Game.objects.annotate(
     num_list_details=Count('listdetailcontent'),
     num_lists=Count('listdetailcontent__list', distinct=True),
   ).order_by('-num_list_details')[:10]
-  context = {'games': games}
+  context = {'games': games,
+             'today': today,}
   return render(request, 'rogueapp/show_games.html', context)
 
 def custom_404(request, exception):
