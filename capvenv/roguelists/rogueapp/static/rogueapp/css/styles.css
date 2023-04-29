@@ -345,11 +345,6 @@ a,
   display: flex;
 }
 
-#game-count {
-  height: fit-content;
-  margin-bottom: .1rem;
-}
-
 #filters-container {
   width: 100%;
   margin-top: 10px;
@@ -405,7 +400,7 @@ img,
 
 .genre-link:hover {
   background-color: #6c757d;
-  border-color: #6c757d;
+  border-color: #2a2e31;
   color: #fff;
 }
 

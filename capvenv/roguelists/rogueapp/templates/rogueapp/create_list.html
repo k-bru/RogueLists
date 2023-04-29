@@ -6,11 +6,11 @@
     <form method="POST">
       {% csrf_token %}
       <div class="form-group">
-        <label for="list_name">List name:</label>
+        <label for="list_name">List name (Max 50 characters)</label>
         <input type="text" class="form-control" id="list_name" name="list_name" required>
       </div>
       <div class="form-group">
-        <label for="list_description">List description:</label>
+        <label for="list_description">List description (Max 500 characters)</label>
         <input type="text" class="form-control" id="list_description" name="list_description">
       </div>
       <input type="hidden" name="game_id" value="{{ game_id }}">

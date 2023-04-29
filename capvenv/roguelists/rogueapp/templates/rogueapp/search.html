@@ -57,19 +57,19 @@
       <div class="w-100">
         <div class="row mx-auto" id="filters-container">
           <div class="row mb-3">
-            <label for="price_range">Price range</label>
+            <label>Price range</label>
             <div class="input-group">
-              <input type="number" name="min_price" id="min_price" placeholder="Min" class="form-control" value="{{ min_price }}" min="0">
+              <input type="number" name="min_price" id="min_price" placeholder="Min" class="form-control"{% if min_price >= 0 %} value="{{ min_price }}"{% else %} value=""{% endif %} min="0">
               <span class="input-group-text">-</span>
-              <input type="number" name="max_price" id="max_price" placeholder="Max" class="form-control" value="{{ max_price }}" min="0">
+              <input type="number" name="max_price" id="max_price" placeholder="Max" class="form-control"{% if max_price >= 0 %} value="{{ max_price }}"{% else %} value=""{% endif %} min="0">
             </div>
           </div>
           <div class="row mb-3" id="filter-range">
-            <label for="release_date_range">Release date range</label>
+            <label>Release date range</label>
             <div class="input-group pb-2">
-              <input type="date" name="min_release_date" id="min_release_date" placeholder="Earliest" class="form-control" value="{{ release_date_start|date:'Y-m-d' }}">
+              <input type="date" name="min_release_date" id="min_release_date" class="form-control" value="{{ release_date_start|date:'Y-m-d' }}">
               <span class="input-group-text">-</span>
-              <input type="date" name="max_release_date" id="max_release_date" placeholder="Latest" class="form-control" value="{{ release_date_end|date:'Y-m-d' }}">
+              <input type="date" name="max_release_date" id="max_release_date" class="form-control" value="{{ release_date_end|date:'Y-m-d' }}">
             </div>
           </div>
           <div class="form-group form-check">
@@ -104,7 +104,7 @@
     <div class="col-sm-6 col-md-4 col-lg-3 mb-3 d-flex">
       <div class="card">
         <div class="search-detail-card" class="text-center align-items-center">
-          <a href="https://store.steampowered.com/app/{{game.steam_id}}" target="_blank"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top d-block">
+          <a href="https://store.steampowered.com/app/{{game.steam_id}}" target="_blank"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{game.steam_id}}/capsule_231x87.jpg" class="card-img-top d-block" alt="Capsule image for {{game.game_title}}">
             <div class="search-price">
               {% if game.base_price > 0 %}
               {% if game.base_price == game.current_price %}

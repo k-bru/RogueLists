@@ -18,7 +18,7 @@
         {% if list_preview.game_images|length == 1 %}
         <div class="col-lg-8 col-md-12 col-sm-12">
           <a href="{% url 'list_detail' list_id=list_preview.list.list_id user_id=list_preview.list.list_owner.id %}">
-            <img class="w-100 text-center list-images large-image my-4" src="{{ list_preview.game_images.0.image_url }}" alt="Capsule image for {{ list_preview.game_images.0.game_title }}">
+            <img class="w-100 text-center list-images large-image" src="{{ list_preview.game_images.0.image_url }}" alt="Capsule image for {{ list_preview.game_images.0.game_title }}">
           </a>
         </div>
         {% elif list_preview.game_images|length == 2 %}

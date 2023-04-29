@@ -6,7 +6,7 @@
     </div>
     <a href="{% url 'list_detail' list_id=favorite_preview.list.list_id user_id=favorite_preview.list.list_owner.id %}">
       <div class="card-body">
-        <p class="card-text text-center" id="game-count">{{ favorite_preview.game_count }} {% if favorite_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
+        <p class="card-text text-center btn">{{ favorite_preview.game_count }} {% if favorite_preview.game_count == 1 %}game{% else %}games{% endif %}</p>
         <hr>
         <div class="container">
           <div class="row d-flex justify-content-center game-img-height">
