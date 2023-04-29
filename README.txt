@@ -27,7 +27,7 @@ RogueLists\capvenv\roguelists\static-files
 RogueLists\capvenv\roguelists
 
 Core Files:
-#contains database model and table structures
+#contains database model and table structures (See note below this section about SQL scripts)
 RogueLists\capvenv\roguelists\rogueapp\models.py
 
 #contains url and slug render logic
@@ -41,6 +41,15 @@ RogueLists\capvenv\roguelists\update-game-table-pythonanywhere.py
 
 #CSV file that is used to update the database daily (The contents of this file are also modified daily based on the scrape results)
 RogueLists\capvenv\roguelists\roguelike.csv
+
+Note about SQL in relation to this project:
+Django uses an Object-Relational Mapping (ORM) framework, which is a technique of mapping between the relational database and the object-oriented programming language. Django provides a high-level abstraction layer that allows developers to work with databases using Python classes and methods instead of writing SQL scripts.
+
+The models.py file in a Django app contains Python classes that represent database tables. These classes inherit from the django.db.models.Model class and define attributes that map to fields in the database table. The ORM framework takes care of translating these Python classes and their attributes into SQL queries and executing them against the database.
+
+When Django is set up, it creates tables in the database for each of the defined models. This is done by running a series of migrations, which are scripts that Django generates based on changes to the models. These migrations are stored in a special folder within the app called migrations.
+
+Therefore, Django does not require a typical SQL script file to initiate a database because the models and the ORM handle the creation and management of database tables. The models.py file is similar to a SQL script file in that it defines the structure of the database, but it is written in Python and uses Django's ORM to interact with the database. You can find the models.py file for a Django app in the app folder at capvenv\roguelists\rogueapp\models.py.
 
 Using RogueLists
 Once the application is up and running, users can navigate to the home page to see a new lists and popular games, and use the search feature to find any other roguelike game. 

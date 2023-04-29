@@ -12,6 +12,9 @@
     {% endif %}
     <a href="#new-h2">Newest Lists</a> |
     <a href="#pop-h2">Popular Games</a>
+    {% if request.user.is_superuser %}
+    | <a href="#admin-btn">Admin</a>
+    {% endif %}
   </div>
   <div class="row col-md-12 col-lg-9 list-holder" id="home-page">
     {% if list_previews %}
