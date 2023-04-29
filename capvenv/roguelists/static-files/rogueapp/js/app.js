@@ -102,8 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Update search results on users page
   searchUsers();
-
 });
+
 // Add change event listeners to 'tier_rank' select dropdowns.
 document.querySelectorAll('select[name="tier_rank"]').forEach(function (select) {
   select.addEventListener('change', function () {
