@@ -5,7 +5,7 @@
   <form method="post">
     {% csrf_token %}
     <label for="tier_rank">New Tier Rank:</label>
-    <select name="tier_rank" id="tier_rank">
+    <select name="tier_rank">
       <option value="A" {% if list_detail_content.tier_rank == A %}selected{% endif %}>A</option>
       <option value="B" {% if list_detail_content.tier_rank == B %}selected{% endif %}>B</option>
       <option value="C" {% if list_detail_content.tier_rank == C %}selected{% endif %}>C</option>
