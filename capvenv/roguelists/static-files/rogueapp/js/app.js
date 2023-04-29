@@ -101,17 +101,16 @@ document.addEventListener("DOMContentLoaded", function () {
   addEditNameAndDescriptionListeners();
 
   // Update search results on users page
-  searchUsers();
 });
 
 // Add change event listeners to 'tier_rank' select dropdowns.
 document.querySelectorAll('select[name="tier_rank"]').forEach(function (select) {
   select.addEventListener('change', function () {
     // Submit the form closest to the dropdown when the value is changed
-    console.log("hi");
     this.closest('form').submit();
   });
 });
 
 //Back to top button
 window.onscroll = function () { scrollFunction() };
+searchUsers();
