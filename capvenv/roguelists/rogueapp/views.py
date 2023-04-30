@@ -82,7 +82,7 @@ def home(request):
   topGames = Game.objects.annotate(num_list_details=Count('listdetailcontent')).order_by('-num_list_details')[:9]
   
   # Render the home page template with the list previews and followed users  
-  return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users, 'top_games': topGames, 'new_list_previews': new_list_previews, 'today': today})
+  return render(request, 'rogueapp/home.html', {'list_previews': list_previews, 'followed_users': followed_users, 'top_games': topGames, 'new_list_previews': new_list_previews, })
 
 def user_profile(request, user_id):
   """
@@ -134,7 +134,7 @@ def user_profile(request, user_id):
     
     # If the requested user is the same as the logged-in user, get a preview of each list that the user has favorited
     if request.user == user:
-      for fl in user_favorites:
+      for fl in reversed(user_favorites):
         ul = fl.list.user_list
         game_count = ListDetailContent.objects.filter(list_detail_id=ul.list_id).count()
         game_titles = [ldc.steam_id.game_title for ldc in ListDetailContent.objects.filter(list_detail_id=ul.list_id).all()]

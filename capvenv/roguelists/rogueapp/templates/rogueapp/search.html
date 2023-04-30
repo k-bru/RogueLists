@@ -6,12 +6,12 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
     <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'search' %}">Search</a></li>
-    <li class="breadcrumb-item pointer">{{searched}}</li>
+    <li class="breadcrumb-item pointer">{{searched|safe}}</li>
   </ol>
 </nav>
 <div class="text-center">
   {% if searched %}
-  <h1>Search Results: <em>{{searched}}</em></h1>
+  <h1>Search Results: <em>{{searched|safe}}</em></h1>
   {% else %}
   <h1>Search Games</h1>
   {% endif %}
@@ -130,7 +130,7 @@
           <h4 class="card-title text-md-center"><a href="https://store.steampowered.com/app/{{game.steam_id}}" class="text-decoration-none" target="_blank">{{game.game_title}}</a></h4>
           <p class="card-text text-center">
             {% for genre in game.get_genres %}
-            <a href="{% url 'search' %}?searched={{ genre.name|urlencode }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
+            <a href="{% url 'search' %}?searched={{ genre.name|urlencode }}" class="genre-link btn btn-outline-secondary">{{ genre.name|safe }}</a>
             {% endfor %}
           </p>
 

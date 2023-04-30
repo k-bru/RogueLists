@@ -17,7 +17,7 @@
         {% csrf_token %}
         <label for="list_name" class="form-label"></label>
         <div class="input-group">
-          <input type="text" class="form-control" id="list_name" name="list_name" value="{{ list_detail.user_list.list_name }}">
+          <input type="text" class="form-control" id="list_name" name="list_name" maxlength="50" value="{{ list_detail.user_list.list_name }}">
           <button type="submit" class="btn btn-primary" id="save-name-btn">Save List Name</button>
         </div>
       </form>
@@ -31,7 +31,7 @@
         {% csrf_token %}
         <label for="list_description" class="form-label"></label>
         <div class="input-group">
-          <textarea class="form-control" id="list_description" name="list_description" rows="3">{{ list_detail.user_list.list_description }}</textarea>
+          <textarea class="form-control" id="list_description" name="list_description" rows="3" maxlength="500">{{ list_detail.user_list.list_description }}</textarea>
           <button type="submit" class="btn btn-primary" id="save-description-btn">Save Description</button>
         </div>
       </form>
@@ -132,7 +132,7 @@
         <div class="card-info">
           <p class="card-text text-center">
             {% for genre in game.get_genres %}
-            <a href="{% url 'search' %}?searched={{ genre.name|urlencode }}" class="genre-link btn btn-outline-secondary">{{ genre.name }}</a>
+            <a href="{% url 'search' %}?searched={{ genre.name|urlencode }}" class="genre-link btn btn-outline-secondary">{{ genre.name|safe }}</a>
             {% endfor %}
           </p>
         </div>
