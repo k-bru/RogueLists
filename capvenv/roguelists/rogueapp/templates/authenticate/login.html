@@ -5,8 +5,7 @@
 
 <h1>Login</h1>
 <br>
-
-<form action="" method=POST>
+<form id="login-form" method="POST">
   {% csrf_token %}
   <div class="mb-3">
     <label for="username" class="form-label">Username</label>
@@ -16,7 +15,8 @@
     <label for="password" class="form-label">Password</label>
     <input type="password" class="form-control" name="password">
   </div>
-  <input type="submit" value="Log In" class="btn-btn-secondary">
+  {{captcha}}
+  <input type="submit" value="Log In" class="btn mt-2">
 </form>
-
+<script src="https://www.google.com/recaptcha/api.js?render=6LeEqNIlAAAAAHDxzx49l5CjPmvnRCDJUfWDJVQS" defer></script>
 {% endblock %}

@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count, F, Func
 from django.db import models
+from .my_captcha import FormWithCaptcha
 
 User = get_user_model()
 
@@ -194,7 +195,7 @@ def login_user(request):
       messages.success(request, ("Invalid username/password combination. Please try again."))
       return redirect('login')
   else:
-    return render(request, 'authenticate/login.html', {})
+    return render(request, 'authenticate/login.html', {'captcha': FormWithCaptcha})
 
 def logout_user(request):
   """

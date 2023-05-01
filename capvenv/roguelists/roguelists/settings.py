@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-a(*cfmt0!iz0nk^7#xrhns(*9o_i6#i1rrsvq7n**k&ql)bhr6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['kbru.pythonanywhere.com', 'www.kbcapstone.com', 'www.kb-capstone.com', '127.0.0.1']
 
@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['kbru.pythonanywhere.com', 'www.kbcapstone.com', 'www.kb-capsto
 # Application definition
 
 INSTALLED_APPS = [
+    'captcha',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -126,3 +127,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+RECAPTCHA_PUBLIC_KEY = '6LcIsdIlAAAAACGIRvO1j5OcAELE7d8f06ZmERde'
+RECAPTCHA_PRIVATE_KEY = '6LcIsdIlAAAAAPxjKuuwYdp3iWW3ALBIeymzx2a7'
+RECAPTCHA_REQUIRED_SCORE = 0.6

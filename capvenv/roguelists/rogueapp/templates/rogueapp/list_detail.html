@@ -136,7 +136,7 @@
             {% endfor %}
           </p>
         </div>
-        <p class="card-text text-center fw-bold p-lg-2">Release Date: {{game.release_date}}</p>
+        <p class="card-text text-center p-lg-2">Release Date: {{game.release_date}}</p>
         {% include 'rogueapp/list_detail_form.html' %}
         {% if request.user.is_authenticated %}
         <div class="dropdown text-center">

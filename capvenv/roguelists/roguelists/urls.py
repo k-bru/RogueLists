@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('rogueapp.urls')),
     path('rogueapp/', include('django.contrib.auth.urls')),
-    path('rogueapp/', include('rogueapp.urls'))
+    path('rogueapp/', include('rogueapp.urls')),
 ]
 
 handler404 = 'rogueapp.views.custom_404'
