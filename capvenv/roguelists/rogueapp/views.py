@@ -239,7 +239,7 @@ def register_user(request):
       return redirect('home')
   else:
     form = RegisterUserForm()
-  return render(request, 'authenticate/register_user.html', {'form':form})
+  return render(request, 'authenticate/register_user.html', {'form':form, 'captcha': FormWithCaptcha})
 
 def search(request):
   """
