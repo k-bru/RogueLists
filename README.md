@@ -17,33 +17,50 @@ Main Directories:
 All major files will be found within the "capvenv" (Capstone Virtual Environment) folder and its sub-folders.
 
 #contains templates used by the rogueapp module, this directory is where you will find most HTML pages 
+
 RogueLists\capvenv\roguelists\rogueapp\templates\rogueapp
 
+
 #contains the main codebase for the rogueapp module
+
 RogueLists\capvenv\roguelists\rogueapp
 
+
 #contains static JS/Image/CSS files used by the application
+
 RogueLists\capvenv\roguelists\static-files
 
+
 #contains the main project files and configuration settings
+
 RogueLists\capvenv\roguelists
 
 
 
 Core Files:
+
 #contains database model and table structures (*See note below this section about SQL scripts)
+
 RogueLists\capvenv\roguelists\rogueapp\models.py
 
+
 #contains url and slug render logic
+
 RogueLists\capvenv\roguelists\rogueapp\urls.py
 
+
 #contains logic for views and how pages know what to render
+
 RogueLists\capvenv\roguelists\rogueapp\views.py
 
+
 #web scraping python script that is run daily on host to update DB games/prices
+
 RogueLists\capvenv\roguelists\update-game-table-pythonanywhere.py
 
+
 #CSV file that is used to update the database daily (The contents of this file are also modified daily based on the scrape results)
+
 RogueLists\capvenv\roguelists\roguelike.csv
 
 *Note about SQL in relation to this project:
