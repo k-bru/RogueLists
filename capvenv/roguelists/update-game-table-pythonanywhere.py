@@ -36,7 +36,7 @@ def get_pagination():
   :return: The total number of pages of search results.
   """
   total_item = 1
-  
+
   # Set up the initial request parameters.
   param = {
     'term': game,
@@ -46,7 +46,7 @@ def get_pagination():
   # Send a request to the Steam search page and parse the HTML response.
   req = requests.get(link, headers=head, params=param)
   soup = BeautifulSoup(req.text, 'html.parser')
-  
+
   # Find the pagination links on the search results page.
   page_item = soup.find('div', 'search_pagination_right').find_all('a')
 
@@ -86,12 +86,12 @@ def convert_release_date(release):
       if release[5] == "," or release[6] == ",":
         release = datetime.strptime(release, '%b %d, %Y')
         release = release.strftime('%Y-%m-%d')
-        
+
   #"2023"
   elif len(release) == 4:
     if release[0:2] == "20":
       release = f"{release}-12-31"
-      
+
   #"Q2 2026"
   elif release[0] == 'Q':
     if len(release) == 7:
@@ -100,7 +100,7 @@ def convert_release_date(release):
       release = f"{qConvertMonth} {qConvertYear}"
       release = datetime.strptime(release, '%m %Y')
       release = release.strftime('%Y-%m-%d')
-      
+
   #"November 2021"
   elif release[5] != "," and release[6] != ",":
     if release[-4:-2] == "20":
@@ -109,14 +109,14 @@ def convert_release_date(release):
           if len(release) != 4:
             release = datetime.strptime(release, '%B %Y')
             release = release.strftime('%Y-%m-%d')
-  
+
   #"Mar 2022"
   elif len(release) == 8:
     if release[-4:-2] == "20":
       if release[3] == " ":
         release = datetime.strptime(release, '%b %Y')
         release = release.strftime('%Y-%m-%d')
-  
+
   #Invalid Date strings
   else:
     release = None
@@ -136,7 +136,7 @@ def scrapeData():
 
   Returns: None
   """
-  
+
   # Initialize variables
   count = 0
   datas = []
@@ -161,7 +161,7 @@ def scrapeData():
     except AttributeError:
       count += 1
       continue
-    
+
     # Extract the game data from each search result page using BeautifulSoup to parse the HTML content. If the content cannot be extracted, the loop increments the count and continues to the next iteration.
     for i in content:
       activeDiscount = False
@@ -190,17 +190,28 @@ def scrapeData():
       if 'OST' in title:
         count += 1
         continue
-      
+
       # Extract the game data for each game from the search results. The loop extracts the game's URL, app ID, tags, and title. It applies some filters to exclude games containing certain keywords (in this case, 'bundle' and 'OST'). If the game has already been scanned (as tracked by the checkedApps list), it skips that game and continues to the next iteration.
       try:
-        price = i.find('div', 'col search_price responsive_secondrow').text.strip()
+        # Check if the game is discounted and extract the necessary price elements accordingly.
+        discount_block = i.find('div', 'discount_block search_discount_block')
+        if discount_block:
+            discount_pct = discount_block.find('div', 'discount_pct').text.strip()
+            original_price = discount_block.find('div', 'discount_original_price').text.strip()
+            discounted_price = discount_block.find('div', 'discount_final_price').text.strip()
+            activeDiscount = True
+        else:
+            original_price = i.find('div', 'col search_price responsive_secondrow').text.strip()
+            discounted_price = original_price
+            activeDiscount = False
       except Exception:
-        activeDiscount = True
-        price = i.find('span', {'style': 'color: #888888;'}).text
-        discountedPrice = i.find('div', 'col search_price discounted responsive_secondrow').find('br').next_sibling.strip()
+        continue
 
-      if price == '' or 'free' in price.lower():
-        price = '$0.00'
+      if original_price == '' or 'free' in original_price.lower():
+        original_price = '$0.00'
+        # Convert prices to floats.
+      original_price = original_price.replace(',', '')[1:]
+      discounted_price = discounted_price.replace(',', '')[1:]
 
       if 'demo' in title.lower():
         count += 1
@@ -212,7 +223,7 @@ def scrapeData():
         continue
 
       for word in blacklistlower:
-        if word in release.lower() or word in title.lower() or word in price.lower():
+        if word in release.lower() or word in title.lower():
           skipEntry = True
 
       if skipEntry:
@@ -242,8 +253,8 @@ def scrapeData():
         data = {
           'steam_id' : appId,
           'game_title': title,
-          'base_price': price[1:],
-          'current_price': discountedPrice[1:],
+          'base_price': original_price,
+          'current_price': discounted_price,
           'release_date': release,
           'genres': tagids,
         }
@@ -251,18 +262,18 @@ def scrapeData():
         data = {
           'steam_id' : appId,
           'game_title': title,
-          'base_price': price[1:],
-          'current_price': price[1:],
+          'base_price': original_price,
+          'current_price': original_price,
           'release_date': release,
           'genres': tagids,
         }
       datas.append(data)
 
       count += 1
-      print(f'{count}. {title}. released: {release}. price: {price} . link: {url}')
+      print(f'{count}. {title}. released: {release}. price: {original_price} . link: {url}')
 
   df = pd.DataFrame(datas)
-  
+
   # Saves the scraped data to a CSV file using the Pandas library
   df.to_csv(csv_path, index=False, header=False)
   print('all data was created')
@@ -279,7 +290,7 @@ def updateGames():
 
   Returns: None
   """
-  
+
   # Connect to the database
   conn = sqlite3.connect(db_path)
   print(conn)
