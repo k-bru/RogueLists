@@ -1,3 +1,5 @@
+*This is an old project and is not as maintained as it was, the below instructions were for a presentation and some information may be inaccurate, and some files may be missing/altered
+
 Project Title: RogueLists
 
 Live Site:
